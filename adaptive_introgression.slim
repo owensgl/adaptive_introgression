@@ -4,7 +4,7 @@ initialize() {
 	
 	defineConstant("initial_pop_size", 250); // initial population size
 	defineConstant("K", 250); // carrying capacity (per subpopulation)
-	defineConstant("pheno_opt2", 10.0); // the final optimum (starts at 0, moves to opt2)
+	defineConstant("pheno_opt2", 1000.0); // the final optimum (starts at 0, moves to opt2)
 	defineConstant("m", 0.01);   // the bidirectional migration rate
 	
 	initializeMutationType("m1", 0.5, "e", 0.0);  // Reproductive isolation (deleterious in p2)
@@ -62,5 +62,30 @@ fitness(m3) { return 1.0; }
 fitness(m1, p2) { return -0.1; }
 fitness(m2, p1) { return -0.1; }
 
+// Print information about run.
+late() {
+	if ((p1.individualCount == 0) | (p2.individualCount == 0))
+	{
+		// stop at extinction
+		if (p1.individualCount == 0) 
+		{
+			catn("Pop 1 extinction in generation " + sim.generation + ".");
+		}else
+		{
+			catn("Pop 2 extinction in generation " + sim.generation + ".");
+		}
+		sim.simulationFinished();
+	}
+	else
+	{
+		if (sim.generation % 100 == 0)
+		{
+			// output the phenotypic mean and pop size
+		
+			cat(sim.generation + ": " + p1.individualCount + ":" + p2.individualCount + " individuals");
+			catn();
+		}
+	}
+}
 
 5000 late() { sim.simulationFinished(); }
