@@ -1,17 +1,35 @@
 initialize() {
-	initializeSLiMModelType("nonWF");
+
+	initializeSLiMModelType("nonWF"); 
 	
+	// ******************************
+	// Simulation parameters
+	// ******************************
 	
 	defineConstant("initial_pop_size", 250); // initial population size
 	defineConstant("K", 250); // carrying capacity (per subpopulation)
-	defineConstant("pheno_opt2", 1000.0); // the final optimum (starts at 0, moves to opt2)
+	defineConstant("pheno_opt2", 100.0); // the final optimum (starts at 0, moves to opt2)
 	defineConstant("m", 0.01);   // the bidirectional migration rate
+	defineConstant("ri", -0.01); // the selection coefficient for RI alleles
+	defineConstant("ri_loci", (1:10*10000)-1); // the positions of the RI loci in both populations
+	
+	// ******************************
+	// Mutation types
+	// ******************************
 	
 	initializeMutationType("m1", 0.5, "e", 0.0);  // Reproductive isolation (deleterious in p2)
 	initializeMutationType("m2", 0.5, "e", 0.0);  // Reproductive isolation (deleterious in p1)
+	
+	m1.convertToSubstitution = F; // the RI alleles should never fix (in the meta population) but just in case
+	m2.convertToSubstitution = F; 
+	
 	initializeMutationType("m3", 0.5, "n", 0.0, 1.0);  // Environmentally sensitive QTL (adaptative everywhere)
+	
+	// ******************************
+	// Genome properties
+	// ******************************
 
-	initializeGenomicElementType("g1", c(m1,m2,m3),  c(0.01,0.01,0.98));
+	initializeGenomicElementType("g1", c(m1,m2,m3),  c(0.00,0.00,1.0)); // only QTL alleles arise from mutations
 	
 	initializeGenomicElement(g1, 0, 99999);
 	initializeMutationRate(1e-7);
@@ -22,13 +40,42 @@ reproduction() {
 	return NULL;
 }
 1 early() {
+	
+	// ******************************
+	// Initialize populations
+	// ******************************
+	
 	sim.addSubpop("p1", initial_pop_size);
 	sim.addSubpop("p2", initial_pop_size);
+	
+	// ******************************
+	// Initialize RI
+	// ******************************
+	
+	// the positions of the RI alleles (same in both pops, for now)
+	// ri_loci = (1:10*10000)-1;
+	
+	// individuals who will recieve the RI alleles (everyone, in this case)
+	p1_inds = sample(p1.individuals, p1.individualCount); // p1 inds, polymorphic
+	p2_inds = sample(p2.individuals, p2.individualCount); // p2 inds, polymorphic
+	
+	// place each adaptive allele in both populations
+	for (i in ri_loci){
+	 
+		p1.individuals.genomes.addNewDrawnMutation(m1, i); 
+		p2.individuals.genomes.addNewDrawnMutation(m2, i);
+		
+	}
+
 
 }
 early() {
+
 	
+	// ************************************************************
 	// QTL-based fitness for the environmentally-sensitive alleles
+	// ************************************************************
+	
 	inds = sim.subpopulations.individuals;
 	phenotypes = inds.sumOfMutationsOfType(m3);
 	optimum = (sim.generation/5000) * pheno_opt2; // optimum gradually moves to opt2
@@ -38,12 +85,17 @@ early() {
 	inds.fitnessScaling = 0.1 + adaptation *  0.9 ;	
 	inds.x = asFloat(phenotypes);   // just for output below
 
+	// ******************************
+	// Density-dependence
+	// ******************************
 	
-	// density-dependence with a maximum benefit at low density
 	p1.fitnessScaling = min(K / p1.individualCount, 1.5);
 	p2.fitnessScaling = min(K / p2.individualCount, 1.5);
 	
-	// migration
+	// ******************************
+	// Migration
+	// ******************************
+	
 	nIndividuals = sum(sim.subpopulations.individualCount);
 	nMigrants = rpois(1, nIndividuals * m);
 	migrants = sample(sim.subpopulations.individuals, nMigrants);
@@ -57,13 +109,20 @@ early() {
 	}
 }
 
-// divergent selection 
-fitness(m3) { return 1.0; }
-fitness(m1, p2) { return -0.1; }
-fitness(m2, p1) { return -0.1; }
+// ******************************
+// Fitness callbacks
+// ******************************
 
-// Print information about run.
+fitness(m3) { return 1.0; }
+fitness(m1, p2) { return ri; }
+fitness(m2, p1) { return ri; }
+
 late() {
+
+	// ******************************
+	// Print information about run.
+	// ******************************
+	
 	if ((p1.individualCount == 0) | (p2.individualCount == 0))
 	{
 		// stop at extinction
