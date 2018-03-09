@@ -33,7 +33,9 @@ initialize() {
 	// Genome properties
 	// ******************************
 
-	initializeGenomicElementType("g1", c(m1,m2,m3,m4),  c(0.25,0.25,0.25,0.25)); // only QTL alleles arise from mutations
+	//initializeGenomicElementType("g1", c(m1,m2,m3,m4),  c(0.25,0.25,0.25,0.25)); // only QTL alleles arise from mutations
+	initializeGenomicElementType("g1", c(m1,m2,m3,m4),  c(0.0,0.0,0.25,0.25)); // only QTL alleles arise from mutations
+
 	
 	initializeGenomicElement(g1, 0, 99999);
 	initializeMutationRate(1e-7);
