@@ -10,7 +10,7 @@ initialize() {
 	defineConstant("K", 250); // carrying capacity (per subpopulation)
 	defineConstant("pheno_opt2", 10.0); // the final optimum (starts at 0, moves to opt2)
 	defineConstant("m", 0.2);   // the bidirectional migration rate
-	defineConstant("ri", 0.0); // the selection coefficient for RI alleles
+	defineConstant("ri", 1.0); // the selection coefficient for RI alleles
 	defineConstant("ri_loci", (1:10*9000)-1); // the positions of the RI loci in both populations
 	defineConstant("delta", 0.001); // the per-generation change in selective optimum (TBD)
 	
@@ -75,7 +75,7 @@ reproduction() {
 	
 	// offset the RI locus by 100 in pop2 (for easier visualization)
 	
-	for (i in ri_loci-100){
+	for (i in ri_loci-1000){
 	 
 		p2.individuals.genomes.addNewDrawnMutation(m2, i); 
 		
