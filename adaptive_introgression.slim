@@ -9,8 +9,8 @@ initialize() {
 	defineConstant("initial_pop_size", 250); // initial population size
 	defineConstant("K", 250); // carrying capacity (per subpopulation)
 	defineConstant("pheno_opt2", 10.0); // the final optimum (starts at 0, moves to opt2)
-	defineConstant("m", 0.0);   // the bidirectional migration rate
-	defineConstant("ri", -0.1); // the selection coefficient for RI alleles
+	defineConstant("m", 0.2);   // the bidirectional migration rate
+	defineConstant("ri", 0.0); // the selection coefficient for RI alleles
 	defineConstant("ri_loci", (1:10*9000)-1); // the positions of the RI loci in both populations
 	defineConstant("delta", 0.001); // the per-generation change in selective optimum (TBD)
 	
@@ -29,16 +29,11 @@ initialize() {
 	m3.color = "red";
 	m4.color = "grey40";
 	
-	//m1.convertToSubstitution = F; // the RI alleles should never fix (in the meta population) but just in case
-	//m2.convertToSubstitution = F; 
-	
-	
-	
 	// ******************************
 	// Genome properties
 	// ******************************
 
-	initializeGenomicElementType("g1", c(m1,m2,m3,m4),  c(0.00,0.00,0.5,0.5)); // only QTL alleles arise from mutations
+	initializeGenomicElementType("g1", c(m1,m2,m3,m4),  c(0.25,0.25,0.25,0.25)); // only QTL alleles arise from mutations
 	
 	initializeGenomicElement(g1, 0, 99999);
 	initializeMutationRate(1e-7);
@@ -67,6 +62,9 @@ reproduction() {
 	// ri_loci = (1:10*10000)-1;
 
 	// place each adaptive allele in both populations
+	
+	// TRY COMMENTING OUT THIS SECTION -- >
+	
 	for (i in ri_loci){
 	 
 		p1.individuals.genomes.addNewDrawnMutation(m1, i); 
@@ -81,26 +79,12 @@ reproduction() {
 		
 	}
 	
+	// <-- TRY COMMENTING OUT THIS SECTION
+	
 
 }
 
 early() {
-
-	// ******************************
-	// Migration
-	// ******************************
-	
-	// p1 -> p2
-	p1_to_p2_n_migrants = asInteger(round(p2.individualCount * m)); // p2 takes from p1 based on pop size of p2
-	//catn(p1_to_p2_n_migrants + " p1->p2");
-	p1_to_p2_migrants = sample(p1.individuals, p1_to_p2_n_migrants);
-	p2.takeMigrants(p1_to_p2_migrants);
-	
-	// p2 -> p1
-	p2_to_p1_n_migrants = asInteger(round(p1.individualCount * m)); // p2 takes from p1 based on pop size of p2
-	//catn(p1_to_p2_n_migrants + " p2->p1");
-	p2_to_p1_migrants = sample(p2.individuals, p1_to_p2_n_migrants);
-	p1.takeMigrants(p2_to_p1_migrants);
 
 	// ************************************************************
 	// p1: QTL-based fitness for the environmentally-sensitive alleles
@@ -108,7 +92,6 @@ early() {
 	
 	p1_inds = p1.individuals;
 	phenotypes = p1_inds.sumOfMutationsOfType(m3);
-	//optimum = 5;
 	optimum = (sim.generation/5000) * pheno_opt2; // optimum gradually moves to opt2
 	deviations = optimum - phenotypes;
 	fitnessFunctionMax = dnorm(0.0, 0.0, 5.0);
@@ -136,6 +119,22 @@ early() {
 	
 	p1.fitnessScaling = min(K / p1.individualCount, 1.5);
 	p2.fitnessScaling = min(K / p2.individualCount, 1.5);
+	
+	// ******************************
+	// Migration
+	// ******************************
+	
+	// p1 -> p2
+	p1_to_p2_n_migrants = asInteger(round(p2.individualCount * m)); // p2 takes from p1 based on pop size of p2
+	//catn(p1_to_p2_n_migrants + " p1->p2");
+	p1_to_p2_migrants = sample(p1.individuals, p1_to_p2_n_migrants);
+	p2.takeMigrants(p1_to_p2_migrants);
+	
+	// p2 -> p1
+	p2_to_p1_n_migrants = asInteger(round(p1.individualCount * m)); // p1 takes from p2 based on pop size of p1
+	//catn(p2_to_p1_n_migrants + " p2->p1");
+	p2_to_p1_migrants = sample(p2.individuals, p2_to_p1_n_migrants);
+	p1.takeMigrants(p2_to_p1_migrants);
 	
 
 
@@ -188,4 +187,4 @@ late() {
 	}
 }
 
-10000 late() { sim.simulationFinished(); }
+5000 late() { sim.simulationFinished(); }
