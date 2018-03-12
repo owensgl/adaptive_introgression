@@ -95,17 +95,14 @@ early() {
 	p1_inds = p1.individuals;
 	phenotypes = p1_inds.sumOfMutationsOfType(m3);
 	ri_pheno = p1_inds.countOfMutationsOfType(m2) * ri; 
-	//print(p1_inds.sumOfMutationsOfType(m2));
-	//print(p1_inds.countOfMutationsOfType(m1));
-	//print(p1_inds.sumOfMutationsOfType(m3));
-	phenotypes = phenotypes - ri_pheno; // ri discounts phenotype
+	phenotypes = phenotypes - ri_pheno; // ri discounts phenotype by # ri alleles x ri multiplier
 	optimum = (sim.generation/5000) * pheno_opt2; // optimum gradually moves to opt2
 	deviations = optimum - phenotypes;
 	fitnessFunctionMax = dnorm(0.0, 0.0, 5.0);
 	adaptation = dnorm(deviations, 0.0, 5.0) / fitnessFunctionMax;
 	p1_inds.fitnessScaling = 0.1 + adaptation *  0.9 ;	
 	p1_inds.tagF = phenotypes; 
-	p1_inds.x = asFloat(mean(ri_pheno));  
+	p1_inds.x = asFloat(mean(ri_pheno)); // the average RI discount (load) for the population
 	
 	// ************************************************************
 	// p2: QTL-based fitness for the environmentally-sensitive alleles
@@ -121,7 +118,7 @@ early() {
 	adaptation = dnorm(deviations, 0.0, 5.0) / fitnessFunctionMax;
 	p2_inds.fitnessScaling = 0.1 + adaptation *  0.9 ;	
 	p2_inds.tagF = phenotypes; 	
-	p2_inds.x = asFloat(mean(ri_pheno));   
+	p2_inds.x = asFloat(mean(ri_pheno)); // the average RI discount (load) for the population  
 
 	// ******************************
 	// Density-dependence
@@ -198,10 +195,6 @@ late() {
 			catn("p1 pheno:" + mean(phenotypes1) + " ri_load:" + mean(ri_1));
 			catn("p2 pheno: " + mean(phenotypes2)+ " ri_load:" + mean(ri_2));
 			
-			//catn("p1 ri mean " + ri_1);
-			//catn("p2 ri mean " + ri_2);
-		//if (size(phenotypes1) > 1)
-		//	cat(" (sd " + sd(phenotypes1) + ")");
 		catn();
 		}
 	}
