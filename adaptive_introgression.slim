@@ -6,11 +6,11 @@ initialize() {
 	// Simulation parameters
 	// ******************************
 	
-	defineConstant("initial_pop_size", 250); // initial population size
-	defineConstant("K", 250); // carrying capacity (per subpopulation)
+	defineConstant("initial_pop_size", 500); // initial population size
+	defineConstant("K", 500); // carrying capacity (per subpopulation)
 	defineConstant("pheno_opt2", 10.0); // the final optimum (starts at 0, moves to opt2)
-	defineConstant("m", 0.2);   // the bidirectional migration rate
-	defineConstant("ri", 1.0); // the selection coefficient for RI alleles
+	defineConstant("m", 0.01);   // the bidirectional migration rate
+	defineConstant("ri", 0.4); // the selection coefficient for RI alleles
 	defineConstant("ri_loci", (1:10*9000)-1); // the positions of the RI loci in both populations
 	defineConstant("delta", 0.001); // the per-generation change in selective optimum (TBD)
 	
@@ -18,8 +18,8 @@ initialize() {
 	// Mutation types
 	// ******************************
 	
-	initializeMutationType("m1", 0.5, "f", 0.0);  // Reproductive isolation (deleterious in p2)
-	initializeMutationType("m2", 0.5, "f", 0.0);  // Reproductive isolation (deleterious in p1)
+	initializeMutationType("m1", 0.5, "n", 0.0, 0.0);  // Reproductive isolation (deleterious in p2)
+	initializeMutationType("m2", 0.5, "n", 0.0, 0.0);  // Reproductive isolation (deleterious in p1)
 	initializeMutationType("m3", 0.5, "n", 0.0, 1.0);  // Environmentally sensitive QTL (adaptative everywhere)
 	initializeMutationType("m4", 0.5, "f", 0.0);  // a neutral allele
 	
@@ -34,7 +34,7 @@ initialize() {
 	// ******************************
 
 	//initializeGenomicElementType("g1", c(m1,m2,m3,m4),  c(0.25,0.25,0.25,0.25)); // only QTL alleles arise from mutations
-	initializeGenomicElementType("g1", c(m1,m2,m3,m4),  c(0.0,0.0,0.25,0.25)); // only QTL alleles arise from mutations
+	initializeGenomicElementType("g1", c(m1,m2,m3,m4),  c(0.0,0.0,0.5,0.5)); // only QTL alleles arise from mutations
 
 	
 	initializeGenomicElement(g1, 0, 99999);
@@ -75,7 +75,7 @@ reproduction() {
 	
 	// offset the RI locus by 100 in pop2 (for easier visualization)
 	
-	for (i in ri_loci-1000){
+	for (i in ri_loci){
 	 
 		p2.individuals.genomes.addNewDrawnMutation(m2, i); 
 		
@@ -94,13 +94,18 @@ early() {
 	
 	p1_inds = p1.individuals;
 	phenotypes = p1_inds.sumOfMutationsOfType(m3);
+	ri_pheno = p1_inds.countOfMutationsOfType(m2) * ri; 
+	//print(p1_inds.sumOfMutationsOfType(m2));
+	//print(p1_inds.countOfMutationsOfType(m1));
+	//print(p1_inds.sumOfMutationsOfType(m3));
+	phenotypes = phenotypes - ri_pheno; // ri discounts phenotype
 	optimum = (sim.generation/5000) * pheno_opt2; // optimum gradually moves to opt2
 	deviations = optimum - phenotypes;
 	fitnessFunctionMax = dnorm(0.0, 0.0, 5.0);
 	adaptation = dnorm(deviations, 0.0, 5.0) / fitnessFunctionMax;
 	p1_inds.fitnessScaling = 0.1 + adaptation *  0.9 ;	
 	p1_inds.tagF = phenotypes; 
-
+	p1_inds.x = asFloat(mean(ri_pheno));  
 	
 	// ************************************************************
 	// p2: QTL-based fitness for the environmentally-sensitive alleles
@@ -108,12 +113,15 @@ early() {
 	
 	p2_inds = p2.individuals;
 	phenotypes = p2_inds.sumOfMutationsOfType(m3);
+	ri_pheno = p2_inds.countOfMutationsOfType(m1) * ri; 
+	phenotypes = phenotypes - ri_pheno; // ri discounts phenotype
 	optimum = (sim.generation/5000) * pheno_opt2; // optimum gradually moves to opt2
 	deviations = optimum - phenotypes;
 	fitnessFunctionMax = dnorm(0.0, 0.0, 5.0);
 	adaptation = dnorm(deviations, 0.0, 5.0) / fitnessFunctionMax;
 	p2_inds.fitnessScaling = 0.1 + adaptation *  0.9 ;	
 	p2_inds.tagF = phenotypes; 	
+	p2_inds.x = asFloat(mean(ri_pheno));   
 
 	// ******************************
 	// Density-dependence
@@ -147,8 +155,12 @@ early() {
 // ******************************
 
 fitness(m3) { return 1.0; }
-fitness(m1, p2) { return ri; }
-fitness(m2, p1) { return ri; }
+
+//fitness(m1) { return 0.0; }
+//fitness(m2) { return 0.0; }
+
+//fitness(m1, p1) { return 0.0; }
+//fitness(m2, p2) { return 0.0; }
 
 late() {
 
@@ -175,13 +187,19 @@ late() {
 		
 			phenotypes1 = p1.individuals.tagF;
 			phenotypes2 = p2.individuals.tagF;
+			ri_1 = p1.individuals.x;
+			ri_2 = p2.individuals.x;
+			
 			// output the phenotypic mean and pop size
 		
 			cat(sim.generation + ": " + p1.individualCount + ":" + p2.individualCount + " individuals");
 			catn();
 			
-			catn("p1 phenotype mean " + mean(phenotypes1));
-			catn("p2 phenotype mean " + mean(phenotypes2));
+			catn("p1 pheno:" + mean(phenotypes1) + " ri_load:" + mean(ri_1));
+			catn("p2 pheno: " + mean(phenotypes2)+ " ri_load:" + mean(ri_2));
+			
+			//catn("p1 ri mean " + ri_1);
+			//catn("p2 ri mean " + ri_2);
 		//if (size(phenotypes1) > 1)
 		//	cat(" (sd " + sd(phenotypes1) + ")");
 		catn();
