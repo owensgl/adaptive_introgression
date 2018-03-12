@@ -11,8 +11,10 @@ initialize() {
 	defineConstant("pheno_opt2", 100.0); // the final optimum (starts at 0, moves to opt2)
 	defineConstant("m", 0.01);   // the bidirectional migration rate
 	defineConstant("ri", 0.2); // the selection coefficient for RI alleles
-	defineConstant("ri_loci", (1:2*9000)-1); // the positions of the RI loci in both populations
-	defineConstant("delta", 0.001); // the per-generation change in selective optimum (TBD)
+	defineConstant("ri_loci", c(5000, 10000)); // the positions of the RI loci in both populations
+	
+	//defineConstant("ri_loci", (1:50*900)-1); // the positions of the RI loci in both populations
+	defineConstant("delta", 0.1); // the per-generation change in selective optimum (TBD)
 	
 	// ******************************
 	// Mutation types
@@ -38,7 +40,7 @@ initialize() {
 
 	
 	initializeGenomicElement(g1, 0, 99999);
-	initializeMutationRate(5e-9);
+	initializeMutationRate(1e-7);
 	initializeRecombinationRate(1e-8);
 }
 
@@ -96,7 +98,7 @@ early() {
 	phenotypes = p1_inds.sumOfMutationsOfType(m3);
 	ri_pheno = (1- ri ) ^ p1_inds.countOfMutationsOfType(m2); 
 	phenotypes = phenotypes; 
-	optimum = (sim.generation/5000) * pheno_opt2; // optimum gradually moves to opt2
+	optimum = sim.generation * delta; // optimum gradually moves to opt2
 	deviations = optimum - phenotypes;
 	fitnessFunctionMax = dnorm(0.0, 0.0, 5.0);
 	adaptation = dnorm(deviations, 0.0, 5.0) / fitnessFunctionMax;
@@ -112,7 +114,7 @@ early() {
 	phenotypes = p2_inds.sumOfMutationsOfType(m3);
 	ri_pheno = (1- ri ) ^ p2_inds.countOfMutationsOfType(m1); 
 	phenotypes = phenotypes;
-	optimum = (sim.generation/5000) * pheno_opt2; // optimum gradually moves to opt2
+	optimum = sim.generation * delta; // optimum gradually moves to opt2
 	deviations = optimum - phenotypes;
 	fitnessFunctionMax = dnorm(0.0, 0.0, 5.0);
 	adaptation = dnorm(deviations, 0.0, 5.0) / fitnessFunctionMax;
@@ -208,4 +210,4 @@ late() {
 	}
 }
 
-5000 late() { sim.simulationFinished(); }
+10000 late() { sim.simulationFinished(); }
