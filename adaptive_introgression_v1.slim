@@ -8,7 +8,6 @@ initialize() {
 	
 	defineConstant("initial_pop_size", 500); // initial population size
 	defineConstant("K", 500); // carrying capacity (per subpopulation)
-	defineConstant("pheno_opt2", 100.0); // the final optimum (starts at 0, moves to opt2)
 	defineConstant("m", 0.01);   // the bidirectional migration rate
 	defineConstant("ri_loci", c(5000, 15000, 20000)); // the positions of the RI loci in both populations
 	defineConstant("ri_max", 0.4); // the maxmium *cumulative* effect of all RI alleles (0 > ri_max > 1);
@@ -122,7 +121,6 @@ early() {
 	
 	// p1 -> p2
 	p1_to_p2_n_migrants = asInteger(round(p2.individualCount * m)); // p2 takes from p1 based on pop size of p2
-	//catn(p1_to_p2_n_migrants + " p1->p2");
 	if ( p1_to_p2_n_migrants > p1.individualCount)
 	{
 		p1_to_p2_n_migrants = p1.individualCount;
@@ -132,7 +130,6 @@ early() {
 	
 	// p2 -> p1
 	p2_to_p1_n_migrants = asInteger(round(p1.individualCount * m)); // p1 takes from p2 based on pop size of p1
-	//catn(p2_to_p1_n_migrants + " p2->p1");
 	if ( p2_to_p1_n_migrants > p2.individualCount)
 	{
 		p2_to_p1_n_migrants = p2.individualCount;
