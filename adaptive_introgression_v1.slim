@@ -12,7 +12,7 @@ initialize() {
 	defineConstant("ri_loci", c(5000, 15000, 20000)); // the positions of the RI loci in both populations
 	defineConstant("ri_max", 0.4); // the maxmium *cumulative* effect of all RI alleles (0 > ri_max > 1);
 	defineConstant("ri", (ri_max/size(ri_loci))/2); // the selection coefficient for RI alleles (all identical)
-	defineConstant("delta", 0.1); // the per-generation change in selective optimum (TBD)
+	defineConstant("delta", 0.2); // the per-generation change in selective optimum (TBD)
 	
 	// ******************************
 	// Mutation types
@@ -169,6 +169,7 @@ late() {
 		{
 			catn("Pop 2 extinction in generation " + sim.generation + ".");
 		}
+		sim.outputFull();
 		sim.simulationFinished();
 	}
 	else
