@@ -37,7 +37,7 @@ initialize() {
 	// TBD prevent back mutations of RI alleles
 
 	initializeGenomicElementType("g1", c(m3,m4),  c(0.5,0.5)); // only QTL and neutral alleles mutate in
-	initializeGenomicElementType("g2", c(m1,m2),  c(1e-100,1e-100)); // RI loci are static (no back-mutations allowed)
+	initializeGenomicElementType("g2", c(m4,m1,m2),  c(1e-200,0.0,0.0)); // RI loci are static (no back-mutations allowed)
 	
 	//define the non-RI regions		
 	for (index in 0:(size(ri_loci)-1))
@@ -52,8 +52,6 @@ initialize() {
 	// define the RI regions (again, to prevent back-mutations at the RI loci)
 	for (index in 0:(size(ri_loci)-1))			initializeGenomicElement(g2, ri_loci[index], ri_loci[index]);
 
-			
-	//initializeGenomicElement(g1, 0, 99999);
 	initializeMutationRate(5e-8);
 	initializeRecombinationRate(1e-8);
 }
