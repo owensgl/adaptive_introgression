@@ -9,8 +9,9 @@ initialize() {
 	defineConstant("initial_pop_size", 500); // initial population size
 	defineConstant("K", 500); // carrying capacity (per subpopulation)
 	defineConstant("m", 0.01);   // the bidirectional migration rate
-	defineConstant("ri_loci", c(5000, 6000, 15000, 20000)); // the positions of the RI loci in both populations
-	defineConstant("ri_max", 1.0); // the maxmium *cumulative* effect of all RI alleles (0 > ri_max > 1);
+	//defineConstant("ri_loci", c(5000, 6000, 15000, 20000)); // the positions of the RI loci in both populations
+	defineConstant("ri_loci", c(1:100)*999); // a "diffuse" genetic architecture for RI
+	defineConstant("ri_max", 0.5); // the maxmium *cumulative* effect of all RI alleles (0 > ri_max > 1);
 	defineConstant("ri", (ri_max/size(ri_loci))/2); // the selection coefficient for RI alleles (all identical)
 	defineConstant("delta", 0.05); // the per-generation change in selective optimum
 	defineConstant("chr_size", 99999); // the total length of the chromosome
@@ -209,4 +210,4 @@ late() {
 	}
 }
 
-10000 late() { sim.simulationFinished(); }
+20000 late() { sim.simulationFinished(); }
