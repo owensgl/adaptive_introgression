@@ -9,10 +9,11 @@ initialize() {
 	defineConstant("initial_pop_size", 500); // initial population size
 	defineConstant("K", 500); // carrying capacity (per subpopulation)
 	defineConstant("m", 0.01);   // the bidirectional migration rate
-	defineConstant("ri_loci", c(5000, 15000, 20000)); // the positions of the RI loci in both populations
-	defineConstant("ri_max", 0.4); // the maxmium *cumulative* effect of all RI alleles (0 > ri_max > 1);
+	defineConstant("ri_loci", c(5000, 6000, 15000, 20000)); // the positions of the RI loci in both populations
+	defineConstant("ri_max", 1.0); // the maxmium *cumulative* effect of all RI alleles (0 > ri_max > 1);
 	defineConstant("ri", (ri_max/size(ri_loci))/2); // the selection coefficient for RI alleles (all identical)
-	defineConstant("delta", 0.1); // the per-generation change in selective optimum (TBD)
+	defineConstant("delta", 0.05); // the per-generation change in selective optimum
+	defineConstant("chr_size", 99999); // the total length of the chromosome
 	
 	// ******************************
 	// Mutation types
@@ -35,9 +36,25 @@ initialize() {
 	
 	// TBD prevent back mutations of RI alleles
 
-	initializeGenomicElementType("g1", c(m1,m2,m3,m4),  c(0.0,0.0,0.5,0.5)); // only QTL and neutral alleles mutate in
-	initializeGenomicElement(g1, 0, 99999);
-	initializeMutationRate(1e-7);
+	initializeGenomicElementType("g1", c(m3,m4),  c(0.5,0.5)); // only QTL and neutral alleles mutate in
+	initializeGenomicElementType("g2", c(m1,m2),  c(1e-100,1e-100)); // RI loci are static (no back-mutations allowed)
+	
+	//define the non-RI regions		
+	for (index in 0:(size(ri_loci)-1))
+		if (index == 0){			initializeGenomicElement(g1, 0, ri_loci[index]-1);
+			initializeGenomicElement(g1, ri_loci[index]+1, ri_loci[index+1]-1);
+			}
+		else if (index == size(ri_loci)-1)
+			initializeGenomicElement(g1, ri_loci[index]+1, chr_size);
+		else
+			initializeGenomicElement(g1, ri_loci[index]+1, ri_loci[index+1]-1);
+	
+	// define the RI regions (again, to prevent back-mutations at the RI loci)
+	for (index in 0:(size(ri_loci)-1))			initializeGenomicElement(g2, ri_loci[index], ri_loci[index]);
+
+			
+	//initializeGenomicElement(g1, 0, 99999);
+	initializeMutationRate(5e-8);
 	initializeRecombinationRate(1e-8);
 }
 
