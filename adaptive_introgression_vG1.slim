@@ -13,12 +13,8 @@ initialize() {
 	defineConstant("ri_loci", c(1:100)*999); // a "diffuse" genetic architecture for RI
 	defineConstant("ri_max", 0.5); // the maxmium *cumulative* effect of all RI alleles (0 > ri_max > 1);
 	defineConstant("ri", (ri_max/size(ri_loci))/2); // the selection coefficient for RI alleles (all identical)
-<<<<<<< HEAD
-	defineConstant("delta", 0.2); // the per-generation change in selective optimum (TBD)
-=======
 	defineConstant("delta", 0.05); // the per-generation change in selective optimum
 	defineConstant("chr_size", 99999); // the total length of the chromosome
->>>>>>> c55c2699bcded62d05e87f1edb291a9759d766ac
 	
 	// ******************************
 	// Mutation types
