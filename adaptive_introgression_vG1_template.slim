@@ -1,0 +1,236 @@
+initialize() {
+
+	initializeSLiMModelType("nonWF"); 
+	
+	// ******************************
+	// Simulation parameters
+	// ******************************
+
+	defineConstant("chr_size", 99999); // the total length of the chromosome
+	defineConstant("initial_pop_size", #k); // initial population size
+	defineConstant("K", #k); // carrying capacity (per subpopulation)
+	defineConstant("m", #mig);   // the bidirectional migration rate
+	//defineConstant("ri_loci", c(5000, 6000, 15000, 20000)); // the positions of the RI loci in both populations
+	defineConstant("ri_n", #ri_n); // The number of ri_loci
+	defineConstant("ri_arch","#ri_architecture"); //Whether the ri_loci are clumped or spread out.Can be "diffuse" or "clustered"
+	if (ri_arch == "diffuse"){
+		defineConstant("ri_loci", c(1:ri_n)*integerDiv(chr_size, ri_n)); // a "diffuse" genetic architecture for RI
+	}else if (ri_arch == "clustered"){
+		defineConstant("chr_size_third", integerDiv(chr_size, 3)); // the total length of the chromosome
+
+		defineConstant("ri_loci", c(1:ri_n)*integerDiv(chr_size_third, ri_n) + chr_size_third); // a "clustered" genetic architecture for RI
+	}
+	defineConstant("ri_max", #ri_max); // the maxmium *cumulative* effect of all RI alleles (0 > ri_max > 1);
+	defineConstant("ri", (ri_max/size(ri_loci))/2); // the selection coefficient for RI alleles (all identical)
+	defineConstant("delta", #delta); // the per-generation change in selective optimum
+	
+	// ******************************
+	// Mutation types
+	// ******************************
+	
+	initializeMutationType("m1", 0.5, "n", 0.0, 0.0);  // Reproductive isolation (deleterious in p2)
+	initializeMutationType("m2", 0.5, "n", 0.0, 0.0);  // Reproductive isolation (deleterious in p1)
+	initializeMutationType("m3", 0.5, "n", 0.0, 1.0);  // Environmentally sensitive QTL (adaptative everywhere)
+	initializeMutationType("m4", 0.5, "f", 0.0);  // a neutral allele
+	
+	// colors, for use in SLiMGui
+	m1.color = "blue";
+	m2.color = "green";
+	m3.color = "red";
+	m4.color = "grey40";
+	
+	// ******************************
+	// Genome properties
+	// ******************************
+	
+	// TBD prevent back mutations of RI alleles
+
+	initializeGenomicElementType("g1", c(m3,m4),  c(0.5,0.5)); // only QTL and neutral alleles mutate in
+	initializeGenomicElementType("g2", c(m4,m1,m2),  c(1e-200,0.0,0.0)); // RI loci are static (no back-mutations allowed)
+	
+	//define the non-RI regions		
+	for (index in 0:(size(ri_loci)-1))
+		if (index == 0){			initializeGenomicElement(g1, 0, ri_loci[index]-1);
+			initializeGenomicElement(g1, ri_loci[index]+1, ri_loci[index+1]-1);
+			}
+		else if (index == size(ri_loci)-1)
+			initializeGenomicElement(g1, ri_loci[index]+1, chr_size);
+		else
+			initializeGenomicElement(g1, ri_loci[index]+1, ri_loci[index+1]-1);
+	
+	// define the RI regions (again, to prevent back-mutations at the RI loci)
+	for (index in 0:(size(ri_loci)-1))			initializeGenomicElement(g2, ri_loci[index], ri_loci[index]);
+
+	initializeMutationRate(#mutation_rate);
+	initializeRecombinationRate(1e-8);
+}
+
+reproduction() {
+	subpop.addCrossed(individual, subpop.sampleIndividuals(1));
+	return NULL;
+}
+
+1 early() {
+	
+	// ******************************
+	// Initialize populations
+	// ******************************
+	
+	sim.addSubpop("p1", initial_pop_size);
+	sim.addSubpop("p2", initial_pop_size);
+	
+	// ******************************
+	// Initialize RI
+	// ******************************
+
+	// place each RI allele in both populations
+	
+
+	for (i in ri_loci){
+	 
+		p1.individuals.genomes.addNewDrawnMutation(m1, i); 
+		p2.individuals.genomes.addNewDrawnMutation(m2, i);
+		
+	}
+	
+
+}
+
+early() {
+
+	// ************************************************************
+	// p1: QTL-based fitness for the environmentally-sensitive alleles
+	// ************************************************************
+	
+	
+	p1_inds = p1.individuals;
+	phenotypes = p1_inds.sumOfMutationsOfType(m3);
+	ri_pheno = 1 - (ri * p1_inds.countOfMutationsOfType(m2)); 
+
+	phenotypes = phenotypes; 
+	optimum = sim.generation * delta; // optimum gradually moves to opt2
+	deviations = optimum - phenotypes;
+	fitnessFunctionMax = dnorm(0.0, 0.0, 5.0);
+	adaptation = dnorm(deviations, 0.0, 5.0) / fitnessFunctionMax;
+	p1_inds.fitnessScaling = (0.1 + adaptation *  0.9)  * ri_pheno;	
+	p1_inds.tagF = phenotypes; 
+	p1_inds.x = asFloat(mean(ri_pheno)); // the average RI discount (load) for the population
+	
+	// ************************************************************
+	// p2: QTL-based fitness for the environmentally-sensitive alleles
+	// ************************************************************
+	
+	p2_inds = p2.individuals;
+	phenotypes = p2_inds.sumOfMutationsOfType(m3);
+	ri_pheno =  1 - (ri * p2_inds.countOfMutationsOfType(m1));
+	phenotypes = phenotypes;
+	optimum = sim.generation * delta; // optimum gradually moves to opt2
+	deviations = optimum - phenotypes;
+	fitnessFunctionMax = dnorm(0.0, 0.0, 5.0);
+	adaptation = dnorm(deviations, 0.0, 5.0) / fitnessFunctionMax;
+	p2_inds.fitnessScaling = (0.1 + adaptation *  0.9)  * ri_pheno;	
+	p2_inds.tagF = phenotypes; 	
+	p2_inds.x = asFloat(mean(ri_pheno)); // the average RI discount (load) for the population  
+
+	// ******************************
+	// Density-dependence
+	// ******************************
+	
+	p1.fitnessScaling = min(K / p1.individualCount, 1.5);
+	p2.fitnessScaling = min(K / p2.individualCount, 1.5);
+	
+	// ******************************
+	// Migration
+	// ******************************
+	
+	// p1 -> p2
+	p1_to_p2_n_migrants = asInteger(round(p2.individualCount * m)); // p2 takes from p1 based on pop size of p2
+	if ( p1_to_p2_n_migrants > p1.individualCount)
+	{
+		p1_to_p2_n_migrants = p1.individualCount;
+	}
+	p1_to_p2_migrants = sample(p1.individuals, p1_to_p2_n_migrants);
+	p2.takeMigrants(p1_to_p2_migrants);
+	
+	// p2 -> p1
+	p2_to_p1_n_migrants = asInteger(round(p1.individualCount * m)); // p1 takes from p2 based on pop size of p1
+	if ( p2_to_p1_n_migrants > p2.individualCount)
+	{
+		p2_to_p1_n_migrants = p2.individualCount;
+	}
+	p2_to_p1_migrants = sample(p2.individuals, p2_to_p1_n_migrants);
+	p1.takeMigrants(p2_to_p1_migrants);
+	
+
+
+}
+
+// ******************************
+// Fitness callbacks
+// ******************************
+
+fitness(m3) { return 1.0; }
+
+//fitness(m1) { return 0.0; }
+//fitness(m2) { return 0.0; }
+
+//fitness(m1, p1) { return 0.0; }
+//fitness(m2, p2) { return 0.0; }
+
+late() {
+
+	// ******************************
+	// Print information about run.
+	// ******************************
+	
+	if ((p1.individualCount == 0) | (p2.individualCount == 0))
+	{
+		// stop at extinction
+		if (p1.individualCount == 0) 
+		{
+			phenotypes2 = p2.individuals.tagF;
+			ri_2 = p2.individuals.x;
+			catn("Extinction:"+ sim.generation + " NA:"+mean(1 - ri_2) +"\n");
+			p2.outputSample(p2.individualCount, F);
+		} else
+		{
+			phenotypes2 = p1.individuals.tagF;
+			ri_1 = p1.individuals.x;
+			catn("Extinction:"+ sim.generation +" "+ mean(1 - ri_1)+":NA" +"\n");
+			p1.outputSample(p1.individualCount, F);
+		}
+		sim.simulationFinished();
+	}
+	else
+	{
+		if (sim.generation % 100 == 0)
+		{
+		
+			phenotypes1 = p1.individuals.tagF;
+			phenotypes2 = p2.individuals.tagF;
+			ri_1 = p1.individuals.x;
+			ri_2 = p2.individuals.x;
+			
+			// output the phenotypic mean and pop size
+		
+			//cat(sim.generation + ": " + p1.individualCount + ":" + p2.individualCount + " individuals");
+		//	catn();
+			
+			//catn("p1 pheno:" + mean(phenotypes1) + " ri_load:" + mean(1 - ri_1));
+			//catn("p2 pheno: " + mean(phenotypes2)+ " ri_load:" + mean(1 - ri_2));
+			
+		//catn();
+		}
+	}
+}
+#generations late() {		
+			phenotypes1 = p1.individuals.tagF;
+			phenotypes2 = p2.individuals.tagF;
+			ri_1 = p1.individuals.x;
+			ri_2 = p2.individuals.x;
+			catn("Complete:#generations " + mean(1 - ri_1) +":"+mean(1 - ri_2));
+			}
+#generations late() { p1.outputSample(p1.individualCount, F); }
+#generations late() { p2.outputSample(p2.individualCount, F); }
+#generations late() {sim.simulationFinished(); }
+
