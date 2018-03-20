@@ -5,16 +5,24 @@ initialize() {
 	// ******************************
 	// Simulation parameters
 	// ******************************
-	
+
+	defineConstant("chr_size", 99999); // the total length of the chromosome
 	defineConstant("initial_pop_size", 500); // initial population size
 	defineConstant("K", 500); // carrying capacity (per subpopulation)
-	defineConstant("m", 0.01);   // the bidirectional migration rate
+	defineConstant("m", 0.001);   // the bidirectional migration rate
 	//defineConstant("ri_loci", c(5000, 6000, 15000, 20000)); // the positions of the RI loci in both populations
-	defineConstant("ri_loci", c(1:100)*999); // a "diffuse" genetic architecture for RI
+	defineConstant("ri_n", 100); // The number of ri_loci
+	defineConstant("ri_arch","clustered"); //Whether the ri_loci are clumped or spread out.Can be "defuse" or "clustered"
+	if (ri_arch == "defuse"){
+		defineConstant("ri_loci", c(1:ri_n)*integerDiv(chr_size, ri_n)); // a "diffuse" genetic architecture for RI
+	}else if (ri_arch == "clustered"){
+		defineConstant("chr_size_third", integerDiv(chr_size, 3)); // the total length of the chromosome
+
+		defineConstant("ri_loci", c(1:ri_n)*integerDiv(chr_size_third, ri_n) + chr_size_third); // a "clustered" genetic architecture for RI
+	}
 	defineConstant("ri_max", 0.5); // the maxmium *cumulative* effect of all RI alleles (0 > ri_max > 1);
 	defineConstant("ri", (ri_max/size(ri_loci))/2); // the selection coefficient for RI alleles (all identical)
 	defineConstant("delta", 0.05); // the per-generation change in selective optimum
-	defineConstant("chr_size", 99999); // the total length of the chromosome
 	
 	// ******************************
 	// Mutation types
@@ -53,7 +61,7 @@ initialize() {
 	// define the RI regions (again, to prevent back-mutations at the RI loci)
 	for (index in 0:(size(ri_loci)-1))			initializeGenomicElement(g2, ri_loci[index], ri_loci[index]);
 
-	initializeMutationRate(5e-8);
+	initializeMutationRate(1.5e-8);
 	initializeRecombinationRate(1e-8);
 }
 
@@ -200,15 +208,23 @@ late() {
 			
 			// output the phenotypic mean and pop size
 		
-			cat(sim.generation + ": " + p1.individualCount + ":" + p2.individualCount + " individuals");
-			catn();
+			//cat(sim.generation + ": " + p1.individualCount + ":" + p2.individualCount + " individuals");
+		//	catn();
 			
-			catn("p1 pheno:" + mean(phenotypes1) + " ri_load:" + mean(1 - ri_1));
-			catn("p2 pheno: " + mean(phenotypes2)+ " ri_load:" + mean(1 - ri_2));
+			//catn("p1 pheno:" + mean(phenotypes1) + " ri_load:" + mean(1 - ri_1));
+			//catn("p2 pheno: " + mean(phenotypes2)+ " ri_load:" + mean(1 - ri_2));
 			
-		catn();
+		//catn();
 		}
 	}
 }
+500 early() { p1.outputSample(p1.individualCount, F); }
+500 early() { p2.outputSample(p2.individualCount, F); }
+500 late() {sim.simulationFinished(); }
 
-20000 late() { sim.simulationFinished(); }
+// Things to keep from output
+// Time of extinction
+// Population sizes of both populations
+// Input parameters
+// RI for both populations (or single population)
+// 
