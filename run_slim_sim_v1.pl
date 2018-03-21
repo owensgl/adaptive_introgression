@@ -7,6 +7,7 @@ use warnings;
 use strict;
 use Getopt::Long;
 use Time::HiRes;
+use Parallel::ForkManager;
 
 
 #NOTE: This is the path to your nonWF slim program
@@ -33,7 +34,35 @@ GetOptions (
 	"total_generations=i" => \$total_generations
                 );
 
-my $timestamp = Time::HiRes::time() . '.' . int(rand(1000));
+#PARALLEL EXECUTION
+my $pm = new Parallel::ForkManager(10);
+
+my @chosen_k = qw(500 1000 2000);
+my @chosen_m = qw(0.0 0.001 0.01);
+my @chosen_ri_n = qw(2 10 100);
+my @chosen_ri_architecture = qw(diffuse clustered);
+my @chosen_ri_max = qw(0.0 0.2 0.5);
+my @chosen_delta = qw(0.01 0.05 0.1);
+my $reps = 100;
+
+foreach my $chosen_k (@chosen_k){
+	foreach my $chosen_m (@chosen_m){
+		foreach my $chosen_ri_n (@chosen_ri_n){
+			foreach my $chosen_ri_architecture (@chosen_ri_architecture){
+				foreach my $chosen_ri_max (@chosen_ri_max){
+					foreach my $chosen_delta (@chosen_delta){
+						foreach my $rep (1..$reps){
+	$k = $chosen_k;
+	$m = $chosen_m;
+	$ri_n = $chosen_ri_n;
+	$ri_architecture = $chosen_ri_architecture;
+	$ri_max = $chosen_ri_max;
+	$delta = $chosen_delta;
+	$pm->start and next;
+
+
+srand();
+my $timestamp = Time::HiRes::time().'.'.int(rand(1000));
 #my $timestamp = "TMP";
 my $template_header= $template;
 $template_header =~ s/.slim//g;
@@ -49,17 +78,17 @@ system("cat $template | sed s/#k/$k/g  | sed s/#mig/$m/g | sed s/#ri_n/$ri_n/g |
 
 
 #Open outfiles
-my $parameter_out = "$folder/parameters.$timestamp.txt";
+#my $parameter_out = "$folder/parameters.$timestamp.txt";
 my $summary_out = "$folder/summary.$timestamp.txt";
 my $mutations_out = "$folder/mutations.$timestamp.txt";
 
-open (my $par_out, '>', $parameter_out);
+#open (my $par_out, '>', $parameter_out);
 open (my $sum_out, '>', $summary_out);
 open (my $mut_out, '>', $mutations_out);
 
 #Print out parameter file
-print $par_out "timestamp\tk\tm\tri_n\tri_architecture\tri_max\tdelta\tmutation_rate";
-print $par_out "\n$timestamp\t$k\t$m\t$ri_n\t$ri_architecture\t$ri_max\t$delta\t$mutation_rate";
+#print $par_out "timestamp\tk\tm\tri_n\tri_architecture\tri_max\tdelta\tmutation_rate";
+#print $par_out "\n$timestamp\t$k\t$m\t$ri_n\t$ri_architecture\t$ri_max\t$delta\t$mutation_rate";
 
 #prepare other outfiles
 print $sum_out "timestamp\toutcome\tgenerations\tp1_n\tp2_n\tp1_ri\tp2_ri";
@@ -131,3 +160,9 @@ print $sum_out "\n$timestamp\t$result\t$generations\t$p1_n\t$p2_n\t$p1_ri\t$p2_r
 if ($remove_template =~ /T/){
 	system("rm $template_out");
 }
+
+$pm->finish
+}}}}}}
+}
+
+$pm->wait_all_children;

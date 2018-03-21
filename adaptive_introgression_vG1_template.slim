@@ -186,7 +186,9 @@ late() {
 	if ((p1.individualCount == 0) | (p2.individualCount == 0))
 	{
 		// stop at extinction
-		if (p1.individualCount == 0) 
+		if ((p1.individualCount == 0) & (p2.individualCount == 0)){
+			catn("Extinction:"+ sim.generation + " NA:NA" +"\n");
+		}else if (p1.individualCount == 0) 
 		{
 			phenotypes2 = p2.individuals.tagF;
 			ri_2 = p2.individuals.x;
