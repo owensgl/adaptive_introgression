@@ -19,6 +19,7 @@ my $delta = "0.05"; #Change in optimal phenotype per generation
 my $mutation_rate = "1.5e-8"; #Mutation rate
 my $total_generations = "5000"; #Total generations to run for
 my $template = "adaptive_introgression_vG1_template.slim"; #The template slim script to be modified and run.
+my $remove_template = "T"; #Whether to remove the template T or F.
 GetOptions (
         "k=i" => \$k,
         "m=f"   => \$m,
@@ -36,13 +37,20 @@ my $timestamp = Time::HiRes::time();
 my $template_header= $template;
 $template_header =~ s/.slim//g;
 print STDERR "TIMESTAMP: $timestamp\n";
-my $template_out = "$template_header.$timestamp.slim";
+
+#Make a folder for the parameter set
+my $folder = "slim_${k}_${m}_${ri_n}_${ri_architecture}_${ri_max}_${delta}_${mutation_rate}_${total_generations}";
+mkdir $folder unless -d $folder;
+
+my $template_out = "$folder/$template_header.$timestamp.slim";
+
 system("cat $template | sed s/#k/$k/g  | sed s/#mig/$m/g | sed s/#ri_n/$ri_n/g | sed s/#ri_architecture/$ri_architecture/g | sed s/#ri_max/$ri_max/g | sed s/#delta/$delta/g | sed s/#mutation_rate/$mutation_rate/g | sed s/#generations/$total_generations/g > $template_out");
 
+
 #Open outfiles
-my $parameter_out = "parameters.$timestamp.txt";
-my $summary_out = "summary.$timestamp.txt";
-my $mutations_out = "mutations.$timestamp.txt";
+my $parameter_out = "$folder/parameters.$timestamp.txt";
+my $summary_out = "$folder/summary.$timestamp.txt";
+my $mutations_out = "$folder/mutations.$timestamp.txt";
 
 open (my $par_out, '>', $parameter_out);
 open (my $sum_out, '>', $summary_out);
@@ -118,3 +126,6 @@ foreach my $line(@output){
 }
 print $sum_out "\n$timestamp\t$result\t$generations\t$p1_n\t$p2_n\t$p1_ri\t$p2_ri";
 
+if ($remove_template =~ /T/){
+	system("rm $template_out");
+}

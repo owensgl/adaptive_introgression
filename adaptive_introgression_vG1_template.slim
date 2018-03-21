@@ -14,7 +14,7 @@ initialize() {
 	defineConstant("ri_n", #ri_n); // The number of ri_loci
 	defineConstant("ri_arch","#ri_architecture"); //Whether the ri_loci are clumped or spread out.Can be "diffuse" or "clustered"
 	if (ri_arch == "diffuse"){
-		defineConstant("ri_loci", c(1:ri_n)*integerDiv(chr_size, ri_n)); // a "diffuse" genetic architecture for RI
+		defineConstant("ri_loci", c(1:ri_n)*integerDiv(chr_size, (ri_n+1))); // a "diffuse" genetic architecture for RI
 	}else if (ri_arch == "clustered"){
 		defineConstant("chr_size_third", integerDiv(chr_size, 3)); // the total length of the chromosome
 
