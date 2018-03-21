@@ -8,6 +8,8 @@ use strict;
 use Getopt::Long;
 use Time::HiRes;
 
+#NOTE: This is the path to your nonWF slim program
+my $slim = "/Applications/nonWF_slim/slim";
 my $k = 500; #The population size carrying capacity
 my $m = 0.01; #The migration rate
 my $ri_n = "10"; #The number of RI loci
@@ -64,7 +66,7 @@ my $p1_ri;
 my $p2_ri;
 my $current_pop;
 my $current_pop_size;
-my @output = `/Applications/nonWF_slim/slim $template_out`;
+my @output = `$slim $template_out`;
 chomp (@output);
 
 foreach my $line(@output){
