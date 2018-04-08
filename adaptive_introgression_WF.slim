@@ -5,18 +5,29 @@ initialize() {
 	// ******************************
 	
 	defineConstant("chr_size", 99999); // the total length of the chromosome
-	defineConstant("pop_size", 200); // initial population size
+	defineConstant("pop_size", 400); // initial population size for p1 and p2
 	defineConstant("m", 0.01);   // the bidirectional migration rate
-	defineConstant("delta", 0.05); // the per-generation change in selective optimum
-	defineConstant("phenotypic_optimum", 10.0); // the (initial) phenotypic optimum
+	defineConstant("delta", 0.001); // the per-generation change in selective optimum
+	defineConstant("initial_optimum", 10.0); // the (initial) phenotypic optimum
+	initializeMutationRate(1.5e-7);
+	initializeRecombinationRate(1e-7);
+	
+	// ******************************
+	// Burn-in parameters
+	// ******************************
+	
+	defineConstant("burn_in_generations", 5000); // the number of burn-in generations (not yet implemented)
+	defineConstant("burn_in_fluct_period", 1000); // no. generations between changes in optimum
+	defineConstant("burn_in_optimum", 10.0); // the amplitude of the burn-in flucation (opt1 = +, opt2 = -)
 	
 	
 	// ******************************
 	// Reproductive isolation parameters
 	// ******************************
 	 
-	defineConstant("ri_n", 10); // The number of ri_loci
+	defineConstant("ri_n", 20); // The number of ri_loci
 	defineConstant("ri_arch","clustered"); //Whether the ri_loci are clumped or spread out.
+	defineConstant("max_ri", 0.45); // the maxmium fitness discount caused by (all) RI alleles 
 	
 	if (ri_arch == "diffuse"){
 	
@@ -29,13 +40,12 @@ initialize() {
 		
 	}
 	
-	defineConstant("ri", 0.1); // the selection coefficient for RI alleles (all identical)
-	
+		
 	// ******************************
 	// Mutation types
 	// ******************************
 	
-	scriptForQTLs = "if (runif(1) < 0.5) -0.1; else 0.1;"; // binary QTL alleles?
+	scriptForQTLs = "if (runif(1) < 0.5) -0.5; else 0.5;"; // binary QTL alleles?
 	
 	initializeMutationType("m1", 0.5, "n", 0.0, 0.0);  // Reproductive isolation (deleterious in p2)
 	initializeMutationType("m2", 0.5, "n", 0.0, 0.0);  // Reproductive isolation (deleterious in p1)
@@ -52,11 +62,9 @@ initialize() {
 	m3.color = "red";
 	m4.color = "grey40";
 	
-		// ******************************
+   // ******************************
 	// Genome properties
 	// ******************************
-	
-	// TBD prevent back mutations of RI alleles
 
 	initializeGenomicElementType("g1", c(m3,m4),  c(0.5,0.5)); // only QTL and neutral alleles mutate in
 	initializeGenomicElementType("g2", c(m4,m1,m2),  c(1e-200,0.0,0.0)); // RI loci are static
@@ -76,14 +84,12 @@ initialize() {
 	for (index in 0:(size(ri_loci)-1))
 			initializeGenomicElement(g2, ri_loci[index], ri_loci[index]);
 
-	initializeMutationRate(1.5e-8);
-	initializeRecombinationRate(1e-8);
 }
 
 1 early() {
 
-	sim.addSubpop("p1", 500);
-	sim.addSubpop("p2", 500);
+	sim.addSubpop("p1", pop_size);
+	sim.addSubpop("p2", pop_size);
 
 	// initialize RI loci
 	for (i in ri_loci){
@@ -93,8 +99,8 @@ initialize() {
 		
 	}
 	
-	p1.setMigrationRates(p2, m);   
-	p2.setMigrationRates(p1, m); 
+	p1.setMigrationRates(p2, 0.0);   
+	p2.setMigrationRates(p1, 0.0); 
 	
 	//sim.registerEarlyEvent("s2", s1.source, 2, 2);
 }
@@ -112,7 +118,6 @@ initialize() {
 	
 	//cat(ri_phenotypes);
 	
-
 	p1_inds.tag = phenotypes; 
 	p1_inds.x = ri_phenotypes; // the average RI discount (load) for the population
 	
@@ -124,7 +129,6 @@ initialize() {
 	phenotypes = asInteger(p2_inds.sumOfMutationsOfType(m3));
 	ri_phenotypes = (p2_inds.countOfMutationsOfType(m1)/ri_n); // max ri pheno = 1
 	//ri_phenotypes = (ri * (p2_inds.countOfMutationsOfType(m2) - p2_inds.countOfMutationsOfType(m1))); 
-	 
 
 	p2_inds.tag = phenotypes; 
 	p2_inds.x = ri_phenotypes; // the average RI discount (load) for the population
@@ -135,37 +139,91 @@ initialize() {
 	
 }
 
-fitness(m2) {
+fitness(m3) {
 	// the QTLs themselves are neutral; their effect is handled below
 	return 1.0;
 }
+
 fitness(NULL, p1) {
-
-	// ri discounts fitness via a percentage
 	
-	return (1-individual.x) * dnorm(phenotypic_optimum - individual.tag, 0.0, 5.0);
+	// if in the burn in period, compute optimum based on burn in fluctations
+	
+	if (sim.generation <= burn_in_generations){
+		
+		// cosine with 1/2 period = burn_in_fluct_period, amplitude = burn_in_optimum
+		current_optimum = cos(sim.generation/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
+	
+	} else{
+	
+		current_optimum = initial_optimum + delta * sim.generation;
+	}
+	
+	// ri discounts fitness by a percentage, scaled by max_ri
+
+	return (1-(individual.x * max_ri)) * dnorm(current_optimum - individual.tag, 0.0, 5.0);
+	
 }
+
 fitness(NULL, p2) {
-
-	// ri discounts fitness via a percentage
 	
-	return (1-individual.x) * dnorm(phenotypic_optimum - individual.tag, 0.0, 5.0);
+	// if in the burn in period, compute optimum based on burn in fluctations
+	
+	if (sim.generation <= burn_in_generations){
+		
+		// cosine with 1/2 period = burn_in_fluct_period, amplitude = burn_in_optimum
+		current_optimum = cos(sim.generation/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
+	
+	} else{
+	
+		current_optimum = initial_optimum + delta * sim.generation;
+	}
+	
+	// ri discounts fitness by a percentage, scaled by max_ri
+
+	return (1-(individual.x * max_ri)) * dnorm(current_optimum - individual.tag, 0.0, 5.0);
+	
 }
 
-1:5000 early() {
+5000: early() {
+
+	// allow migration after the burn-in
+
+	p1.setMigrationRates(p2, m);   
+	p2.setMigrationRates(p1, m); 
+
+}
+
+1:10000 early() {
 
 	if (sim.generation % 100 == 0){
 	
+	if (sim.generation <= burn_in_generations){
+		cat("BURN IN" + "\n");
+	}
+	
+	if (sim.generation <= burn_in_generations){
+		
+		// cosine with 1/2 period = burn_in_fluct_period, amplitude = burn_in_optimum
+		current_optimum = cos(sim.generation/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
+	
+	} else{
+	
+		current_optimum = initial_optimum + delta * sim.generation;
+	}
+	
+	cat("Output for end of generation " + (sim.generation) + ":\n");
 	cat("-------------------------------\n");
-	cat("Output for end of generation " + (sim.generation - 1) + ":\n\n");
 	
 	// Output population fitness values
 	cat("p1 mean fitness = " + mean(p1.cachedFitness(NULL)) + "\n");
 	cat("p2 mean fitness = " + mean(p2.cachedFitness(NULL)) + "\n");
 	
+	// print the current optimum
+	cat("current phenotypic optimum = " + current_optimum + "\n"); 
+	
 	// Output population additive QTL-based phenotypes
 	cat("p1 mean phenotype = " + mean(p1.individuals.tag) + "\n");
-	cat("p2 mean phenotype = " + mean(p2.individuals.tag) + "\n");
+	cat("p2 mean phenotype = " + mean(p2.individuals.tag) + "\n\n");
 	}
 	
 }
