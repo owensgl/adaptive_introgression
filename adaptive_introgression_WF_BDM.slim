@@ -69,11 +69,6 @@ initialize() {
 			if(size(matches) > 1){
 			
 					valid_loci[matches] = 1e10;
-	  		   
-	  		   //for (j in 0:(size(matches)-1)){
-				//	valid_loci[matches[j]] = 1e10;
-				
-	  		   //}
 	  		
 	  		} else{
 	  		
@@ -95,9 +90,7 @@ initialize() {
 	    bdm_loci_p2[i] = sample(valid_loci, 1);
 	    
 	  }
-	  
-	  cat("loci_p2: " + paste(bdm_loci_p2)+ "\n");
-	  
+	  	  
 	}
 
 	// ******************************
