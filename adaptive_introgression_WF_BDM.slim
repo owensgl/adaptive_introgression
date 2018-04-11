@@ -18,56 +18,94 @@ initialize() {
 	
 	defineConstant("burn_in_generations", 4000); // the number of burn-in generations (not yet implemented)
 	defineConstant("burn_in_fluct_period", 1000); // no. generations between changes in optimum
-	defineConstant("burn_in_optimum", 10.0); // the amplitude of the burn-in flucation (opt1 = +, opt2 = -)
+	defineConstant("burn_in_optimum", 5.0); // the amplitude of the burn-in flucation (opt1 = +, opt2 = -)
 	
-	
+
 	// ******************************
-	// Reproductive isolation parameters
-	// ******************************
-	 
-	defineConstant("ri_n", 2); // The number of ri_loci
-	defineConstant("ri_arch","clustered"); //Whether the ri_loci are clumped or spread out.
-	defineConstant("max_ri", 0.0); // the maxmium fitness discount caused by (all) RI alleles 
-	
-	if (ri_arch == "diffuse"){
-	
-		defineConstant("ri_loci", c(1:ri_n)*integerDiv(chr_size, ri_n)); 
-		
-	} else if (ri_arch == "clustered"){
-	
-		defineConstant("chr_size_third", integerDiv(chr_size, 3)); 
-		defineConstant("ri_loci", c(1:ri_n)*integerDiv(chr_size_third, ri_n) + chr_size_third); 
-		
-	}
-	// ******************************
-	// BDM parameters
+	// BDM location parameters
 	// ******************************
 	
-	defineConstant("bdm_s", -0.1); //The multiplied penalty for not having 4 copies of a BDM allele;
+	defineConstant("bdm_s", -0.5); //The multiplied penalty for not having 4 copies of a BDM allele;
 	
-	defineConstant("bdm_n", 2); // The number of ri_loci
-	defineConstant("bdm_arch","clustered"); //Whether the ri_loci are clumped or spread out.
+	defineConstant("bdm_n",  10); // The number of bdm_loci (minimum 2)
+	defineConstant("bdm_arch","clustered"); //Whether the bdm_loci are clumped or spread out.
 	
 	if (bdm_arch == "diffuse"){
 	
-		defineConstant("bdm_loci", c(0:bdm_n)*integerDiv(chr_size, bdm_n)); 
+		defineConstant("bdm_loci", c(1:bdm_n) * integerDiv(chr_size, (bdm_n+1))); 
 		
 	} else if (bdm_arch == "clustered"){
-	
-		defineConstant("chr_size_third_bdm", integerDiv(chr_size, 3)); 
-		defineConstant("bdm_loci", c(0:(bdm_n - 1))* chr_size_third_bdm + chr_size_third_bdm + 1000); 
 		
+		defineConstant("cluster_proportion", 6); // the size of the cluster, 1 = whole chromosome, 2 = half, 3 = third, etc.
+		defineConstant("cluster_size", integerDiv(chr_size, cluster_proportion)); // the size of the BDM cluster, in bp
+		defineConstant("cluster_start", integerDiv(chr_size, 2) - integerDiv(chr_size, cluster_proportion*2)); // the starting locus of the cluster
+		
+		defineConstant("bdm_loci", c(1:bdm_n) * integerDiv(cluster_size, (bdm_n+1)) + cluster_start); // define the bdm loci
+
 	}
 	
-		
+	// ******************************
+	// BDM epistasis parameters
+	// ******************************
+	
+	
+	// create 
+	bdm_loci_p1 = 0:(bdm_n-1); 
+	bdm_loci_p2 = rep(1e10, bdm_n);
+
+	for (i in 0:(size(bdm_loci_p1)-1)){
+			
+			// define invalid loci (previously selected loci; also the current locus)
+			invalid_loci = unique(c(bdm_loci_p2, bdm_loci_p1[i]));
+			
+			//where are the invalid loci within the loci_p1 vector?
+			matches = match(invalid_loci, bdm_loci_p1)[ match(invalid_loci, bdm_loci_p1) >= 0];
+			
+			valid_loci = bdm_loci_p1;
+			
+			// if we were using r, we could use %in%, but instead
+			// assign a dummy value to loci that are invalid
+			// (or in the case of a single value, just assign it as the valid locus)
+			if(size(matches) > 1){
+			
+					valid_loci[matches] = 1e10;
+	  		   
+	  		   //for (j in 0:(size(matches)-1)){
+				//	valid_loci[matches[j]] = 1e10;
+				
+	  		   //}
+	  		
+	  		} else{
+	  		
+	  			valid_loci = bdm_loci_p1[bdm_loci_p1 != matches[0]];
+	  		
+	  		}
+	  		// purge the vector of the dummy values
+	  		valid_loci = valid_loci[valid_loci < 1e10];
+	  		valid_loci = unique(valid_loci);
+	  
+	  // if there is only one valid locus, assign it to the p2_bdm vector
+	  // otherwise, draw a random sample from the available loci
+	  if(size(valid_loci) <= 1){
+	  
+	    bdm_loci_p2[i] = valid_loci;
+	    
+	  } else{
+	  
+	    bdm_loci_p2[i] = sample(valid_loci, 1);
+	    
+	  }
+	  
+	  cat("loci_p2: " + paste(bdm_loci_p2)+ "\n");
+	  
+	}
+
 	// ******************************
 	// Mutation types
 	// ******************************
 	
 	scriptForQTLs = "if (runif(1) < 0.5) -0.5; else 0.5;"; // binary QTL alleles?
 	
-	initializeMutationType("m1", 0.5, "n", 0.0, 0.0);  // Reproductive isolation (deleterious in p2)
-	initializeMutationType("m2", 0.5, "n", 0.0, 0.0);  // Reproductive isolation (deleterious in p1)
 	initializeMutationType("m3", 0.5, "s", scriptForQTLs);  // Environmentally-sensitive QTL 
 	initializeMutationType("m4", 0.5, "f", 0.0);  // a neutral allele
 	initializeMutationType("m5", 0.5, "f", bdm_s);  // The BDM loci p1 half
@@ -81,8 +119,8 @@ initialize() {
 
 	
 	// colors, for use in SLiMGui
-	m1.color = "blue";
-	m2.color = "green";
+	//m1.color = "blue";
+	//m2.color = "green";
 	m3.color = "red";
 	m4.color = "grey40";
 	m5.color = "yellow";
@@ -94,22 +132,22 @@ initialize() {
 	// ******************************
 
 	initializeGenomicElementType("g1", c(m3,m4),  c(0.5,0.5)); // only QTL and neutral alleles mutate in
-	initializeGenomicElementType("g2", c(m4,m1,m2,m5,m6),  c(1e-200,0.0,0.0,0.0,0.0)); // RI loci are static
+	initializeGenomicElementType("g2", c(m4,m5,m6),  c(1e-200,0.0,0.0)); // RI loci are static
 	
 	//define the non-RI regions		
-	for (index in 0:(size(ri_loci)-1))
+	for (index in 0:(size(bdm_loci)-1))
 		if (index == 0){
-			initializeGenomicElement(g1, 0, ri_loci[index]-1);
-			initializeGenomicElement(g1, ri_loci[index]+1, ri_loci[index+1]-1);
+			initializeGenomicElement(g1, 0, bdm_loci[index]-1);
+			initializeGenomicElement(g1, bdm_loci[index]+1, bdm_loci[index+1]-1);
 			}
-		else if (index == size(ri_loci)-1)
-			initializeGenomicElement(g1, ri_loci[index]+1, chr_size);
+		else if (index == size(bdm_loci)-1)
+			initializeGenomicElement(g1, bdm_loci[index]+1, chr_size);
 		else
-			initializeGenomicElement(g1, ri_loci[index]+1, ri_loci[index+1]-1);
+			initializeGenomicElement(g1, bdm_loci[index]+1, bdm_loci[index+1]-1);
 	
 	// define the RI regions (again, to prevent back-mutations at the RI loci)
-	for (index in 0:(size(ri_loci)-1))
-			initializeGenomicElement(g2, ri_loci[index], ri_loci[index]);
+	for (index in 0:(size(bdm_loci)-1))
+			initializeGenomicElement(g2, bdm_loci[index], bdm_loci[index]);
 
 }
 
@@ -118,18 +156,11 @@ initialize() {
 	sim.addSubpop("p1", pop_size);
 	sim.addSubpop("p2", pop_size);
 
-	// initialize RI loci
-	for (i in ri_loci){
-	 
-		p1.individuals.genomes.addNewDrawnMutation(m1, i); 
-		p2.individuals.genomes.addNewDrawnMutation(m2, i);
-		
-	}
+	p1.setMigrationRates(p2, m);   
+	p2.setMigrationRates(p1, m); 
 	
-	p1.setMigrationRates(p2, 0.0);   
-	p2.setMigrationRates(p1, 0.0); 
 	
-	//sim.registerEarlyEvent("s2", s1.source, 2, 2);
+	// add in BDM loci
 	for (i in bdm_loci){
 	 
 	p2.individuals.genomes.addNewDrawnMutation(m5, i);
@@ -140,19 +171,19 @@ initialize() {
 
 1: late() {
 
-// ************************************************************
+	// ************************************************************
 	// p1: QTL-based fitness for the environmentally-sensitive alleles
 	// ************************************************************
 	
 	p1_inds = p1.individuals;
 	phenotypes = asInteger(p1_inds.sumOfMutationsOfType(m3));
-	ri_phenotypes = (p1_inds.countOfMutationsOfType(m2)/ri_n);
+	//ri_phenotypes = (p1_inds.countOfMutationsOfType(m2)/ri_n);
 	//ri_phenotypes = ri * (p1_inds.countOfMutationsOfType(m1) - p1_inds.countOfMutationsOfType(m2))/; 
 	
 	//cat(ri_phenotypes);
 	
 	p1_inds.tag = phenotypes; 
-	p1_inds.x = ri_phenotypes; // the average RI discount (load) for the population
+	//p1_inds.x = ri_phenotypes; // the average RI discount (load) for the population
 	
 	// ************************************************************
 	// p2: QTL-based fitness for the environmentally-sensitive alleles
@@ -160,11 +191,11 @@ initialize() {
 	
 	p2_inds = p2.individuals;
 	phenotypes = asInteger(p2_inds.sumOfMutationsOfType(m3));
-	ri_phenotypes = (p2_inds.countOfMutationsOfType(m1)/ri_n); // max ri pheno = 1
+	//ri_phenotypes = (p2_inds.countOfMutationsOfType(m1)/ri_n); // max ri pheno = 1
 	//ri_phenotypes = (ri * (p2_inds.countOfMutationsOfType(m2) - p2_inds.countOfMutationsOfType(m1))); 
 
 	p2_inds.tag = phenotypes; 
-	p2_inds.x = ri_phenotypes; // the average RI discount (load) for the population
+	//p2_inds.x = ri_phenotypes; // the average RI discount (load) for the population
 
 	// construct phenotypes for the additive effects of QTLs
 	//inds = sim.subpopulations.individuals;
@@ -183,12 +214,14 @@ fitness(m5) {
 	else
 		return relFitness;
 }
+
 fitness(m6) {
 	if ((genome1.countOfMutationsOfType(m6) == 2) & (genome2.countOfMutationsOfType(m6) == 2))
 		return 1.0;
 	else
 		return relFitness;
 }
+
 fitness(NULL, p1) {
 	
 	// if in the burn in period, compute optimum based on burn in fluctations
@@ -205,7 +238,7 @@ fitness(NULL, p1) {
 	
 	// ri discounts fitness by a percentage, scaled by max_ri
 
-	return (1-(individual.x * max_ri)) * dnorm(current_optimum - individual.tag, 0.0, 5.0);
+	return dnorm(current_optimum - individual.tag, 0.0, 5.0);
 	
 }
 
@@ -225,18 +258,10 @@ fitness(NULL, p2) {
 	
 	// ri discounts fitness by a percentage, scaled by max_ri
 
-	return (1-(individual.x * max_ri)) * dnorm(current_optimum - individual.tag, 0.0, 5.0);
+	return dnorm(current_optimum - individual.tag, 0.0, 5.0);
 	
 }
 
-1 early() {
-
-	// allow migration after the burn-in
-
-	p1.setMigrationRates(p2, m);   
-	p2.setMigrationRates(p1, m); 
-
-}
 
 1:10000 early() {
 
