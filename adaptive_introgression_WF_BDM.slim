@@ -9,6 +9,7 @@ initialize() {
 	defineConstant("m", 0.01);   // the bidirectional migration rate
 	defineConstant("delta", 0.001); // the per-generation change in selective optimum
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum
+	defineConstant("qtl_effect_size", 0.5); // the *phenotypic* effect size of the QTL alleles
 	initializeMutationRate(1.5e-7);
 	initializeRecombinationRate(1e-7);
 	
@@ -64,8 +65,8 @@ initialize() {
 			
 			valid_loci = bdm_loci_p1;
 			
-			// if we were using r, we could use %in%, but instead
-			// assign a dummy value to loci that are invalid
+			// if we were using R, we could use %in%, but instead:
+			// assign a dummy value (1e10) to loci that are invalid
 			// (or in the case of a single value, just assign it as the valid locus)
 			if(size(matches) > 1){
 			
@@ -98,8 +99,8 @@ initialize() {
 	// Mutation types
 	// ******************************
 	
-	scriptForQTLs = "if (runif(1) < 0.5) -0.5; else 0.5;"; // binary QTL alleles?
-	
+
+	scriptForQTLs = paste(c("if (runif(1) < 0.5) -", qtl_effect_size, "; else ",qtl_effect_size ,";"), sep = ""); // binary QTL alleles
 	initializeMutationType("m1", 0.5, "s", scriptForQTLs);  // Environmentally-sensitive QTL 
 	initializeMutationType("m2", 0.5, "f", 0.0);  // a neutral allele
 	initializeMutationType("m3", 0.5, "f", bdm_s);  // The BDM loci p1 half
