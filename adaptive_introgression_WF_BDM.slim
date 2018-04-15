@@ -272,7 +272,7 @@ fitness(NULL) {
 	}
 	// discount the qtl fitness by the amount of negative epistatsis
 	// limted by max_ri 
-	return (qtl_fitness * (1-(max_ri * sum(negative_epistasis))));
+	return (qtl_fitness * (1-sum(negative_epistasis)));
 	
 }
 
