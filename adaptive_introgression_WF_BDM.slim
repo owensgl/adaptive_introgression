@@ -6,12 +6,12 @@ initialize() {
 	
 	defineConstant("chr_size", 99999); // the total length of the chromosome
 	defineConstant("pop_size", 400); // initial population size for p1 and p2
-	defineConstant("m", 0.01);   // the bidirectional migration rate
+	defineConstant("m", 0.001);   // the bidirectional migration rate
 	defineConstant("delta", 0.001); // the per-generation change in selective optimum
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum
 	defineConstant("qtl_effect_size", 0.5); // the *phenotypic* effect size of the QTL alleles
 	initializeMutationRate(1.5e-7);
-	initializeRecombinationRate(1e-7);
+	initializeRecombinationRate(1e-8);
 	
 	// ******************************
 	// Burn-in parameters
@@ -26,12 +26,12 @@ initialize() {
 	// ******************************
 	
 	defineConstant("max_ri", 1.0); // the maximum possible reproductive isolation (proportional, 1 = lethal)
-	defineConstant("bdm_n",  40); // the number of bdm_loci (minimum 2)
+	defineConstant("bdm_n",  8); // the number of bdm_loci (minimum 2)
 	defineConstant("bdm_s", (max_ri/bdm_n)/2); // the proportion of RI caused by each bdm allele
 	defineConstant("bdm_arch","clustered"); // whether the bdm_loci are clumped or spread out.
 	
 	// parameters for 'clustered' architectures
-	defineConstant("cluster_proportion", 1); // the size of the cluster, 1 = whole chromosome, 2 = half, 3 = third, etc.
+	defineConstant("cluster_proportion", 4); // the size of the cluster, 1 = whole chromosome, 2 = half, 3 = third, etc.
 	defineConstant("cluster_size", integerDiv(chr_size, cluster_proportion)); // the size of the BDM cluster, in bp
 	defineConstant("cluster_start", integerDiv(chr_size, 2) - integerDiv(chr_size, cluster_proportion*2)); // the starting locus of the cluster
 	
@@ -111,15 +111,18 @@ initialize() {
 	initializeMutationType("m4", 0.5, "f", 0.0);  // The BDM allele in p2 
 
 	m1.convertToSubstitution = F;
-	m1.mutationStackPolicy = "l";
 	m3.convertToSubstitution = F;
 	m4.convertToSubstitution = F;
+	
+	m1.mutationStackPolicy = "l";
+	//m3.mutationStackPolicy = "l";
+	//m4.mutationStackPolicy = "l";
 	
 	// colors, for use in SLiMGui
 	m1.color = "red";
 	m2.color = "grey40";
-	m3.color = "green";
-	m4.color = "orange";
+	m3.color = "blue";
+	m4.color = "yellow";
 
    // ******************************
 	// Genome properties
@@ -238,22 +241,38 @@ fitness(NULL) {
 		// sum these together to get a 'bdm_genotype'
 		bdm_genotype =  c(sum(p1_bdm_locations == p1_locus) + sum(p2_bdm_locations == p2_locus));
 		
-		// assign a value to the negative epistatsis vector 
+		// assign a value to the negative epistasis vector 
 		// based on the bdm genotype
 		// single mismatches (bdm_genotype = 3) get a pentalty = bdm_s
 		// double mismatches (sum = 4) get a pentalty = 2*bdm_s
 		// otherwise remains at 0 (initial value)
 
-		if(bdm_genotype == 3)
+		if(bdm_genotype == 3){
+			//cat("loci: " + p1_locus + " " + p2_locus + "\n");
+			//cat("bdm genotype: " + bdm_genotype + "\n");
+			//cat("p1 alleles: " + paste(sort(p1_bdm_locations)) + "\n");
+			//cat("p2 alleles: " + paste(sort(p2_bdm_locations)) + "\n");
 			negative_epistasis[i] = bdm_s;
-		else if(bdm_genotype == 4)
+		}
+		else if(bdm_genotype == 4){
+			//cat("loci: " + p1_locus + " " + p2_locus + "\n");
+			//cat("bdm genotype: " + bdm_genotype + "\n");
+			//cat("p1 alleles: " + paste(p1_bdm_locations) + "\n");
+			//cat("p2 alleles: " + paste(p2_bdm_locations) + "\n");
 			negative_epistasis[i] = 2 * bdm_s;
-	
+		}
 	}
 	
+	if(sum(negative_epistasis)>0){
+		cat("bdm loci p1: " + paste(bdm_loci[bdm_loci_p1]) + "\n");
+		cat("bdm loci p2: " + paste(bdm_loci[bdm_loci_p2]) + "\n");
+		cat("p1 alleles: " + paste(p1_bdm_locations) + "\n");
+		cat("p2 alleles: " + paste(p2_bdm_locations) + "\n");
+		cat("neg epi total: " + sum(negative_epistasis) + "\n\n");
+	}
 	// discount the qtl fitness by the amount of negative epistatsis
 	// limted by max_ri 
-	return qtl_fitness * (1-(max_ri * sum(negative_epistasis)));
+	return (qtl_fitness * (1-(max_ri * sum(negative_epistasis))));
 	
 }
 
