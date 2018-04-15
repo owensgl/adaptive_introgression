@@ -6,10 +6,10 @@ initialize() {
 	
 	defineConstant("chr_size", 99999); // the total length of the chromosome
 	defineConstant("pop_size", 400); // initial population size for p1 and p2
-	defineConstant("m", 0.001);   // the bidirectional migration rate
+	defineConstant("m", 0.01);   // the bidirectional migration rate
 	defineConstant("delta", 0.001); // the per-generation change in selective optimum
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum
-	defineConstant("qtl_effect_size", 0.5); // the *phenotypic* effect size of the QTL alleles
+	defineConstant("qtl_effect_size", 0.2); // the *phenotypic* effect size of the QTL alleles
 	initializeMutationRate(1.5e-7);
 	initializeRecombinationRate(1e-8);
 	
@@ -25,7 +25,7 @@ initialize() {
 	// BDM location parameters
 	// ******************************
 	
-	defineConstant("max_ri", 1.0); // the maximum possible reproductive isolation (proportional, 1 = lethal)
+	defineConstant("max_ri", 1.0); // the maximum possible reduction in fitness due to RI (1 > max_ri > 0)
 	defineConstant("bdm_n",  8); // the number of bdm_loci (minimum 2)
 	defineConstant("bdm_s", (max_ri/bdm_n)/2); // the proportion of RI caused by each bdm allele
 	defineConstant("bdm_arch","clustered"); // whether the bdm_loci are clumped or spread out.
@@ -211,10 +211,11 @@ fitness(NULL) {
 		current_optimum = cos(sim.generation/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
 	
 	} else{
-	
+		
 		current_optimum = initial_optimum + delta * sim.generation;
 	}
-
+	
+	// the fitness of this individual, based on the current optimum
 	qtl_fitness = dnorm(current_optimum - individual.tag, 0.0, 5.0);
 	
 	
@@ -224,9 +225,6 @@ fitness(NULL) {
 	
 	// initialize fitness pairwise fitness penalities at 0
 	negative_epistasis = rep(0.0, bdm_n);
-	p1_alleles = c();
-	p2_alleles = c();
-
 	
 	// where are the p1 and p2 bdm *alleles* in each genome?
 	p1_bdm_locations = c(genome1.positionsOfMutationsOfType(m3), genome2.positionsOfMutationsOfType(m3));
@@ -240,49 +238,24 @@ fitness(NULL) {
 		p1_locus = bdm_loci[bdm_loci_p1[i]];
 		p2_locus = bdm_loci[bdm_loci_p2[i]];
 		
+		// count the number of BDM alleles in each genome (if any)
+		num_p1_alleles = sum(p1_bdm_locations == p1_locus);
+		num_p2_alleles = sum(p2_bdm_locations == p2_locus);
 		
-		// count the number of alleles of each type at each of the two loci
 		// sum these together to get a 'bdm_genotype'
-		bdm_genotype =  c(sum(p1_bdm_locations == p1_locus) + sum(p2_bdm_locations == p2_locus));
+		bdm_genotype =  c(num_p1_alleles + num_p2_alleles);
 		
 		// assign a value to the negative epistasis vector 
 		// based on the bdm genotype
-		// single mismatches (bdm_genotype = 3) get a pentalty = bdm_s
-		// double mismatches (sum = 4) get a pentalty = 2*bdm_s
+		// first checks if there are any missing alleles (product of both counts > 0)
+		// if there are no missing alleles, assigns a penalty = (bdm_genotype/2) * bdm_s
 		// otherwise remains at 0 (initial value)
 
-		if(bdm_genotype == 3){
-			p1_alleles = c(p1_alleles, p1_bdm_locations[p1_bdm_locations == p1_locus]);
-			p2_alleles = c(p2_alleles, p2_bdm_locations[p2_bdm_locations == p2_locus]);
-		
-			//cat("loci: " + p1_locus + " " + p2_locus + "\n");
-			//cat("bdm genotype: " + bdm_genotype + "\n");
-			//cat("p1 alleles: " + paste(sort(p1_bdm_locations)) + "\n");
-			//cat("p2 alleles: " + paste(sort(p2_bdm_locations)) + "\n");
-			negative_epistasis[i] = bdm_s;
-		}
-		else if(bdm_genotype == 4){
-			p1_alleles = c(p1_alleles, p1_bdm_locations[p1_bdm_locations == p1_locus]);
-			p2_alleles = c(p2_alleles, p2_bdm_locations[p2_bdm_locations == p2_locus]);
-
-			//cat("loci: " + p1_locus + " " + p2_locus + "\n");
-			//cat("bdm genotype: " + bdm_genotype + "\n");
-			//cat("p1 alleles: " + paste(p1_bdm_locations) + "\n");
-			//cat("p2 alleles: " + paste(p2_bdm_locations) + "\n");
-			negative_epistasis[i] = 2 * bdm_s;
-		}
+		if((num_p2_alleles * num_p1_alleles > 0) & bdm_genotype > 1)
+			negative_epistasis[i] = (bdm_genotype/2) * bdm_s;
+			
 	}
 	
-	if(sum(negative_epistasis)>0){
-		cat("bdm loci p1: " + paste(bdm_loci[bdm_loci_p1]) + "\n");
-		cat("bdm loci p2: " + paste(bdm_loci[bdm_loci_p2]) + "\n");
-		cat("p1 m3 alleles: " + paste(sort(p1_bdm_locations)) + "\n");
-		cat("p2 m4 alleles: " + paste(sort(p2_bdm_locations)) + "\n");
-		cat("p1 m3 bdms: " + paste(sort(p1_alleles)) + "\n");
-		cat("p2 m4 bdms: " + paste(sort(p2_alleles)) + "\n");
-		cat("num BDM interactions: " + sum(negative_epistasis > 0) + "\n");
-		cat("neg epi total: " + sum(negative_epistasis) + "\n\n");
-	}
 	// discount the qtl fitness by the amount of negative epistatsis
 	// limted by max_ri 
 	return (qtl_fitness * (1-sum(negative_epistasis)));
