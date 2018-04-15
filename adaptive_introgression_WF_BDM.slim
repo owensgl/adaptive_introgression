@@ -224,6 +224,9 @@ fitness(NULL) {
 	
 	// initialize fitness pairwise fitness penalities at 0
 	negative_epistasis = rep(0.0, bdm_n);
+	p1_alleles = c();
+	p2_alleles = c();
+
 	
 	// where are the p1 and p2 bdm *alleles* in each genome?
 	p1_bdm_locations = c(genome1.positionsOfMutationsOfType(m3), genome2.positionsOfMutationsOfType(m3));
@@ -237,6 +240,7 @@ fitness(NULL) {
 		p1_locus = bdm_loci[bdm_loci_p1[i]];
 		p2_locus = bdm_loci[bdm_loci_p2[i]];
 		
+		
 		// count the number of alleles of each type at each of the two loci
 		// sum these together to get a 'bdm_genotype'
 		bdm_genotype =  c(sum(p1_bdm_locations == p1_locus) + sum(p2_bdm_locations == p2_locus));
@@ -248,6 +252,9 @@ fitness(NULL) {
 		// otherwise remains at 0 (initial value)
 
 		if(bdm_genotype == 3){
+			p1_alleles = c(p1_alleles, p1_bdm_locations[p1_bdm_locations == p1_locus]);
+			p2_alleles = c(p2_alleles, p2_bdm_locations[p2_bdm_locations == p2_locus]);
+		
 			//cat("loci: " + p1_locus + " " + p2_locus + "\n");
 			//cat("bdm genotype: " + bdm_genotype + "\n");
 			//cat("p1 alleles: " + paste(sort(p1_bdm_locations)) + "\n");
@@ -255,6 +262,9 @@ fitness(NULL) {
 			negative_epistasis[i] = bdm_s;
 		}
 		else if(bdm_genotype == 4){
+			p1_alleles = c(p1_alleles, p1_bdm_locations[p1_bdm_locations == p1_locus]);
+			p2_alleles = c(p2_alleles, p2_bdm_locations[p2_bdm_locations == p2_locus]);
+
 			//cat("loci: " + p1_locus + " " + p2_locus + "\n");
 			//cat("bdm genotype: " + bdm_genotype + "\n");
 			//cat("p1 alleles: " + paste(p1_bdm_locations) + "\n");
@@ -266,8 +276,11 @@ fitness(NULL) {
 	if(sum(negative_epistasis)>0){
 		cat("bdm loci p1: " + paste(bdm_loci[bdm_loci_p1]) + "\n");
 		cat("bdm loci p2: " + paste(bdm_loci[bdm_loci_p2]) + "\n");
-		cat("p1 alleles: " + paste(p1_bdm_locations) + "\n");
-		cat("p2 alleles: " + paste(p2_bdm_locations) + "\n");
+		cat("p1 m3 alleles: " + paste(sort(p1_bdm_locations)) + "\n");
+		cat("p2 m4 alleles: " + paste(sort(p2_bdm_locations)) + "\n");
+		cat("p1 m3 bdms: " + paste(sort(p1_alleles)) + "\n");
+		cat("p2 m4 bdms: " + paste(sort(p2_alleles)) + "\n");
+		cat("num BDM interactions: " + sum(negative_epistasis > 0) + "\n");
 		cat("neg epi total: " + sum(negative_epistasis) + "\n\n");
 	}
 	// discount the qtl fitness by the amount of negative epistatsis
