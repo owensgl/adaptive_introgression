@@ -177,8 +177,9 @@ initialize() {
 	// ***************************************************************
 	
 	inds = sim.subpopulations.individuals;
-	phenotypes = asInteger(inds.sumOfMutationsOfType(m1));
-	inds.tag = phenotypes; 
+	phenotypes = inds.sumOfMutationsOfType(m1);
+	inds.x = phenotypes; 
+	
 	
 }
 
@@ -216,7 +217,12 @@ fitness(NULL) {
 	}
 	
 	// the fitness of this individual, based on the current optimum
-	qtl_fitness = dnorm(current_optimum - individual.tag, 0.0, 5.0);
+	qtl_fitness = dnorm(current_optimum - individual.x, 0.0, 5.0);
+	
+	//if (sim.generation % 100 == 0){
+	//cat("Phenotype =" + individual.x + ". Optimum="  +current_optimum  +"\n");
+	//}
+	
 	
 	
 	// ***************************************************************
