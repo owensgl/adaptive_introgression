@@ -49,24 +49,13 @@ initialize() {
 	// BDM pairwise locus assignments
 	// ******************************
 	
-	// create pairs of interacting BDM loci
-	// constrained such that there each locus interacts with exactly one other locus 
-	// (and never underdominance at single locus).
-	
-	shuffle_valid = 0;
-	bdm_loci_p1_tmp = 0:(bdm_n-1); 
-	
-	//interatively shuffle until there are no perfect matches (all interlocus, no intralocus)
-	
-	while (shuffle_valid == 0){
-	
-		bdm_loci_p2_tmp = sample(bdm_loci_p1_tmp, bdm_n); 
-		shuffle_valid = all(bdm_loci_p1_tmp != bdm_loci_p2_tmp);
-	
-	}
-	
-	defineConstant("bdm_loci_p1", bdm_loci_p1_tmp);
-	defineConstant("bdm_loci_p2", bdm_loci_p2_tmp);
+	// shuffles a vector of 0:bdm_n
+	// each pair = index the shuffled vector by 2s (done at fitness step)
+	// e.g. 0 1 2 3 -> 3 0 1 2, pairs are locus 3 and locus 0; locus 1 and 2
+
+	bdm_pairs_tmp = sample(0:(bdm_n-1), 10);
+	cat("BDM pairs: " + paste(bdm_pairs_tmp) + "\n");
+	defineConstant("bdm_pairs", bdm_pairs_tmp);
 	
 	// ******************************
 	// Mutation types
@@ -206,11 +195,12 @@ fitness(NULL) {
 	
 	// scan each pair of negatively interacting bdm loci (assigned in the starting parameters)
 	
-	for (i in 0:(bdm_n-1)){
+	for (i in 0:((bdm_n/2) -1)){
 	
 		// identify the two negatively interacting loci
-		p1_locus = bdm_loci[bdm_loci_p1[i]];
-		p2_locus = bdm_loci[bdm_loci_p2[i]];
+		// (indexes the bdm_pairs vector by 2s)
+		p1_locus = bdm_loci[bdm_pairs[i*2]];
+		p2_locus = bdm_loci[bdm_pairs[i*2 + 1]];
 		
 		// count the number of BDM alleles in each genome (if any)
 		num_p1_alleles = sum(p1_bdm_locations == p1_locus);
