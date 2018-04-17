@@ -26,7 +26,7 @@ initialize() {
 	// ******************************
 	
 	defineConstant("max_ri", 1.0); // the maximum possible reduction in fitness due to RI (1 > max_ri > 0)
-	defineConstant("bdm_n",  8); // the number of bdm_loci (minimum 2)
+	defineConstant("bdm_n",  10); // the number of bdm_loci (minimum 2)
 	defineConstant("bdm_s", (max_ri/bdm_n)/2); // the proportion of RI caused by each bdm allele
 	defineConstant("bdm_arch","clustered"); // whether the bdm_loci are clumped or spread out.
 	
@@ -46,60 +46,28 @@ initialize() {
 	}
 	
 	// ******************************
-	// BDM epistasis parameters
+	// BDM pairwise locus assignments
 	// ******************************
 	
 	// create pairs of interacting BDM loci
 	// constrained such that there each locus interacts with exactly one other locus 
 	// (and never underdominance at single locus).
 	
+	shuffle_valid = 0;
 	bdm_loci_p1_tmp = 0:(bdm_n-1); 
-	bdm_loci_p2_tmp = rep(1e10, bdm_n); // 1e10 is a dummy value
-
-	for (i in 0:(size(bdm_loci_p1_tmp)-1)){
-			
-			// define invalid loci (previously selected loci; also the current locus)
-			invalid_loci = unique(c(bdm_loci_p2_tmp, bdm_loci_p1_tmp[i]));
-			
-			//where are the invalid loci within the loci_p1 vector?
-			matches = match(invalid_loci, bdm_loci_p1_tmp)[ match(invalid_loci, bdm_loci_p1_tmp) >= 0];
-			
-			valid_loci = bdm_loci_p1_tmp;
-			
-			// if we were using R, we could use %in%, but instead:
-			// assign a dummy value (1e10) to loci that are invalid
-			// (or in the case of a single value, just assign it as the valid locus)
-			if(size(matches) > 1){
-			
-					valid_loci[matches] = 1e10;
-	  		
-	  		} else{
-	  		
-	  			valid_loci = bdm_loci_p1_tmp[bdm_loci_p1_tmp != matches[0]];
-	  		
-	  		}
-	  		// purge the vector of the dummy values
-	  		valid_loci = valid_loci[valid_loci < 1e10];
-	  		valid_loci = unique(valid_loci);
-	  
-	  // if there is only one valid locus, assign it to the p2_bdm vector
-	  // otherwise, draw a random sample from the available loci
-	  if(size(valid_loci) <= 1){
-	  
-	    bdm_loci_p2_tmp[i] = valid_loci;
-	    
-	  } else{
-	  
-	    bdm_loci_p2_tmp[i] = sample(valid_loci, 1);
-	    
-	  }
-	  	  
+	
+	//interatively shuffle until there are no perfect matches (all interlocus, no intralocus)
+	
+	while (shuffle_valid == 0){
+	
+		bdm_loci_p2_tmp = sample(bdm_loci_p1_tmp, bdm_n); 
+		shuffle_valid = all(bdm_loci_p1_tmp != bdm_loci_p2_tmp);
+	
 	}
 	
 	defineConstant("bdm_loci_p1", bdm_loci_p1_tmp);
 	defineConstant("bdm_loci_p2", bdm_loci_p2_tmp);
 	
-
 	// ******************************
 	// Mutation types
 	// ******************************
@@ -248,17 +216,29 @@ fitness(NULL) {
 		num_p1_alleles = sum(p1_bdm_locations == p1_locus);
 		num_p2_alleles = sum(p2_bdm_locations == p2_locus);
 		
-		// sum these together to get a 'bdm_genotype'
-		bdm_genotype =  c(num_p1_alleles + num_p2_alleles);
+		// multiply these together to get a 'bdm_genotype'
+		bdm_genotype = num_p1_alleles * num_p2_alleles;
 		
 		// assign a value to the negative epistasis vector 
 		// based on the bdm genotype
-		// first checks if there are any missing alleles (product of both counts > 0)
-		// if there are no missing alleles, assigns a penalty = (bdm_genotype/2) * bdm_s
+		// possible values: 0, 1, 2, 4
+		// if genotype > 0, assigns penalty based on genotype value
 		// otherwise remains at 0 (initial value)
 
-		if((num_p2_alleles * num_p1_alleles > 0) & bdm_genotype > 1)
-			negative_epistasis[i] = (bdm_genotype/2) * bdm_s;
+		if(bdm_genotype == 1){
+			
+			negative_epistasis[i] = bdm_s;
+			
+		}	else if (bdm_genotype == 2){
+		
+			negative_epistasis[i] = 1.5 * bdm_s;
+		
+		}  else if (bdm_genotype == 4){
+		
+			negative_epistasis[i] = 2 * bdm_s;
+		
+		} 
+		
 			
 	}
 	
