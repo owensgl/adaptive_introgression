@@ -209,6 +209,19 @@ fitness(NULL) {
 		// multiply these together to get a 'bdm_genotype'
 		bdm_genotype = num_p1_alleles * num_p2_alleles;
 		
+		
+		// debug only, print genotypes
+		if (sim.generation % 200 == 0){
+		cat("current loci : " + p1_locus + " " + p2_locus + "\n");
+		cat("m3 alleles in genome : " + paste(sort(p1_bdm_locations)) + "\n");
+		cat("m4 alleles in genome : " + paste(sort(p2_bdm_locations)) + "\n");
+		cat("num m3 at locus 1: " + num_p1_alleles + "\n");
+		cat("num m4 at locus 2: " + num_p2_alleles + "\n");
+		cat("bdm_genotype : " + bdm_genotype + "\n\n");
+		}
+		
+		
+		
 		// assign a value to the negative epistasis vector 
 		// based on the bdm genotype
 		// possible values: 0, 1, 2, 4
