@@ -9,41 +9,33 @@ initialize() {
 	defineConstant("m", 0.01);   // the bidirectional migration rate
 	defineConstant("delta", 0.001); // the per-generation change in selective optimum
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum
-	defineConstant("qtl_effect_size", 0.2); // the *phenotypic* effect size of the QTL alleles
+	defineConstant("qtl_sd", 1); // the standard deviation of the QTL mutation distribution
 	initializeMutationRate(1.5e-7);
-	initializeRecombinationRate(1e-8);
+	initializeRecombinationRate(1e-5); // 1e8 = 1 centimorgan/Mbp, 1e5 = 100 cM/mbp; total chromosome length = 100cM
 	
 	// ******************************
 	// Burn-in parameters
 	// ******************************
 	
-	defineConstant("burn_in_generations", 4000); // the number of burn-in generations (not yet implemented)
-	defineConstant("burn_in_fluct_period", 1000); // no. generations between changes in optimum
+	defineConstant("burn_in_generations", 1250); // the number of burn-in generations (not yet implemented)
+	defineConstant("burn_in_fluct_period", 500); // no. generations between changes in optimum
 	defineConstant("burn_in_optimum", 5.0); // the amplitude of the burn-in flucation (opt1 = +, opt2 = -)
 	
 	// ******************************
-	// BDM location parameters
+	// BDM parameters
 	// ******************************
 	
-	defineConstant("max_ri", 1.0); // the maximum possible reduction in fitness due to RI (1 > max_ri > 0)
 	defineConstant("bdm_n",  10); // the number of bdm_loci (minimum 2)
-	defineConstant("bdm_s", (max_ri/bdm_n)/2); // the proportion of RI caused by each bdm allele
-	defineConstant("bdm_arch","clustered"); // whether the bdm_loci are clumped or spread out.
+	defineConstant("bdm_s", 0.15); // the effect size of BDM interactions
 	
-	// parameters for 'clustered' architectures
-	defineConstant("cluster_proportion", 4); // the size of the cluster, 1 = whole chromosome, 2 = half, 3 = third, etc.
+	// parameters for spatial arrangement of BDMs
+	defineConstant("cluster_proportion", 2); // the size of the cluster, 1 = whole chromosome, 2 = half, 3 = third, etc.
 	defineConstant("cluster_size", integerDiv(chr_size, cluster_proportion)); // the size of the BDM cluster, in bp
 	defineConstant("cluster_start", integerDiv(chr_size, 2) - integerDiv(chr_size, cluster_proportion*2)); // the starting locus of the cluster
 	
-	if (bdm_arch == "diffuse"){
-	
-		defineConstant("bdm_loci", c(1:bdm_n) * integerDiv(chr_size, (bdm_n+1))); 
-		
-	} else if (bdm_arch == "clustered"){
-				
-		defineConstant("bdm_loci", c(1:bdm_n) * integerDiv(cluster_size, (bdm_n+1)) + cluster_start); // define the bdm loci
+	// assign BDMs to loci based on the above
+	defineConstant("bdm_loci", c(1:bdm_n) * integerDiv(cluster_size, (bdm_n+1)) + cluster_start); // define the bdm loci
 
-	}
 	
 	// ******************************
 	// BDM pairwise locus assignments
@@ -61,9 +53,7 @@ initialize() {
 	// Mutation types
 	// ******************************
 	
-	scriptForQTLs = paste(c("if (runif(1) < 0.5) -", qtl_effect_size, "; else ",qtl_effect_size ,";"), sep = ""); // binary QTL alleles
-	initializeMutationType("m1", 0.5, "s", scriptForQTLs);  // Environmentally-sensitive QTL 
-	initializeMutationType("m2", 0.5, "f", 0.0);  // a neutral allele
+	initializeMutationType("m1", 0.5, "n", 0, qtl_sd);  // Environmentally-sensitive QTL, mean zero, sd = 1
 	initializeMutationType("m3", 0.5, "f", 0.0);  // The BDM allele in p1 
 	initializeMutationType("m4", 0.5, "f", 0.0);  // The BDM allele in p2 
 
@@ -72,12 +62,11 @@ initialize() {
 	m4.convertToSubstitution = F;
 	
 	m1.mutationStackPolicy = "l";
-	//m3.mutationStackPolicy = "l";
-	//m4.mutationStackPolicy = "l";
+	m3.mutationStackPolicy = "l";
+	m4.mutationStackPolicy = "l";
 	
 	// colors, for use in SLiMGui
 	m1.color = "red";
-	m2.color = "grey40";
 	m3.color = "blue";
 	m4.color = "yellow";
 
@@ -85,8 +74,8 @@ initialize() {
 	// Genome properties
 	// ******************************
 
-	initializeGenomicElementType("g1", c(m1,m2),  c(0.5,0.5)); // only QTL and neutral alleles mutate in
-	initializeGenomicElementType("g2", c(m1,m3,m4),  c(1e-200,0.0,0.0)); // RI loci are static
+	initializeGenomicElementType("g1", c(m1),  c(1.0)); // only QTL alleles are allows to arise via new mutation
+	initializeGenomicElementType("g2", c(m1,m3,m4),  c(1e-200,0.0,0.0)); // RI loci are static (m1 included to allow fitness calc)
 	
 	//define the non-RI regions
 			
@@ -170,18 +159,13 @@ fitness(NULL) {
 	
 	} else{
 		
-		current_optimum = initial_optimum + delta * sim.generation;
+		current_optimum = initial_optimum + delta * (sim.generation - burn_in_generations);
 	}
 	
 	// the fitness of this individual, based on the current optimum
-	qtl_fitness = dnorm(current_optimum - individual.x, 0.0, 5.0);
+	qtl_fitness = dnorm(current_optimum - individual.x, 0.0, 2.0);
 	
-	//if (sim.generation % 100 == 0){
-	//cat("Phenotype =" + individual.x + ". Optimum="  +current_optimum  +"\n");
-	//}
-	
-	
-	
+
 	// ***************************************************************
 	// BDM pairwise negative epistasis
 	// ***************************************************************
@@ -209,19 +193,6 @@ fitness(NULL) {
 		// multiply these together to get a 'bdm_genotype'
 		bdm_genotype = num_p1_alleles * num_p2_alleles;
 		
-		
-		// debug only, print genotypes
-		if (sim.generation % 200 == 0){
-		cat("current loci : " + p1_locus + " " + p2_locus + "\n");
-		cat("m3 alleles in genome : " + paste(sort(p1_bdm_locations)) + "\n");
-		cat("m4 alleles in genome : " + paste(sort(p2_bdm_locations)) + "\n");
-		cat("num m3 at locus 1: " + num_p1_alleles + "\n");
-		cat("num m4 at locus 2: " + num_p2_alleles + "\n");
-		cat("bdm_genotype : " + bdm_genotype + "\n\n");
-		}
-		
-		
-		
 		// assign a value to the negative epistasis vector 
 		// based on the bdm genotype
 		// possible values: 0, 1, 2, 4
@@ -247,7 +218,11 @@ fitness(NULL) {
 	
 	// discount the qtl fitness by the amount of negative epistatsis
 	// limted by max_ri 
-	return (qtl_fitness * (1-sum(negative_epistasis)));
+	
+	// the maxmimum total epistasis penalty is 1 (total lethality)
+	epistasis_penalty = ifelse(sum(negative_epistasis) > 1, 1.0, sum(negative_epistasis));
+	
+	return (qtl_fitness * (1-epistasis_penalty));
 	
 }
 
