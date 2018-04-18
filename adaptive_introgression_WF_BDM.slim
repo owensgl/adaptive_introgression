@@ -54,28 +54,28 @@ initialize() {
 	// ******************************
 	
 	initializeMutationType("m1", 0.5, "n", 0, qtl_sd);  // Environmentally-sensitive QTL, mean zero, sd = 1
-	initializeMutationType("m3", 0.5, "f", 0.0);  // The BDM allele in p1 
-	initializeMutationType("m4", 0.5, "f", 0.0);  // The BDM allele in p2 
+	initializeMutationType("m2", 0.5, "f", 0.0);  // The BDM allele in p1 
+	initializeMutationType("m3", 0.5, "f", 0.0);  // The BDM allele in p2 
 
 	m1.convertToSubstitution = F;
+	m2.convertToSubstitution = F;
 	m3.convertToSubstitution = F;
-	m4.convertToSubstitution = F;
 	
 	m1.mutationStackPolicy = "l";
+	m2.mutationStackPolicy = "l";
 	m3.mutationStackPolicy = "l";
-	m4.mutationStackPolicy = "l";
 	
 	// colors, for use in SLiMGui
 	m1.color = "red";
-	m3.color = "blue";
-	m4.color = "yellow";
+	m2.color = "blue";
+	m3.color = "yellow";
 
    // ******************************
 	// Genome properties
 	// ******************************
 
 	initializeGenomicElementType("g1", c(m1),  c(1.0)); // only QTL alleles are allows to arise via new mutation
-	initializeGenomicElementType("g2", c(m1,m3,m4),  c(1e-200,0.0,0.0)); // RI loci are static (m1 included to allow fitness calc)
+	initializeGenomicElementType("g2", c(m1,m2,m3),  c(1e-200,0.0,0.0)); // RI loci are static (m1 included to allow fitness calc)
 	
 	//define the non-RI regions
 			
@@ -109,8 +109,8 @@ initialize() {
 	// add in BDM alleles
 	for (i in bdm_loci){
 	
-	 	p1.individuals.genomes.addNewDrawnMutation(m3, i);
-		p2.individuals.genomes.addNewDrawnMutation(m4, i);
+	 	p1.individuals.genomes.addNewDrawnMutation(m2, i);
+		p2.individuals.genomes.addNewDrawnMutation(m3, i);
 				
 	}
 	
@@ -134,12 +134,12 @@ fitness(m1) {
 	return 1.0;
 }
 
-fitness(m3) {
+fitness(m2) {
 	// the p1 BDMs themselves are neutral; their effect is handled below 
 	return 1.0;
 }
 
-fitness(m4) {
+fitness(m3) {
 	// the p2 BDMs themselves are neutral; their effect is handled below 
 	return 1.0;		
 }
@@ -174,8 +174,8 @@ fitness(NULL) {
 	negative_epistasis = rep(0.0, bdm_n);
 	
 	// where are the p1 and p2 bdm *alleles* in each genome?
-	p1_bdm_locations = c(genome1.positionsOfMutationsOfType(m3), genome2.positionsOfMutationsOfType(m3));
-	p2_bdm_locations = c(genome1.positionsOfMutationsOfType(m4), genome2.positionsOfMutationsOfType(m4));
+	p1_bdm_locations = c(genome1.positionsOfMutationsOfType(m2), genome2.positionsOfMutationsOfType(m2));
+	p2_bdm_locations = c(genome1.positionsOfMutationsOfType(m3), genome2.positionsOfMutationsOfType(m3));
 	
 	// scan each pair of negatively interacting bdm loci (assigned in the starting parameters)
 	
