@@ -7,7 +7,7 @@ initialize() {
 	defineConstant("chr_size", 99999); // the total length of the chromosome
 	defineConstant("pop_size", 400); // initial population size for p1 and p2
 	defineConstant("m", 0.01);   // the bidirectional migration rate
-	defineConstant("delta", 0.001); // the per-generation change in selective optimum
+	defineConstant("delta", 0.1); // the per-generation change in selective optimum
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum
 	defineConstant("qtl_sd", 1); // the standard deviation of the QTL mutation distribution
 	initializeMutationRate(1.5e-7);
@@ -20,6 +20,7 @@ initialize() {
 	defineConstant("burn_in_generations", 1250); // the number of burn-in generations (not yet implemented)
 	defineConstant("burn_in_fluct_period", 500); // no. generations between changes in optimum
 	defineConstant("burn_in_optimum", 5.0); // the amplitude of the burn-in flucation (opt1 = +, opt2 = -)
+
 	
 	// ******************************
 	// BDM parameters
@@ -45,9 +46,31 @@ initialize() {
 	// each pair = index the shuffled vector by 2s (done at fitness step)
 	// e.g. 0 1 2 3 -> 3 0 1 2, pairs are locus 3 and locus 0; locus 1 and 2
 
-	bdm_pairs_tmp = sample(0:(bdm_n-1), 10);
+	bdm_pairs_tmp = sample(0:(bdm_n-1), bdm_n);
 	cat("BDM pairs: " + paste(bdm_pairs_tmp) + "\n");
 	defineConstant("bdm_pairs", bdm_pairs_tmp);
+	
+	// ******************************
+	// Divergent selection parameters
+	// ******************************
+	
+	defineConstant("div_sel_n", 100); // the number of loci subject to divergent selection
+	defineConstant("div_sel_s", 0.001); // selection coefficient for divergently seleted alleles
+	
+	// disperse div sel loci evenly along genome
+	defineConstant("div_sel_loci", c(1:div_sel_n) * integerDiv(chr_size, (div_sel_n+1))); 
+	
+	// if div sel sites overlap BDMs, nudge them by 1 bp
+	
+	for (i in bdm_loci){
+	
+		if (any(div_sel_loci == i)){
+	
+			cat("NUDGED " + div_sel_loci[div_sel_loci == i] +"\n");
+			div_sel_loci[div_sel_loci == i] = (div_sel_loci[div_sel_loci == i] + 1);
+	
+		}
+	}
 	
 	// ******************************
 	// Mutation types
@@ -56,19 +79,27 @@ initialize() {
 	initializeMutationType("m1", 0.5, "n", 0, qtl_sd);  // Environmentally-sensitive QTL, mean zero, sd = 1
 	initializeMutationType("m2", 0.5, "f", 0.0);  // The BDM allele in p1 
 	initializeMutationType("m3", 0.5, "f", 0.0);  // The BDM allele in p2 
+	initializeMutationType("m4", 0.5, "f", div_sel_s);  // The divergently selected allele in p1
+	initializeMutationType("m5", 0.5, "f", div_sel_s);  // The divergently selected allele in p2
 
 	m1.convertToSubstitution = F;
 	m2.convertToSubstitution = F;
 	m3.convertToSubstitution = F;
+	m4.convertToSubstitution = F;
+	m5.convertToSubstitution = F;
 	
 	m1.mutationStackPolicy = "l";
 	m2.mutationStackPolicy = "l";
 	m3.mutationStackPolicy = "l";
+	m4.mutationStackPolicy = "l";
+	m5.mutationStackPolicy = "l";
 	
 	// colors, for use in SLiMGui
 	m1.color = "red";
 	m2.color = "blue";
 	m3.color = "yellow";
+	m4.color = "green";
+	m5.color = "purple";
 
    // ******************************
 	// Genome properties
@@ -76,23 +107,32 @@ initialize() {
 
 	initializeGenomicElementType("g1", c(m1),  c(1.0)); // only QTL alleles are allows to arise via new mutation
 	initializeGenomicElementType("g2", c(m1,m2,m3),  c(1e-200,0.0,0.0)); // RI loci are static (m1 included to allow fitness calc)
+	initializeGenomicElementType("g3", c(m1,m4,m5),  c(1e-200,0.0,0.0)); // div loci are static (m1 included to allow fitness calc)
 	
-	//define the non-RI regions
+	//define the static (g2, g3) and mutatable regions (g1)
+	
+	statics = sort(c(bdm_loci, div_sel_loci));
+	
+	// first, lay down the mutatable regions of the genome (g1)
 			
-	for (index in 0:(size(bdm_loci)-1))
+	for (index in 0:(size(statics)-1))
 	
 		if (index == 0){
-			initializeGenomicElement(g1, 0, bdm_loci[index]-1);
-			initializeGenomicElement(g1, bdm_loci[index]+1, bdm_loci[index+1]-1);
+			initializeGenomicElement(g1, 0, statics[index]-1);
+			initializeGenomicElement(g1, statics[index]+1, statics[index+1]-1);
 		}
-		else if (index == size(bdm_loci)-1)
-			initializeGenomicElement(g1, bdm_loci[index]+1, chr_size);
+		else if (index == size(statics)-1)
+			initializeGenomicElement(g1, statics[index]+1, chr_size);
 		else
-			initializeGenomicElement(g1, bdm_loci[index]+1, bdm_loci[index+1]-1);
+			initializeGenomicElement(g1, statics[index]+1, statics[index+1]-1);
 	
-	// define the RI regions (again, to prevent back-mutations at the RI loci)
+	// next, define the RI regions (again, to prevent back-mutations at the RI loci)
 	for (index in 0:(size(bdm_loci)-1))
 			initializeGenomicElement(g2, bdm_loci[index], bdm_loci[index]);
+	
+	// finally, define the divergently selected regions (no mutations allowed here as well)
+	for (index in 0:(size(div_sel_loci)-1))
+			initializeGenomicElement(g3, div_sel_loci[index], div_sel_loci[index]);
 
 }
 
@@ -111,6 +151,15 @@ initialize() {
 	
 	 	p1.individuals.genomes.addNewDrawnMutation(m2, i);
 		p2.individuals.genomes.addNewDrawnMutation(m3, i);
+				
+	}
+	
+	
+	// add in divergently selcted alleles
+	for (i in div_sel_loci){
+	
+	 	p1.individuals.genomes.addNewDrawnMutation(m4, i);
+		p2.individuals.genomes.addNewDrawnMutation(m5, i);
 				
 	}
 	
@@ -144,6 +193,16 @@ fitness(m3) {
 	return 1.0;		
 }
 
+fitness(m4, p2) {
+	// divergent selection
+	return -div_sel_s;		
+}
+
+fitness(m5, p1) {
+	// divergent selection
+	return -div_sel_s;		
+}
+
 fitness(NULL) {
 
 	// ***************************************************************
@@ -164,7 +223,6 @@ fitness(NULL) {
 	
 	// the fitness of this individual, based on the current optimum
 	qtl_fitness = dnorm(current_optimum - individual.x, 0.0, 2.0);
-	
 
 	// ***************************************************************
 	// BDM pairwise negative epistasis
@@ -245,7 +303,7 @@ fitness(NULL) {
 	
 	} else{
 	
-		current_optimum = initial_optimum + delta * sim.generation;
+		current_optimum = initial_optimum + delta * (sim.generation - burn_in_generations);
 	}
 	
 	cat("Output for end of generation " + (sim.generation) + ":\n");
