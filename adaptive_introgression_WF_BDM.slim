@@ -27,7 +27,7 @@ initialize() {
 	// ******************************
 	
 	defineConstant("bdm_n",  10); // the number of bdm_loci (minimum 2)
-	defineConstant("bdm_s", 0.15); // the effect size of BDM interactions
+	defineConstant("bdm_s", 0.10); // the effect size of BDM interactions
 	
 	// parameters for spatial arrangement of BDMs
 	defineConstant("cluster_proportion", 2); // the size of the cluster, 1 = whole chromosome, 2 = half, 3 = third, etc.
@@ -195,12 +195,12 @@ fitness(m3) {
 
 fitness(m4, p2) {
 	// divergent selection
-	return -div_sel_s;		
+	return 1-div_sel_s;		
 }
 
 fitness(m5, p1) {
 	// divergent selection
-	return -div_sel_s;		
+	return 1-div_sel_s;		
 }
 
 fitness(NULL) {
