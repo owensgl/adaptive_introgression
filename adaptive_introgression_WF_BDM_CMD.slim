@@ -5,8 +5,8 @@ initialize() {
 	// ******************************
 	
 	defineConstant("chr_size", 99999); // the total length of the chromosome
-	defineConstant("pop_size", 500); // initial population size for p1 and p2
-	defineConstant("m", 0.001);   // the bidirectional migration rate
+	defineConstant("pop_size", d_pop_size); // initial population size for p1 and p2
+	defineConstant("m", d_m);   // the bidirectional migration rate
 	defineConstant("delta", 0.1); // the per-generation change in selective optimum
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum
 	defineConstant("qtl_sd", 1); // the standard deviation of the QTL mutation distribution
@@ -55,8 +55,8 @@ initialize() {
 	// Divergent selection parameters
 	// ******************************
 	
-	defineConstant("div_sel_n", 100); // the number of loci subject to divergent selection
-	defineConstant("div_sel_s", 0.005); // selection coefficient for divergently seleted alleles
+	defineConstant("div_sel_n", d_div_sel_n); // the number of loci subject to divergent selection
+	defineConstant("div_sel_s", d_div_sel_s); // selection coefficient for divergently seleted alleles
 
 	// disperse div sel loci evenly along genome
 	defineConstant("div_sel_loci", c(1:div_sel_n) * integerDiv(chr_size, (div_sel_n+1))); 
