@@ -11,6 +11,7 @@ initialize() {
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum
 	defineConstant("qtl_sd", 1); // the standard deviation of the QTL mutation distribution
 	initializeMutationRate(d_mutation_rate);
+	defineConstant("mutation_rate", d_mutation_rate); // Used so that mutation rate can be reported later
 	initializeRecombinationRate(1e-5); // 1e8 = 1 centimorgan/Mbp, 1e5 = 100 cM/mbp; total chromosome length = 100cM
 	defineConstant("commandline",  "True"); //Set to False to make it output every 100 generations
 	
