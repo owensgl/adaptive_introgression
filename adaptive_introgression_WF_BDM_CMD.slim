@@ -346,7 +346,7 @@ fitness(NULL) {
 		p2total_away = sum(p2g.countOfMutationsOfType(m4));
 		p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-		cat("burn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s "\t" + d_mutation_rate +"\t" + d_delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\n");
+		cat("burn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s "\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\n");
 	}
 
 	if (sim.generation  == (burn_in_generations + shift_generations)){
@@ -359,7 +359,7 @@ fitness(NULL) {
 		p2total_away = sum(p2g.countOfMutationsOfType(m4));
 		p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-		cat("shift\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s "\t" + d_mutation_rate +"\t" + d_delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\n");
+		cat("shift\t" + pop_size +"\t"+ m +"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s "\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\n");
 		sim.simulationFinished();
 	}
 	
