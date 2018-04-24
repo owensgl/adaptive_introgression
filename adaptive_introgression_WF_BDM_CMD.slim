@@ -14,6 +14,7 @@ initialize() {
 	defineConstant("mutation_rate", d_mutation_rate); // Used so that mutation rate can be reported later
 	initializeRecombinationRate(1e-5); // 1e8 = 1 centimorgan/Mbp, 1e5 = 100 cM/mbp; total chromosome length = 100cM
 	defineConstant("commandline",  "True"); //Set to False to make it output every 100 generations
+	defineConstant("rep", d_rep); //A rep number used to keep track of multi line output. 
 	
 	// ******************************
 	// Burn-in parameters
@@ -347,7 +348,7 @@ fitness(NULL) {
 		p2total_away = sum(p2g.countOfMutationsOfType(m4));
 		p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-		cat("burn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\n");
+		cat("burn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + rep + "\n");
 	}
 
 	if (sim.generation  == (burn_in_generations + shift_generations)){
@@ -360,7 +361,7 @@ fitness(NULL) {
 		p2total_away = sum(p2g.countOfMutationsOfType(m4));
 		p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-		cat("shift\t" + pop_size +"\t"+ m +"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\n");
+		cat("shift\t" + pop_size +"\t"+ m +"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + rep + "\n");
 		sim.simulationFinished();
 	}
 	
