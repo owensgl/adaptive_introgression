@@ -1,0 +1,198 @@
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+
+// RunInitializeCallbacks():
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
+   -d[efine] <def>  : define an Eidos constant, such as "mu=1e-7"
+
