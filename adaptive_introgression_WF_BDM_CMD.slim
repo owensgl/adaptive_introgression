@@ -352,7 +352,7 @@ fitness(NULL) {
 		fit_dif = (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
 
 			
-		cat("burn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
+		cat("OUT1\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
 		
 				counts = p1.genomes.countOfMutationsOfType(m1);
 		
@@ -361,7 +361,7 @@ fitness(NULL) {
 			if (mut.mutationType == m1){
 				mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
 				if (mutFreq > 0.1){
-					cat("burn_in,mutations,p1," + mut.position + "," + mut.subpopID+ "," + mutFreq + "," + mut.selectionCoeff + "\n");
+					cat("OUT2\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp1\t" + mut.position + "\t" + mut.subpopID+ "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
 				}
 			}
 		}
@@ -373,7 +373,7 @@ fitness(NULL) {
 			if (mut.mutationType == m1){
 				mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
 				if (mutFreq > 0.1){
-					cat("burn_in,mutations,p2," + mut.position + "," + mut.subpopID + "," + mutFreq + "," + mut.selectionCoeff + "\n");
+					cat("OUT2\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp2\t" + mut.position + "\t" + mut.subpopID + "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
 				}
 			}
 		}
@@ -395,7 +395,7 @@ fitness(NULL) {
 		fit_dif =  (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
 
 			
-		cat("shift\t" + pop_size +"\t"+ m +"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
+		cat("OUT1\tshift\t" + pop_size +"\t"+ m +"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
 		
 		counts = p1.genomes.countOfMutationsOfType(m1);
 		
@@ -404,7 +404,7 @@ fitness(NULL) {
 			if (mut.mutationType == m1){
 				mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
 				if (mutFreq > 0.1){
-					cat("shift,mutations,p1," + mut.position + "," + mut.subpopID+ "," + mutFreq + "," + mut.selectionCoeff + "\n");
+					cat("OUT2\tshift\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp1\t" + mut.position + "\t" + mut.subpopID+ "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
 				}
 			}
 		}
@@ -416,7 +416,7 @@ fitness(NULL) {
 			if (mut.mutationType == m1){
 				mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
 				if (mutFreq > 0.1){
-					cat("shift,mutations,p2," + mut.position + "," + mut.subpopID + "," + mutFreq + "," + mut.selectionCoeff + "\n");
+					cat("OUT2\tshift\t"+ pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp2\t" + mut.position + "\t" + mut.subpopID + "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
 				}
 			}
 		}
