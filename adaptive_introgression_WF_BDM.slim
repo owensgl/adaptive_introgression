@@ -6,21 +6,26 @@ initialize() {
 	
 	defineConstant("chr_size", 99999); // the total length of the chromosome
 	defineConstant("pop_size", 500); // initial population size for p1 and p2
-	defineConstant("m", 0.001);   // the bidirectional migration rate
+	defineConstant("m", 0.01);   // the bidirectional migration rate
 	defineConstant("delta", 0.1); // the per-generation change in selective optimum
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum
 	defineConstant("qtl_sd", 1); // the standard deviation of the QTL mutation distribution
-	initializeMutationRate(1.5e-8);
+	defineConstant("mutation_rate", 1.5e-8); // Used so that mutation rate can be reported later
+
+	initializeMutationRate(mutation_rate);
 	initializeRecombinationRate(1e-5); // 1e8 = 1 centimorgan/Mbp, 1e5 = 100 cM/mbp; total chromosome length = 100cM
 	defineConstant("commandline",  "True"); //Set to False to make it output every 100 generations
+	defineConstant("rep", 1); //A rep number used to keep track of multi line output. 
+
 	
 	// ******************************
 	// Burn-in parameters
 	// ******************************
 	
-	defineConstant("burn_in_generations", 3500); // the number of burn-in generations (not yet implemented)
+	defineConstant("burn_in_generations", 300); // the number of burn-in generations (not yet implemented)
 	defineConstant("burn_in_fluct_period", 1000); // no. generations between changes in optimum
-	defineConstant("burn_in_optimum", 0.0); // the amplitude of the burn-in flucation (opt1 = +, opt2 = -)
+	defineConstant("burn_in_optimum", 5.0); // the amplitude of the burn-in flucation (opt1 = +, opt2 = -)
+	defineConstant("shift_generations",100); // the number of post burn-in generations to run. 
 
 	
 	// ******************************
@@ -333,20 +338,91 @@ fitness(NULL) {
 			p2_home_percent = p2total_home/ (p2total_home + p2total_away);
 			cat("In p2, there are " + p2_home_percent + "% native alleles\n");
 		}
-	}else{
-		if (sim.generation == burn_in_generations){
-			p1g = p1.genomes; 			p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
-			p1total_away = sum(p1g.countOfMutationsOfType(m5));
-			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
+	}
+	if (sim.generation == burn_in_generations){
 	
-			p2g = p2.genomes;
-			p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
-			p2total_away = sum(p2g.countOfMutationsOfType(m4));
-			p2_home_percent = p2total_home/ (p2total_home + p2total_away);
+		p1g = p1.genomes; 		p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
+		p1total_away = sum(p1g.countOfMutationsOfType(m5));
+		p1_home_percent = p1total_home/ (p1total_home + p1total_away);
+	
+		p2g = p2.genomes;
+		p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
+		p2total_away = sum(p2g.countOfMutationsOfType(m4));
+		p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
+		
+		fit_dif = (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
+
 			
-			cat(pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\n");
-			sim.simulationFinished();
+		cat("burn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
+		
+				counts = p1.genomes.countOfMutationsOfType(m1);
+		
+		for (mut in sim.mutations)
+		{
+			if (mut.mutationType == m1){
+				mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
+				if (mutFreq > 0.1){
+					cat("burn_in,mutations,p1," + mut.position + "," + mut.subpopID+ "," + mutFreq + "," + mut.selectionCoeff + "\n");
+				}
+			}
 		}
+		
+		counts = p2.genomes.countOfMutationsOfType(m1);
+		
+		for (mut in sim.mutations)
+		{
+			if (mut.mutationType == m1){
+				mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
+				if (mutFreq > 0.1){
+					cat("burn_in,mutations,p2," + mut.position + "," + mut.subpopID + "," + mutFreq + "," + mut.selectionCoeff + "\n");
+				}
+			}
+		}
+	}
+
+	if (sim.generation  == (burn_in_generations + shift_generations)){
+	
+	
+
+		p1g = p1.genomes; 		p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
+		p1total_away = sum(p1g.countOfMutationsOfType(m5));
+		p1_home_percent = p1total_home/ (p1total_home + p1total_away);
+	
+		p2g = p2.genomes;
+		p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
+		p2total_away = sum(p2g.countOfMutationsOfType(m4));
+		p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
+		
+		fit_dif =  (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
+
+			
+		cat("shift\t" + pop_size +"\t"+ m +"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
+		
+		counts = p1.genomes.countOfMutationsOfType(m1);
+		
+		for (mut in sim.mutations)
+		{
+			if (mut.mutationType == m1){
+				mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
+				if (mutFreq > 0.1){
+					cat("shift,mutations,p1," + mut.position + "," + mut.subpopID+ "," + mutFreq + "," + mut.selectionCoeff + "\n");
+				}
+			}
+		}
+		
+		counts = p2.genomes.countOfMutationsOfType(m1);
+		
+		for (mut in sim.mutations)
+		{
+			if (mut.mutationType == m1){
+				mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
+				if (mutFreq > 0.1){
+					cat("shift,mutations,p2," + mut.position + "," + mut.subpopID + "," + mutFreq + "," + mut.selectionCoeff + "\n");
+				}
+			}
+		}
+		
+		sim.simulationFinished();
 	}
 	
 }
