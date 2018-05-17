@@ -282,7 +282,6 @@ fitness(NULL) {
 	}
 	
 	// discount the qtl fitness by the amount of negative epistatsis
-	// limted by max_ri 
 	
 	// the maxmimum total epistasis penalty is 1 (total lethality)
 	epistasis_penalty = ifelse(sum(negative_epistasis) > 1, 1.0, sum(negative_epistasis));
