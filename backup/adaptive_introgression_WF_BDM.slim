@@ -61,7 +61,7 @@ initialize() {
 	// ******************************
 	
 	defineConstant("div_sel_n", 100); // the number of loci subject to divergent selection
-	defineConstant("div_sel_s", 0.005); // selection coefficient for divergently seleted alleles
+	defineConstant("div_sel_s", 0.01); // selection coefficient for divergently seleted alleles
 
 	// disperse div sel loci evenly along genome
 	defineConstant("div_sel_loci", c(1:div_sel_n) * integerDiv(chr_size, (div_sel_n+1))); 
@@ -201,12 +201,12 @@ fitness(m3) {
 
 fitness(m4, p2) {
 	// divergent selection
-	return 1-div_sel_s;		
+	return 1/relFitness;		
 }
 
 fitness(m5, p1) {
 	// divergent selection
-	return 1-div_sel_s;		
+	return 1/relFitness;		
 }
 
 fitness(NULL) {
