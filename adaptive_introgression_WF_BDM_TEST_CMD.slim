@@ -5,7 +5,6 @@ initialize() {
 	// ******************************
 	defineConstant("seed", d_seed); // The seed for repeating running a simulation with and without the climate shift.
 	setSeed(seed); 
-
 	
 	defineConstant("chr_size", 99999); // the total length of the chromosome
 	defineConstant("pop_size", d_pop_size); // initial population size for p1 and p2
@@ -142,8 +141,6 @@ initialize() {
 	for (index in 0:(size(div_sel_loci)-1))
 			initializeGenomicElement(g3, div_sel_loci[index], div_sel_loci[index]);
 			
-	// Load burn in simulation
-	sim.readFromPopulationFile("/states/slim_" + seed + ".txt"); 
 
 }
 
@@ -294,6 +291,10 @@ fitness(NULL) {
 	
 }
 
+1 early() {
+        // Load burn in simulation
+        sim.readFromPopulationFile("states/slim_" + seed + ".txt");
+}
 1:10000 late() {
 
 	// ***************************************************************
