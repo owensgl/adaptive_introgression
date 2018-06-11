@@ -203,12 +203,14 @@ fitness(m3) {
 
 fitness(m4, p2) {
 	// divergent selection
-	return 1/relFitness;		
+//	return 1/relFitness;		
+        return 1.0 - (1.0 * div_sel_s);
 }
 
 fitness(m5, p1) {
 	// divergent selection
-	return 1/relFitness;		
+//	return 1/relFitness;	
+	return 1.0 - (1.0 * div_sel_s);	
 }
 
 fitness(NULL) {
@@ -295,7 +297,7 @@ fitness(NULL) {
         // Load burn in simulation
         sim.readFromPopulationFile("states/slim_" + seed + ".txt");
 }
-1:10000 late() {
+1:100000 late() {
 
 	// ***************************************************************
 	// Output and console reports

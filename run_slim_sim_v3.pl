@@ -13,16 +13,16 @@ my $slim = "/home/owens/working/SLiM/bin/slim";
 #PARALLEL EXECUTION
 my $pm = new Parallel::ForkManager(1);
 
-my @chosen_k = qw(100);
-my @chosen_m = qw(0.1);
+my @chosen_k = qw(1000);
+my @chosen_m = qw(0.01);
 my @chosen_div_n = qw(100);
-my @chosen_div_s = qw(0.008);
+my @chosen_div_s = qw(0.01);
 my @chosen_bdm_n = qw(10);
 my @chosen_bdm_s = qw(0);
 my @chosen_mutation_rate = qw(1e-7);
-my @chosen_delta = qw(0.1);
+my @chosen_delta = qw(0.5);
 my $reps =10; 
-my $burn_in_gen = 3500;
+my $burn_in_gen = 10000;
 my $shift_gen = 100;
 foreach my $chosen_k (@chosen_k){
 	foreach my $chosen_m (@chosen_m){
