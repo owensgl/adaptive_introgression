@@ -18,20 +18,20 @@ $p{m} = 0.01;
 $p{div_n} = 100;
 $p{div_s} = 0.005;
 $p{bdm_n} = 10;
-$p{bdm_s} = 0;
+$p{bdm_s} = 0.0;
 $p{mutation_rate} = 1e-7;
-$p{delta} = 5;
-my $reps =10; 
-$p{burn_in_gen} = 100;
+$p{delta} = 0.1;
+my $reps =100; 
+$p{burn_in_gen} = 10000;
 $p{shift_gen} = 100;
 
 
 my @p_changes = qw(0.1 0.5 1 2 10); #Numbers to multiply the starting values by. 
 my %varying_p; #each parameter that is going to vary individually. 
 $varying_p{m}++;
-#$varying_p{div_s}++;
-#$varying_p{mutation_rate}++;
-#$varying_p{delta}++;
+$varying_p{div_s}++;
+$varying_p{mutation_rate}++;
+$varying_p{delta}++;
 
 foreach my $varying_parameter (sort keys %varying_p){
 	foreach my $p_change (@p_changes){

@@ -18,7 +18,7 @@ parse_output_filenames <- function(file_name){
   
   x <- strsplit(file_name, "_") %>% data.frame %>% t %>% data.frame
   names(x) <- c("slug","ne", "m", "burn_in_gen", "div_n", "div_s", "bdm_n", "bdm_s", "mu", "delta", "rep")
-  x$rep <- gsub(".txt", "", x$rep)
+  x$rep <- gsub(".txt.gz", "", x$rep)
   row.names(x) <- NULL
   x <- x[,c(2:11)]
   data.frame(x, file_name)
@@ -43,7 +43,7 @@ safe_read_sim_output <- function(x){
   # grep the out1 and read as data frame
   # TBD: out2
 
-  call_string <- paste0("grep OUT1 ", x)
+  call_string <- paste0("zgrep OUT1 ", x)
   out1_df <- system(call_string, intern = TRUE) %>% strsplit(split = "\t") %>% 
     data.frame %>% t %>% data.frame
   
