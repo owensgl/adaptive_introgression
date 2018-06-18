@@ -5,7 +5,8 @@ initialize() {
 	// ******************************
 	defineConstant("seed", d_seed); // The seed for repeating running a simulation with and without the climate shift.
 	setSeed(seed); 
-
+	
+	defineConstant("version", d_version); // This sets whether it is running the burn-in, or testing version. In the burn-in version it stops at the end of the burn in and saves the state. In test version it loads the saved state and continues forward to the end of the shift phase. Can be "test" or "burn".
 	defineConstant("chr_size", 99999); // the total length of the chromosome
 	defineConstant("pop_size", d_pop_size); // initial population size for p1 and p2
 	defineConstant("m", d_m);   // the bidirectional migration rate
@@ -140,6 +141,7 @@ initialize() {
 	// finally, define the divergently selected regions (no mutations allowed here as well)
 	for (index in 0:(size(div_sel_loci)-1))
 			initializeGenomicElement(g3, div_sel_loci[index], div_sel_loci[index]);
+			
 
 }
 
@@ -203,13 +205,13 @@ fitness(m3) {
 fitness(m4, p2) {
 	// divergent selection
 //	return 1/relFitness;		
-	return 1.0 - (1.0 * div_sel_s);
+        return 1.0 - (1.0 * div_sel_s);
 }
 
 fitness(m5, p1) {
 	// divergent selection
-//	return 1/relFitness;		
-	return 1.0 - (1.0 * div_sel_s);
+//	return 1/relFitness;	
+	return 1.0 - (1.0 * div_sel_s);	
 }
 
 fitness(NULL) {
@@ -292,7 +294,13 @@ fitness(NULL) {
 	
 }
 
-1:10000 late() {
+1 late() {
+	if(version == "test"){
+        // Load burn in simulation
+        sim.readFromPopulationFile("states/slim_" + seed + ".txt");
+   }
+}
+1:100000 late() {
 
 	// ***************************************************************
 	// Output and console reports
@@ -341,90 +349,96 @@ fitness(NULL) {
 			cat("In p2, there are " + p2_home_percent + "% native alleles\n");
 		}
 	}
-	if (sim.generation == burn_in_generations){
-	
-		p1g = p1.genomes; 		p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
-		p1total_away = sum(p1g.countOfMutationsOfType(m5));
-		p1_home_percent = p1total_home/ (p1total_home + p1total_away);
-	
-		p2g = p2.genomes;
-		p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
-		p2total_away = sum(p2g.countOfMutationsOfType(m4));
-		p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
-		
-		fit_dif = (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
 
+	if (sim.generation == burn_in_generations){
+		if (version == "burn"){
+	
+			p1g = p1.genomes; 			p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
+			p1total_away = sum(p1g.countOfMutationsOfType(m5));
+			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
+		
+			p2g = p2.genomes;
+			p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
+			p2total_away = sum(p2g.countOfMutationsOfType(m4));
+			p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-		cat("OUT1\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
-		
-				counts = p1.genomes.countOfMutationsOfType(m1);
-		
-		for (mut in sim.mutations)
-		{
-			if (mut.mutationType == m1){
-				mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
-				if (mutFreq > 0.1){
-					cat("OUT2\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp1\t" + mut.position + "\t" + mut.subpopID+ "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+			fit_dif = (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
+
+				
+			cat("OUT1\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
+			
+					counts = p1.genomes.countOfMutationsOfType(m1);
+			
+			for (mut in sim.mutations)
+			{
+				if (mut.mutationType == m1){
+					mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
+					if (mutFreq > 0.1){
+						cat("OUT2\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp1\t" + mut.position + "\t" + mut.subpopID+ "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+					}
 				}
 			}
-		}
-		
-		counts = p2.genomes.countOfMutationsOfType(m1);
-		
-		for (mut in sim.mutations)
-		{
-			if (mut.mutationType == m1){
-				mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
-				if (mutFreq > 0.1){
-					cat("OUT2\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp2\t" + mut.position + "\t" + mut.subpopID + "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+			
+			counts = p2.genomes.countOfMutationsOfType(m1);
+			
+			for (mut in sim.mutations)
+			{
+				if (mut.mutationType == m1){
+					mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
+					if (mutFreq > 0.1){
+						cat("OUT2\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp2\t" + mut.position + "\t" + mut.subpopID + "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+					}
 				}
 			}
+			//Save output for starting the testing phase.
+			sim.outputFull("states/slim_" + seed + ".txt"); 
+			sim.simulationFinished();
 		}
 	}
 
+
 	if (sim.generation  == (burn_in_generations + shift_generations)){
-	
-	
-
-		p1g = p1.genomes; 		p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
-		p1total_away = sum(p1g.countOfMutationsOfType(m5));
-		p1_home_percent = p1total_home/ (p1total_home + p1total_away);
-	
-		p2g = p2.genomes;
-		p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
-		p2total_away = sum(p2g.countOfMutationsOfType(m4));
-		p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
+		if (version == "test"){
+			p1g = p1.genomes; 			p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
+			p1total_away = sum(p1g.countOfMutationsOfType(m5));
+			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
 		
-		fit_dif =  (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
-
+			p2g = p2.genomes;
+			p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
+			p2total_away = sum(p2g.countOfMutationsOfType(m4));
+			p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-		cat("OUT1\tshift\t" + pop_size +"\t"+ m +"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
-		
-		counts = p1.genomes.countOfMutationsOfType(m1);
-		
-		for (mut in sim.mutations)
-		{
-			if (mut.mutationType == m1){
-				mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
-				if (mutFreq > 0.1){
-					cat("OUT2\tshift\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp1\t" + mut.position + "\t" + mut.subpopID+ "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+			fit_dif =  (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
+
+				
+			cat("OUT1\tshift\t" + pop_size +"\t"+ m +"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
+			
+			counts = p1.genomes.countOfMutationsOfType(m1);
+			
+			for (mut in sim.mutations)
+			{
+				if (mut.mutationType == m1){
+					mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
+					if (mutFreq > 0.1){
+						cat("OUT2\tshift\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp1\t" + mut.position + "\t" + mut.subpopID+ "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+					}
 				}
 			}
-		}
-		
-		counts = p2.genomes.countOfMutationsOfType(m1);
-		
-		for (mut in sim.mutations)
-		{
-			if (mut.mutationType == m1){
-				mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
-				if (mutFreq > 0.1){
-					cat("OUT2\tshift\t"+ pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp2\t" + mut.position + "\t" + mut.subpopID + "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+			
+			counts = p2.genomes.countOfMutationsOfType(m1);
+			
+			for (mut in sim.mutations)
+			{
+				if (mut.mutationType == m1){
+					mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
+					if (mutFreq > 0.1){
+						cat("OUT2\tshift\t"+ pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp2\t" + mut.position + "\t" + mut.subpopID + "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+					}
 				}
 			}
+			
+			sim.simulationFinished();
 		}
-		
-		sim.simulationFinished();
 	}
 	
 }

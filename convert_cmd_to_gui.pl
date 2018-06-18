@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-my $d_version = '"test"';
+my $d_version = '\"burn\"';
 my $d_pop_size = "1000";
 my $d_m = "0.01";
 my $d_div_sel_n = "100";
