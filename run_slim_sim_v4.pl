@@ -46,7 +46,7 @@ foreach my $varying_parameter (sort keys %varying_p){
 			open (my $fh,'>', $filename);
 			my $seed = int(rand(100000000000));
 			print STDERR "Running burn in for output_$tmp_p{k}_$tmp_p{m}_$tmp_p{burn_in_gen}_$tmp_p{div_n}_$tmp_p{div_s}_$tmp_p{bdm_n}_$tmp_p{bdm_s}_$tmp_p{mutation_rate}_$tmp_p{delta}_${rep}\n";
-			my $output_1 = `$slim -d d_pop_size=$tmp_p{k} -d d_m=$tmp_p{m} -d d_div_sel_n=$tmp_p{div_n} -d d_div_sel_s=$tmp_p{div_s} -d d_bdm_s=$tmp_p{bdm_s} -d d_bdm_n=$tmp_p{bdm_n} -d d_mutation_rate=$tmp_p{mutation_rate} -d d_delta=$tmp_p{delta} -d d_rep=$rep -d d_seed=$seed -d d_burn_in_gen=$tmp_p{burn_in_gen} -d d_shift_gen=$tmp_p{shift_gen} -d_version=burn adaptive_introgression_WF_BDM_CMD.v2.slim`;
+			my $output_1 = `$slim -d d_pop_size=$tmp_p{k} -d d_m=$tmp_p{m} -d d_div_sel_n=$tmp_p{div_n} -d d_div_sel_s=$tmp_p{div_s} -d d_bdm_s=$tmp_p{bdm_s} -d d_bdm_n=$tmp_p{bdm_n} -d d_mutation_rate=$tmp_p{mutation_rate} -d d_delta=$tmp_p{delta} -d d_rep=$rep -d d_seed=$seed -d d_burn_in_gen=$tmp_p{burn_in_gen} -d d_shift_gen=$tmp_p{shift_gen} -d_version="burn" adaptive_introgression_WF_BDM_CMD.v2.slim`;
 			chomp($output_1);
                         my @lines = split(/\n/,$output_1);
                         foreach my $line (@lines){
@@ -55,7 +55,7 @@ foreach my $varying_parameter (sort keys %varying_p){
 				}
 			}
 			print STDERR "Running test shift for output_$tmp_p{k}_$tmp_p{m}_$tmp_p{burn_in_gen}_$tmp_p{div_n}_$tmp_p{div_s}_$tmp_p{bdm_n}_$tmp_p{bdm_s}_$tmp_p{mutation_rate}_$tmp_p{delta}_${rep}\n";
-			my $output_2 = `$slim -d d_pop_size=$tmp_p{k} -d d_m=$tmp_p{m} -d d_div_sel_n=$tmp_p{div_n} -d d_div_sel_s=$tmp_p{div_s} -d d_bdm_s=$tmp_p{bdm_s} -d d_bdm_n=$tmp_p{bdm_n} -d d_mutation_rate=$tmp_p{mutation_rate} -d d_delta=$tmp_p{delta} -d d_rep=$rep -d d_seed=$seed -d d_burn_in_gen=$tmp_p{burn_in_gen} -d d_shift_gen=$tmp_p{shift_gen} -d_version=test adaptive_introgression_WF_BDM_CMD.v2.slim`;
+			my $output_2 = `$slim -d d_pop_size=$tmp_p{k} -d d_m=$tmp_p{m} -d d_div_sel_n=$tmp_p{div_n} -d d_div_sel_s=$tmp_p{div_s} -d d_bdm_s=$tmp_p{bdm_s} -d d_bdm_n=$tmp_p{bdm_n} -d d_mutation_rate=$tmp_p{mutation_rate} -d d_delta=$tmp_p{delta} -d d_rep=$rep -d d_seed=$seed -d d_burn_in_gen=$tmp_p{burn_in_gen} -d d_shift_gen=$tmp_p{shift_gen} -d_version="test" adaptive_introgression_WF_BDM_CMD.v2.slim`;
 			chomp($output_2);
 			@lines = split(/\n/,$output_2);
 			foreach my $line (@lines){
@@ -65,7 +65,7 @@ foreach my $varying_parameter (sort keys %varying_p){
 			}
 			my $longer_gen = $tmp_p{burn_in_gen} + $tmp_p{shift_gen};
 			print STDERR "Running control for output_$tmp_p{k}_$tmp_p{m}_$tmp_p{burn_in_gen}_$tmp_p{div_n}_$tmp_p{div_s}_$tmp_p{bdm_n}_$tmp_p{bdm_s}_$tmp_p{mutation_rate}_$tmp_p{delta}_${rep}\n";
-			my $output_3 = `$slim -d d_pop_size=$tmp_p{k} -d d_m=$tmp_p{m} -d d_div_sel_n=$tmp_p{div_n} -d d_div_sel_s=$tmp_p{div_s} -d d_bdm_s=$tmp_p{bdm_s} -d d_bdm_n=$tmp_p{bdm_n} -d d_mutation_rate=$tmp_p{mutation_rate} -d d_delta=$tmp_p{delta} -d d_rep=$rep -d d_seed=$seed -d d_burn_in_gen=$longer_gen -d d_shift_gen=0 -d_version=test adaptive_introgression_WF_BDM_CMD.v2.slim`;
+			my $output_3 = `$slim -d d_pop_size=$tmp_p{k} -d d_m=$tmp_p{m} -d d_div_sel_n=$tmp_p{div_n} -d d_div_sel_s=$tmp_p{div_s} -d d_bdm_s=$tmp_p{bdm_s} -d d_bdm_n=$tmp_p{bdm_n} -d d_mutation_rate=$tmp_p{mutation_rate} -d d_delta=$tmp_p{delta} -d d_rep=$rep -d d_seed=$seed -d d_burn_in_gen=$longer_gen -d d_shift_gen=0 -d_version="test" adaptive_introgression_WF_BDM_CMD.v2.slim`;
 			chomp($output_3);
 			@lines = split(/\n/,$output_3);
 			foreach my $line (@lines){

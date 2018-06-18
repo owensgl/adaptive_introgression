@@ -6,7 +6,7 @@ initialize() {
 	defineConstant("seed", d_seed); // The seed for repeating running a simulation with and without the climate shift.
 	setSeed(seed); 
 	
-	defineConstant("version", d_version) // This sets whether it is running the burn-in, or testing version. In the burn-in version it stops at the end of the burn in and saves the state. In test version it loads the saved state and continues forward to the end of the shift phase. Can be "test" or "burn".
+	defineConstant("version", d_version); // This sets whether it is running the burn-in, or testing version. In the burn-in version it stops at the end of the burn in and saves the state. In test version it loads the saved state and continues forward to the end of the shift phase. Can be "test" or "burn".
 	defineConstant("chr_size", 99999); // the total length of the chromosome
 	defineConstant("pop_size", d_pop_size); // initial population size for p1 and p2
 	defineConstant("m", d_m);   // the bidirectional migration rate
