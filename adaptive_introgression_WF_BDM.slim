@@ -1,39 +1,63 @@
 initialize() {
-
-	// ******************************
-	// Core simulation parameters
-	// ******************************
 	
-	defineConstant("chr_size", 99999); // the total length of the chromosome
-	defineConstant("pop_size", 500); // initial population size for p1 and p2
+	// **********************************
+	// Simulation execution parameters
+	// **********************************
+	
+	defineConstant("work_dir", "/Volumes/JetDrive/Big Repos/adaptive_introgression"); // The working directory.
+	defineConstant("seed", 1111); // The seed, used for repeating simulations with and without the climate shift.
+	setSeed(seed); // Set the seed.
+	
+	// Simulation version
+	// This sets whether it is running the burn-in, or testing version. 
+	// In the burn-in version it stops at the end of the burn in and saves the state. 
+	// In test version it loads the saved state and continues forward to the end of the shift phase. 
+	defineConstant("version", "burn"); //Can be "test" or "burn".
+
+	defineConstant("commandline",  "True"); //Set to False to make it output every 100 generations
+	defineConstant("rep", 100); //A rep number used to keep track of multi line output. 
+
+	// **********************************
+	// Core simulation parameters
+	// **********************************
+	
+	// Make delta, sd of fitness function, qtl effect size dist and 
+	// burn in optimum all proportional (and then have modifiers for each)
+	// TBD!
+	
+	defineConstant("chr_size", 99999); // the total length of the chromosome in loci
+	defineConstant("pop_size", 100); // initial population size for p1 and p2
 	defineConstant("m", 0.01);   // the bidirectional migration rate
-	defineConstant("delta", 0.1); // the per-generation change in selective optimum
+	
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum
 	defineConstant("qtl_sd", 1); // the standard deviation of the QTL mutation distribution
-	defineConstant("mutation_rate", 1.5e-8); // Used so that mutation rate can be reported later
-
+	defineConstant("fitness_sd", 2.0); // the standard deviation of the fitness function, i.e. the smoothness of the QTL peak
+	
+	defineConstant("mutation_rate", 1e-7); // Used so that mutation rate can be reported later
 	initializeMutationRate(mutation_rate);
 	initializeRecombinationRate(1e-5); // 1e8 = 1 centimorgan/Mbp, 1e5 = 100 cM/mbp; total chromosome length = 100cM
-	defineConstant("commandline",  "True"); //Set to False to make it output every 100 generations
-	defineConstant("rep", 1); //A rep number used to keep track of multi line output. 
-
 	
-	// ******************************
+	// **********************************
 	// Burn-in parameters
-	// ******************************
+	// **********************************
 	
-	defineConstant("burn_in_generations", 300); // the number of burn-in generations (not yet implemented)
+	defineConstant("burn_in_generations", 1000); // the number of burn-in generations (not yet implemented)
 	defineConstant("burn_in_fluct_period", 1000); // no. generations between changes in optimum
 	defineConstant("burn_in_optimum", 5.0); // the amplitude of the burn-in flucation (opt1 = +, opt2 = -)
+	
+	// **********************************
+	// Shift (climate change) parameters
+	// **********************************
+	
+	defineConstant("delta", 0.1); // the per-generation change in selective optimum
 	defineConstant("shift_generations",100); // the number of post burn-in generations to run. 
 
-	
-	// ******************************
+	// **********************************
 	// BDM parameters
-	// ******************************
+	// **********************************
 	
 	defineConstant("bdm_n",  10); // the number of bdm_loci (minimum 2)
-	defineConstant("bdm_s", 0.10); // the effect size of BDM interactions
+	defineConstant("bdm_s", 0.0001); // the effect size of BDM interactions
 	
 	// parameters for spatial arrangement of BDMs
 	defineConstant("cluster_proportion", 2); // the size of the cluster, 1 = whole chromosome, 2 = half, 3 = third, etc.
@@ -43,7 +67,6 @@ initialize() {
 	// assign BDMs to loci based on the above
 	defineConstant("bdm_loci", c(1:bdm_n) * integerDiv(cluster_size, (bdm_n+1)) + cluster_start); // define the bdm loci
 
-	
 	// ******************************
 	// BDM pairwise locus assignments
 	// ******************************
@@ -60,8 +83,8 @@ initialize() {
 	// Divergent selection parameters
 	// ******************************
 	
-	defineConstant("div_sel_n", 100); // the number of loci subject to divergent selection
-	defineConstant("div_sel_s", 0.005); // selection coefficient for divergently seleted alleles
+	defineConstant("div_sel_n", 10); // the number of loci subject to divergent selection
+	defineConstant("div_sel_s", 0.01); // selection coefficient for divergently seleted alleles
 
 	// disperse div sel loci evenly along genome
 	defineConstant("div_sel_loci", c(1:div_sel_n) * integerDiv(chr_size, (div_sel_n+1))); 
@@ -87,31 +110,39 @@ initialize() {
 	initializeMutationType("m3", 0.5, "f", 0.0);  // The BDM allele in p2 
 	initializeMutationType("m4", 0.5, "f", div_sel_s);  // The divergently selected allele in p1
 	initializeMutationType("m5", 0.5, "f", div_sel_s);  // The divergently selected allele in p2
+	initializeMutationType("m6", 0.5, "f", 0.0);  // Neutral mutations from p1  for tracking local introgression
+	initializeMutationType("m7", 0.5, "f", 0.0);  // Neutral mutations from p2  for tracking local introgression
 
 	m1.convertToSubstitution = F;
 	m2.convertToSubstitution = F;
 	m3.convertToSubstitution = F;
 	m4.convertToSubstitution = F;
 	m5.convertToSubstitution = F;
+	m6.convertToSubstitution = F;
+	m7.convertToSubstitution = F;
 	
 	m1.mutationStackPolicy = "l";
 	m2.mutationStackPolicy = "l";
 	m3.mutationStackPolicy = "l";
 	m4.mutationStackPolicy = "l";
 	m5.mutationStackPolicy = "l";
+	m6.mutationStackPolicy = "l";
+	m7.mutationStackPolicy = "l";
 	
 	// colors, for use in SLiMGui
-	m1.color = "red";
-	m2.color = "blue";
-	m3.color = "yellow";
-	m4.color = "green";
-	m5.color = "purple";
+	m1.color = "red"; // qtl
+	m2.color = "blue"; // bdm p1
+	m3.color = "yellow"; // bdm p2
+	m4.color = "green"; // div sel p1
+	m5.color = "purple"; // div sel p2
+	m6.color = "grey10"; // neutral p1
+	m7.color = "grey20"; // neutral p2
 
    // ******************************
 	// Genome properties
 	// ******************************
 
-	initializeGenomicElementType("g1", c(m1),  c(1.0)); // only QTL alleles are allows to arise via new mutation
+	initializeGenomicElementType("g1", c(m1,m6,m7),  c(1.0,0.0,0.0)); // only QTL alleles are allows to arise via new mutation
 	initializeGenomicElementType("g2", c(m1,m2,m3),  c(1e-200,0.0,0.0)); // RI loci are static (m1 included to allow fitness calc)
 	initializeGenomicElementType("g3", c(m1,m4,m5),  c(1e-200,0.0,0.0)); // div loci are static (m1 included to allow fitness calc)
 	
@@ -136,9 +167,29 @@ initialize() {
 	for (index in 0:(size(bdm_loci)-1))
 			initializeGenomicElement(g2, bdm_loci[index], bdm_loci[index]);
 	
-	// finally, define the divergently selected regions (no mutations allowed here as well)
+	// define the divergently selected regions (no mutations allowed here as well)
 	for (index in 0:(size(div_sel_loci)-1))
 			initializeGenomicElement(g3, div_sel_loci[index], div_sel_loci[index]);
+			
+	
+	// finally, add in neutral alleles (for ancestry tracking!)
+	
+	// disperse neutral loci evenly along genome
+	defineConstant("neutral_loci", ((c(1:100) * integerDiv(chr_size, (100+1)))) + 10); 
+	
+	// if any neutral loci overlap other sites, nudge them by 1 bp
+	
+	for (i in statics){
+	
+		if (any(neutral_loci == i)){
+	
+			//cat("NUDGED neutral locus " + neutral_loci[neutral_loci == i] +"\n");
+			neutral_loci[neutral_loci == i] = (neutral_loci[neutral_loci == i] + 1);
+	
+		}
+	}
+	
+			
 
 }
 
@@ -166,6 +217,22 @@ initialize() {
 	
 	 	p1.individuals.genomes.addNewDrawnMutation(m4, i);
 		p2.individuals.genomes.addNewDrawnMutation(m5, i);
+				
+	}
+	
+	// add in divergently selcted alleles
+	for (i in div_sel_loci){
+	
+	 	p1.individuals.genomes.addNewDrawnMutation(m4, i);
+		p2.individuals.genomes.addNewDrawnMutation(m5, i);
+				
+	}
+	
+	// add in neutral alleles
+	for (i in neutral_loci){
+	
+	 	p1.individuals.genomes.addNewDrawnMutation(m6, i);
+		p2.individuals.genomes.addNewDrawnMutation(m7, i);
 				
 	}
 	
@@ -201,12 +268,14 @@ fitness(m3) {
 
 fitness(m4, p2) {
 	// divergent selection
-	return 1/relFitness;		
+//	return 1/relFitness;		
+        return 1.0 - (1.0 * div_sel_s);
 }
 
 fitness(m5, p1) {
 	// divergent selection
-	return 1/relFitness;		
+//	return 1/relFitness;	
+	return 1.0 - (1.0 * div_sel_s);	
 }
 
 fitness(NULL) {
@@ -228,7 +297,7 @@ fitness(NULL) {
 	}
 	
 	// the fitness of this individual, based on the current optimum
-	qtl_fitness = dnorm(current_optimum - individual.x, 0.0, 2.0);
+	qtl_fitness = dnorm(current_optimum - individual.x, 0.0, fitness_sd);
 
 	// ***************************************************************
 	// BDM pairwise negative epistasis
@@ -289,7 +358,13 @@ fitness(NULL) {
 	
 }
 
-1:10000 late() {
+1 late() {
+	if(version == "test"){
+        // Load burn in simulation
+        sim.readFromPopulationFile(work_dir + "/states/slim_" + seed + ".txt");
+   }
+}
+1:100000 late() {
 
 	// ***************************************************************
 	// Output and console reports
@@ -338,90 +413,96 @@ fitness(NULL) {
 			cat("In p2, there are " + p2_home_percent + "% native alleles\n");
 		}
 	}
-	if (sim.generation == burn_in_generations){
-	
-		p1g = p1.genomes; 		p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
-		p1total_away = sum(p1g.countOfMutationsOfType(m5));
-		p1_home_percent = p1total_home/ (p1total_home + p1total_away);
-	
-		p2g = p2.genomes;
-		p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
-		p2total_away = sum(p2g.countOfMutationsOfType(m4));
-		p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
-		
-		fit_dif = (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
 
+	if (sim.generation == burn_in_generations){
+		if (version == "burn"){
+	
+			p1g = p1.genomes; 			p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
+			p1total_away = sum(p1g.countOfMutationsOfType(m5));
+			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
+		
+			p2g = p2.genomes;
+			p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
+			p2total_away = sum(p2g.countOfMutationsOfType(m4));
+			p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-		cat("burn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
-		
-				counts = p1.genomes.countOfMutationsOfType(m1);
-		
-		for (mut in sim.mutations)
-		{
-			if (mut.mutationType == m1){
-				mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
-				if (mutFreq > 0.1){
-					cat("burn_in,mutations,p1," + mut.position + "," + mut.subpopID+ "," + mutFreq + "," + mut.selectionCoeff + "\n");
+			fit_dif = (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
+
+				
+			cat("OUT1\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
+			
+					counts = p1.genomes.countOfMutationsOfType(m1);
+			
+			for (mut in sim.mutations)
+			{
+				if (mut.mutationType == m1){
+					mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
+					if (mutFreq > 0.1){
+						cat("OUT2\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp1\t" + mut.position + "\t" + mut.subpopID+ "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+					}
 				}
 			}
-		}
-		
-		counts = p2.genomes.countOfMutationsOfType(m1);
-		
-		for (mut in sim.mutations)
-		{
-			if (mut.mutationType == m1){
-				mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
-				if (mutFreq > 0.1){
-					cat("burn_in,mutations,p2," + mut.position + "," + mut.subpopID + "," + mutFreq + "," + mut.selectionCoeff + "\n");
+			
+			counts = p2.genomes.countOfMutationsOfType(m1);
+			
+			for (mut in sim.mutations)
+			{
+				if (mut.mutationType == m1){
+					mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
+					if (mutFreq > 0.1){
+						cat("OUT2\tburn_in\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp2\t" + mut.position + "\t" + mut.subpopID + "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+					}
 				}
 			}
+			//Save output for starting the testing phase.
+			sim.outputFull(work_dir + "/states/slim_" + seed + ".txt"); 
+			sim.simulationFinished();
 		}
 	}
 
+
 	if (sim.generation  == (burn_in_generations + shift_generations)){
-	
-	
-
-		p1g = p1.genomes; 		p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
-		p1total_away = sum(p1g.countOfMutationsOfType(m5));
-		p1_home_percent = p1total_home/ (p1total_home + p1total_away);
-	
-		p2g = p2.genomes;
-		p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
-		p2total_away = sum(p2g.countOfMutationsOfType(m4));
-		p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
+		if (version == "test"){
+			p1g = p1.genomes; 			p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
+			p1total_away = sum(p1g.countOfMutationsOfType(m5));
+			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
 		
-		fit_dif =  (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
-
+			p2g = p2.genomes;
+			p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
+			p2total_away = sum(p2g.countOfMutationsOfType(m4));
+			p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-		cat("shift\t" + pop_size +"\t"+ m +"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
-		
-		counts = p1.genomes.countOfMutationsOfType(m1);
-		
-		for (mut in sim.mutations)
-		{
-			if (mut.mutationType == m1){
-				mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
-				if (mutFreq > 0.1){
-					cat("shift,mutations,p1," + mut.position + "," + mut.subpopID+ "," + mutFreq + "," + mut.selectionCoeff + "\n");
+			fit_dif =  (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
+
+				
+			cat("OUT1\tshift\t" + pop_size +"\t"+ m +"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\t"+ p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t" + rep + "\n");
+			
+			counts = p1.genomes.countOfMutationsOfType(m1);
+			
+			for (mut in sim.mutations)
+			{
+				if (mut.mutationType == m1){
+					mutFreq = mean(asInteger(p1.genomes.containsMutations(mut)));
+					if (mutFreq > 0.1){
+						cat("OUT2\tshift\t" + pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp1\t" + mut.position + "\t" + mut.subpopID+ "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+					}
 				}
 			}
-		}
-		
-		counts = p2.genomes.countOfMutationsOfType(m1);
-		
-		for (mut in sim.mutations)
-		{
-			if (mut.mutationType == m1){
-				mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
-				if (mutFreq > 0.1){
-					cat("shift,mutations,p2," + mut.position + "," + mut.subpopID + "," + mutFreq + "," + mut.selectionCoeff + "\n");
+			
+			counts = p2.genomes.countOfMutationsOfType(m1);
+			
+			for (mut in sim.mutations)
+			{
+				if (mut.mutationType == m1){
+					mutFreq = mean(asInteger(p2.genomes.containsMutations(mut)));
+					if (mutFreq > 0.1){
+						cat("OUT2\tshift\t"+ pop_size +"\t"+m+"\t"+burn_in_generations+"\t" + div_sel_n + "\t" + div_sel_s +"\t" + mutation_rate +"\t" + delta +"\tp2\t" + mut.position + "\t" + mut.subpopID + "\t" + mutFreq + "\t" + mut.selectionCoeff + "\n");
+					}
 				}
 			}
+			
+			sim.simulationFinished();
 		}
-		
-		sim.simulationFinished();
 	}
 	
 }
