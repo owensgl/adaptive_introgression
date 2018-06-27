@@ -343,7 +343,7 @@ fitness(NULL) {
 1 late() {
 	if(version == "test"){
         // Load burn in simulation
-        sim.readFromPopulationFile("states/slim_" + seed + ".txt");
+        sim.readFromPopulationFile(work_dir + "/states/slim_" + seed + ".txt");
    }
 }
 1:100000 late() {
@@ -437,7 +437,7 @@ fitness(NULL) {
 				}
 			}
 			//Save output for starting the testing phase.
-			sim.outputFull("states/slim_" + seed + ".txt"); 
+			sim.outputFull(work_dir + "/states/slim_" + seed + ".txt"); 
 			sim.simulationFinished();
 		}
 	}
