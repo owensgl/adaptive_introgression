@@ -3,7 +3,7 @@ initialize() {
 	// **********************************
 	// Simulation execution parameters
 	// **********************************
-	defineConstant("work_dir", "/Volumes/JetDrive/Big Repos/adaptive_introgression"); // The working directory.
+	defineConstant("work_dir", "./"); // The working directory.
 
 	defineConstant("seed", d_seed); // The seed for repeating running a simulation with and without the climate shift.
 	setSeed(seed); 
@@ -25,7 +25,7 @@ initialize() {
 	
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum	
 	defineConstant("qtl_sd", 1); // the standard deviation of the QTL mutation distribution
-	*******defineConstant("fitness_sd", 2.0); // the standard deviation of the fitness function, i.e. the smoothness of the QTL peak
+	defineConstant("fitness_sd", 2.0); // the standard deviation of the fitness function, i.e. the smoothness of the QTL peak
 	defineConstant("delta", d_delta); // the per-generation change in selective optimum	
 	defineConstant("shift_generations",d_shift_gen); // the number of post burn-in generations to run. 
 

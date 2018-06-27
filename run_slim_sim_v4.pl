@@ -11,7 +11,7 @@ use Parallel::ForkManager;
 #NOTE: This is the path to your nonWF slim program
 my $slim = "/home/owens/working/SLiM/bin/slim";
 #PARALLEL EXECUTION
-my $pm = new Parallel::ForkManager(10);
+my $pm = new Parallel::ForkManager(1);
 my %p;
 $p{k} = 1000;
 $p{m} = 0.01;
