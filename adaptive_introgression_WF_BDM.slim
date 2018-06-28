@@ -26,14 +26,14 @@ initialize() {
 	// TBD!
 	
 	defineConstant("chr_size", 99999); // the total length of the chromosome in loci
-	defineConstant("pop_size", 100); // initial population size for p1 and p2
+	defineConstant("pop_size", 1000); // initial population size for p1 and p2
 	defineConstant("m", 0.01);   // the bidirectional migration rate
 	
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum
 	defineConstant("qtl_sd", 1); // the standard deviation of the QTL mutation distribution
-	defineConstant("fitness_sd", 2.0); // the standard deviation of the fitness function, i.e. the smoothness of the QTL peak
+	defineConstant("fitness_sd", 1.5); // the standard deviation of the fitness function, i.e. the smoothness of the QTL peak
 	defineConstant("delta", 0.1); // the per-generation change in selective optimum
-	defineConstant("shift_generations",100); // the number of post burn-in generations to run. 
+	defineConstant("shift_generations", 100); // the number of post burn-in generations to run. 
 	
 	defineConstant("mutation_rate", 1e-7); // Used so that mutation rate can be reported later
 	initializeMutationRate(mutation_rate);
@@ -43,7 +43,7 @@ initialize() {
 	// Burn-in parameters
 	// **********************************
 	
-	defineConstant("burn_in_generations", 1000); // the number of burn-in generations (not yet implemented)
+	defineConstant("burn_in_generations", 10000); // the number of burn-in generations (not yet implemented)
 	defineConstant("burn_in_fluct_period", 1000); // no. generations between changes in optimum
 	defineConstant("burn_in_optimum", 5.0); // the amplitude of the burn-in flucation (opt1 = +, opt2 = -)
 	
@@ -79,7 +79,7 @@ initialize() {
 	// ******************************
 	
 	defineConstant("div_sel_n", 10); // the number of loci subject to divergent selection
-	defineConstant("div_sel_s", 0.01); // selection coefficient for divergently seleted alleles
+	defineConstant("div_sel_s", 0.1); // selection coefficient for divergently seleted alleles
 
 	// disperse div sel loci evenly along genome
 	defineConstant("div_sel_loci", c(1:div_sel_n) * integerDiv(chr_size, (div_sel_n+1))); 
@@ -137,16 +137,34 @@ initialize() {
 	// Genome properties
 	// ******************************
 
-	initializeGenomicElementType("g1", c(m1,m6,m7),  c(1.0,0.0,0.0)); // only QTL alleles are allows to arise via new mutation
+	initializeGenomicElementType("g1", c(m1),  c(1.0)); // only QTL alleles are allows to arise via new mutation
 	initializeGenomicElementType("g2", c(m1,m2,m3),  c(1e-200,0.0,0.0)); // RI loci are static (m1 included to allow fitness calc)
-	initializeGenomicElementType("g3", c(m1,m4,m5),  c(1e-200,0.0,0.0)); // div loci are static (m1 included to allow fitness calc)
+	initializeGenomicElementType("g3", c(m1,m4,m5),  c(1e-200,0.0,0.0)); // div loci are static 
+	initializeGenomicElementType("g4", c(m1,m6,m7),  c(1e-200,0.0,0.0)); // neutral alleles are static 
 	
-	//define the static (g2, g3) and mutatable regions (g1)
 	
-	statics = sort(c(bdm_loci, div_sel_loci));
+	// define the neutral alleles
+	defineConstant("neutral_loci", ((c(1:100) * integerDiv(chr_size, (100+1)))) + 10); 
 	
-	// first, lay down the mutatable regions of the genome (g1)
-			
+	// adjust the neutral loci to avoid overlapping any other statics
+	// if any neutral loci overlap other sites, nudge them by 1 bp
+	
+	non_neutral_statics = sort(c(bdm_loci, div_sel_loci));
+	
+	for (i in non_neutral_statics){
+	
+		while (any(neutral_loci == i)){
+	
+			neutral_loci[neutral_loci == i] = (neutral_loci[neutral_loci == i] + 1);
+	
+		}
+	}
+	
+	// a list of all the static genomic elements
+	statics = sort(c(bdm_loci, div_sel_loci, neutral_loci));
+
+	
+	// lay down the mutatable regions of the genome (g1) around the statics
 	for (index in 0:(size(statics)-1))
 	
 		if (index == 0){
@@ -166,23 +184,10 @@ initialize() {
 	for (index in 0:(size(div_sel_loci)-1))
 			initializeGenomicElement(g3, div_sel_loci[index], div_sel_loci[index]);
 			
-	
 	// finally, add in neutral alleles (for ancestry tracking!)
-	
-	// disperse neutral loci evenly along genome
-	defineConstant("neutral_loci", ((c(1:100) * integerDiv(chr_size, (100+1)))) + 10); 
-	
-	// if any neutral loci overlap other sites, nudge them by 1 bp
-	
-	for (i in statics){
-	
-		if (any(neutral_loci == i)){
-	
-			//cat("NUDGED neutral locus " + neutral_loci[neutral_loci == i] +"\n");
-			neutral_loci[neutral_loci == i] = (neutral_loci[neutral_loci == i] + 1);
-	
-		}
-	}
+		for (index in 0:(size(neutral_loci)-1))
+			initializeGenomicElement(g4, neutral_loci[index], neutral_loci[index]);
+
 	
 			
 
