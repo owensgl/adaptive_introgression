@@ -338,13 +338,17 @@ fitness(NULL) {
 	
 }
 
-1 late() {
-	if(version == "test"){
-        // Load burn in simulation
-        sim.readFromPopulationFile(work_dir + "/states/slim_" + seed + ".txt");
-   }
+1: late(){
+	if (sim.generation == burn_in_generations){
+		if (version == "burn"){
+			//Save output for starting the testing phase.
+			sim.outputFull(work_dir + "/states/slim_" + seed + ".txt"); 
+			sim.simulationFinished();
+		}
+	}
 }
-1:100000 late() {
+
+1: late() {
 
 	// ***************************************************************
 	// Output and console reports
@@ -381,14 +385,14 @@ fitness(NULL) {
 			cat("p1 mean phenotype = " + mean(p1.individuals.x) + "\n");
 			cat("p2 mean phenotype = " + mean(p2.individuals.x) + "\n\n");
 	
-			p1g = p1.genomes;  			p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
-			p1total_away = sum(p1g.countOfMutationsOfType(m5));
+			p1g = p1.genomes;  			p1total_home = sum(p1g.countOfMutationsOfType(m6)); 
+			p1total_away = sum(p1g.countOfMutationsOfType(m7));
 			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
 			cat("In p1, there are " + p1_home_percent + "% native alleles\n");
 	
 			p2g = p2.genomes;
-			p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
-			p2total_away = sum(p2g.countOfMutationsOfType(m4));
+			p2total_home = sum(p2g.countOfMutationsOfType(m7)); 
+			p2total_away = sum(p2g.countOfMutationsOfType(m6));
 			p2_home_percent = p2total_home/ (p2total_home + p2total_away);
 			cat("In p2, there are " + p2_home_percent + "% native alleles\n");
 		}
@@ -397,13 +401,13 @@ fitness(NULL) {
 	if (sim.generation == burn_in_generations){
 		if (version == "burn"){
 	
-			p1g = p1.genomes; 			p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
-			p1total_away = sum(p1g.countOfMutationsOfType(m5));
+			p1g = p1.genomes; 			p1total_home = sum(p1g.countOfMutationsOfType(m6)); 
+			p1total_away = sum(p1g.countOfMutationsOfType(m7));
 			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
 		
 			p2g = p2.genomes;
-			p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
-			p2total_away = sum(p2g.countOfMutationsOfType(m4));
+			p2total_home = sum(p2g.countOfMutationsOfType(m7)); 
+			p2total_away = sum(p2g.countOfMutationsOfType(m6));
 			p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
 			fit_dif = (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
@@ -434,22 +438,19 @@ fitness(NULL) {
 					}
 				}
 			}
-			//Save output for starting the testing phase.
-			sim.outputFull(work_dir + "/states/slim_" + seed + ".txt"); 
-			sim.simulationFinished();
 		}
 	}
 
 
 	if (sim.generation  == (burn_in_generations + shift_generations)){
 		if (version == "test"){
-			p1g = p1.genomes; 			p1total_home = sum(p1g.countOfMutationsOfType(m4)); 
-			p1total_away = sum(p1g.countOfMutationsOfType(m5));
+			p1g = p1.genomes; 			p1total_home = sum(p1g.countOfMutationsOfType(m6)); 
+			p1total_away = sum(p1g.countOfMutationsOfType(m7));
 			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
 		
 			p2g = p2.genomes;
-			p2total_home = sum(p2g.countOfMutationsOfType(m5)); 
-			p2total_away = sum(p2g.countOfMutationsOfType(m4));
+			p2total_home = sum(p2g.countOfMutationsOfType(m7)); 
+			p2total_away = sum(p2g.countOfMutationsOfType(m6));
 			p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
 			fit_dif =  (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
@@ -485,4 +486,12 @@ fitness(NULL) {
 		}
 	}
 	
+}
+1 late() {
+   if(version == "test"){
+      // Load burn in simulation
+      sim.readFromPopulationFile(work_dir + "/states/slim_" + seed + ".txt");
+      p1.setMigrationRates(p2, m);   
+      p2.setMigrationRates(p1, m); 
+   }
 }
