@@ -29,7 +29,8 @@ $p{burn_in_gen} = 10000; #Number of generations of burn in before shift
 $p{shift_gen} = 100; #Number of generations of shifting optimum.
 
 my @parameters = sort keys %p;
-my @p_changes = qw(0.1 0.2 0.5 0.75 1 1.5 2 5 10); #Numbers to multiply the starting values by. 
+my @p_changes = qw(10 5 2 1.5 1 0.75 0.5 0.2 0.1); #Numbers to multiply the starting values by.
+#my @p_changes = qw(0.1 0.2 0.5 0.75 1 1.5 2 5 10); #Numbers to multiply the starting values by. 
 my %varying_p; #each parameter that is going to vary individually. 
 
 #PARAMETERS TO VARY
@@ -101,8 +102,10 @@ foreach my $varying_parameter (sort keys %varying_p){
                         my $command_3 = "$slim";
                         foreach my $parameter (@parameters){
 				if ($parameter eq "burn_in_gen"){next;}
+				if ($parameter eq "shift_gen"){next;}
                                 $command_3 .= " -d d_${parameter}=$tmp_p{$parameter}";
                         }
+			$command_3 .= " -d d_shift_gen=0";
 			$command_3 .= " -d d_rep=$rep";
 			$command_3 .= " -d d_burn_in_gen=$longer_gen";
                         $command_3 .= " -d d_seed=$seed";
