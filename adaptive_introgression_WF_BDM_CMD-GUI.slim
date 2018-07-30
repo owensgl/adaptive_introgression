@@ -72,7 +72,7 @@ initialize() {
 	// Divergent selection parameters
 	// ******************************
 	
-	defineConstant("div_sel_n", 10); // the number of loci subject to divergent selection
+	defineConstant("div_sel_n", 75); // the number of loci subject to divergent selection
 	defineConstant("div_sel_s", 0.09); // selection coefficient for divergently seleted alleles
 
 	// disperse div sel loci evenly along genome
@@ -129,6 +129,9 @@ initialize() {
    // ******************************
 	// Genome properties
 	// ******************************
+	
+	//bdm_n   bdm_s   burn_in_gen     delta   div_sel_n       div_sel_s       fitness_sd      m       mutation_rate   pop_size        qtl_sd  shift_gen       total_div       rep
+	//output_10_0_10000_1_75_0.012_2_0.01_1e-07_1000_1_100_0.9_9.txt
 
 	initializeGenomicElementType("g1", c(m1),  c(1.0)); // only QTL alleles are allows to arise via new mutation
 	initializeGenomicElementType("g2", c(m1,m2,m3),  c(1e-200,0.0,0.0)); // RI loci are static (m1 included to allow fitness calc)
@@ -154,9 +157,10 @@ initialize() {
 	
 	// a list of all the static genomic elements
 	statics = sort(c(bdm_loci, div_sel_loci, neutral_loci));
-
+	print(statics);
 	
 	// lay down the mutatable regions of the genome (g1) around the statics
+	
 	for (index in 0:(size(statics)-1))
 	
 		if (index == 0){
@@ -166,7 +170,8 @@ initialize() {
 		else if (index == size(statics)-1)
 			initializeGenomicElement(g1, statics[index]+1, chr_size);
 		else
-			initializeGenomicElement(g1, statics[index]+1, statics[index+1]-1);
+			if(((statics[index+1]-1) - (statics[index]+1)) > 1)
+				initializeGenomicElement(g1, statics[index]+1, statics[index+1]-1);
 	
 	// next, define the RI regions (again, to prevent back-mutations at the RI loci)
 	for (index in 0:(size(bdm_loci)-1))
@@ -354,7 +359,7 @@ fitness(NULL) {
         sim.readFromPopulationFile(work_dir + "/states/slim_" + seed + ".txt");
    }
 }
-1:100000 late() {
+1:100000 early() {
 
 	// ***************************************************************
 	// Output and console reports
