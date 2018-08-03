@@ -166,7 +166,8 @@ initialize() {
 		else if (index == size(statics)-1)
 			initializeGenomicElement(g1, statics[index]+1, chr_size);
 		else
-			initializeGenomicElement(g1, statics[index]+1, statics[index+1]-1);
+			if(((statics[index+1]-1) - (statics[index]+1)) > 1)
+				initializeGenomicElement(g1, statics[index]+1, statics[index+1]-1);
 	
 	// next, define the RI regions (again, to prevent back-mutations at the RI loci)
 	for (index in 0:(size(bdm_loci)-1))
@@ -348,7 +349,7 @@ fitness(NULL) {
 	}
 }
 
-1:100000 late() {
+1:100000 early() {
 
 	// ***************************************************************
 	// Output and console reports
