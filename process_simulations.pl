@@ -15,7 +15,7 @@ print "seed\ttreatment\tout_type\tphase\tburn_in_gens\tp1_home_percent\tp2_home_
 foreach my $par (@parameters){
   print "\t$par";
 }
-my $cmd = "ls output/";
+my $cmd = "ls output/ | grep gz";
 my @list = `$cmd`;
 foreach my $filename (@list){  
   chomp($filename);
