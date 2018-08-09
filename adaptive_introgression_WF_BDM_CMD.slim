@@ -384,9 +384,13 @@ fitness(NULL) {
 	
 			// Output population additive QTL-based phenotypes
 			cat("p1 mean phenotype = " + mean(p1.individuals.x) + "\n");
+			cat("p1 sd phenotype = " + sd(p1.individuals.x) + "\n");
 			cat("p2 mean phenotype = " + mean(p2.individuals.x) + "\n\n");
+			cat("p2 sd phenotype = " + sd(p1.individuals.x) + "\n");
 	
-			p1g = p1.genomes;  			p1total_home = sum(p1g.countOfMutationsOfType(m6)); 
+			p1g = p1.genomes; 
+ 
+			p1total_home = sum(p1g.countOfMutationsOfType(m6)); 
 			p1total_away = sum(p1g.countOfMutationsOfType(m7));
 			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
 			cat("In p1, there are " + p1_home_percent + "% native alleles\n");
@@ -402,7 +406,8 @@ fitness(NULL) {
 	if (sim.generation == burn_in_generations){
 		if (version == "burn"){
 	
-			p1g = p1.genomes; 			p1total_home = sum(p1g.countOfMutationsOfType(m6)); 
+			p1g = p1.genomes; 
+			p1total_home = sum(p1g.countOfMutationsOfType(m6)); 
 			p1total_away = sum(p1g.countOfMutationsOfType(m7));
 			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
 		
@@ -445,7 +450,8 @@ fitness(NULL) {
 
 	if (sim.generation  == (burn_in_generations + shift_generations)){
 		if (version == "test"){
-			p1g = p1.genomes; 			p1total_home = sum(p1g.countOfMutationsOfType(m6)); 
+			p1g = p1.genomes; 
+			p1total_home = sum(p1g.countOfMutationsOfType(m6)); 
 			p1total_away = sum(p1g.countOfMutationsOfType(m7));
 			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
 		
