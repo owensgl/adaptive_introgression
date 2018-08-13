@@ -29,16 +29,41 @@ $p{burn_in_gen} = 10000; #Number of generations of burn in before shift
 $p{shift_gen} = 100; #Number of generations of shifting optimum.
 
 my @parameters = sort keys %p;
-my @p_changes = qw(10 5 2 1.5 1 0.75 0.5 0.2 0.1); #Numbers to multiply the starting values by.
-#my @p_changes = qw(0.1 0.2 0.5 0.75 1 1.5 2 5 10); #Numbers to multiply the starting values by. 
 my %varying_p; #each parameter that is going to vary individually. 
-
+my %starting_p; #The starting point for incrementing;
+my %ending_p; #The ending point
+my %increment_p; #The amount it increases with each increment
 #PARAMETERS TO VARY
 $varying_p{delta}++;
 $varying_p{qtl_sd}++;
 $varying_p{mutation_rate}++;
-$varying_p{div_sel_n}++;
-$varying_p{fitness_sd}++;
+$varying_p{total_div}++;
+$varying_p{m}++;
+
+#Starting point of parameters
+$starting_p{delta}= 0.1;
+$starting_p{qtl_sd}= 0.1;
+$starting_p{mutation_rate} = 1e-8;
+$starting_p{total_div} = 0.1;
+$starting_p{m} = 0.001;
+
+#Ending point of parameters
+$ending_p{delta}= 2;
+$ending_p{qtl_sd}= 10;
+$ending_p{mutation_rate} = 1e-6;
+$ending_p{total_div} = 1;
+$ending_p{m} = 0.1;
+
+#Increment for parameters
+$increment_p{delta}= 0.1;
+$increment_p{qtl_sd}= 0.1;
+$increment_p{mutation_rate} = 1e-8;
+$increment_p{total_div} = 0.01;
+$increment_p{m} = 0.001;
+
+
+
+
 
 my $parameter_file = "parameter_file.txt";
 open (my $ph, '>', $parameter_file);
@@ -50,9 +75,9 @@ print $ph "rep";
 close $ph;
 
 foreach my $varying_parameter (sort keys %varying_p){
-	foreach my $p_change (@p_changes){
+	for (my $new_p = $starting_p{$varying_parameter}; $new_p <= $ending_p{$varying_parameter}; $new_p += $increment_p{$varying_parameter} ){ 
 		my %tmp_p = %p;
-		$tmp_p{$varying_parameter} = $p{$varying_parameter} * $p_change; #Multiply the chosen parameter up or down.
+		$tmp_p{$varying_parameter} = $new_p;
 		if ($tmp_p{m} > 0.5){next;} #Skip if migration is greater than panmixis.
 		$tmp_p{div_sel_s} = $tmp_p{total_div}/$tmp_p{div_sel_n};
 		foreach my $rep (1..$reps){
@@ -62,8 +87,16 @@ foreach my $varying_parameter (sort keys %varying_p){
 			foreach my $parameter (@parameters){
 				$filename .= "_$tmp_p{$parameter}";
 			}
-			$filename .= "_${rep}.txt";
-			open (my $fh,'>', $filename);
+			$filename .= "_${rep}";
+			my $filename_1 = $filename."_out1.txt";
+			my $filename_2 = $filename."_out2.txt";
+			my $filename_3 = $filename."_out3.txt";
+			open (my $fh1,'>', $filename_1);
+			open (my $fh2,'>', $filename_2);
+			open (my $fh3,'>', $filename_3);
+			print $fh1 "seed\toutput\tversion\tgeneration\toptimum\tp1fit\tp1mean\tp1sd\tp2fit\tp2mean\tp2sd";
+			print $fh2 "seed\toutput\tversion\tp1home\tp2home\tfit_dif";
+			print $fh3 "seed\toutput\tversion\tpop\tmut_position\tmut_subpopID\tmutFreq\tmut_selectionCoeff";
 			my $seed = int(rand(100000000000));
 			print STDERR "Running burn in for $filename\n";
 			my $command_1 = "$slim";
@@ -77,8 +110,12 @@ foreach my $varying_parameter (sort keys %varying_p){
 			chomp($output_1);
                         my @lines = split(/\n/,$output_1);
                         foreach my $line (@lines){
-                                if ($line =~ m/^OUT/){
-					print $fh "$seed\ttest\t$line\n";
+                                if ($line =~ m/^OUT1/){
+					print $fh1 "\n$seed\t$line";
+				}elsif ($line =~ m/^OUT2/){
+					print $fh2 "\n$seed\t$line";
+				}elsif ($line =~ m/^OUT3/){
+					print $fh3 "\n$seed\t$line";
 				}
 			}
 			print STDERR "Running test shift for $filename\n";
@@ -92,9 +129,13 @@ foreach my $varying_parameter (sort keys %varying_p){
 			my $output_2 = `$command_2`;
 			chomp($output_2);
 			@lines = split(/\n/,$output_2);
-			foreach my $line (@lines){
-				if ($line =~ m/^OUT/){
-					print $fh "$seed\ttest\t$line\n";
+                        foreach my $line (@lines){
+                                if ($line =~ m/^OUT1/){
+					print $fh1 "\n$seed\t$line";
+				}elsif ($line =~ m/^OUT2/){
+					print $fh2 "\n$seed\t$line";
+				}elsif ($line =~ m/^OUT3/){
+					print $fh3 "\n$seed\t$line";
 				}
 			}
 			my $longer_gen = $tmp_p{burn_in_gen} + $tmp_p{shift_gen};
@@ -106,22 +147,28 @@ foreach my $varying_parameter (sort keys %varying_p){
                                 $command_3 .= " -d d_${parameter}=$tmp_p{$parameter}";
                         }
 			$command_3 .= " -d d_shift_gen=0";
-			$command_3 .= " -d d_rep=$rep";
 			$command_3 .= " -d d_burn_in_gen=$longer_gen";
+			$command_3 .= " -d d_rep=$rep";
                         $command_3 .= " -d d_seed=$seed";
-                        $command_3 .= ' -d d_version=\"test\" adaptive_introgression_WF_BDM_CMD.slim';
+                        $command_3 .= ' -d d_version=\"control\" adaptive_introgression_WF_BDM_CMD.slim';
                         my $output_3 = `$command_3`;
 			chomp($output_3);
 			@lines = split(/\n/,$output_3);
+
 			foreach my $line (@lines){
-				if ($line =~ m/^OUT/){
-					if ($line =~ m/burn_in/){next;}
-					print $fh "$seed\tcontrol\t$line\n";
+                                if ($line =~ m/^OUT1/){
+					print $fh1 "\n$seed\t$line";
+				}elsif ($line =~ m/^OUT2/){
+					print $fh2 "\n$seed\t$line";
+				}elsif ($line =~ m/^OUT3/){
+					print $fh3 "\n$seed\t$line";
 				}
 			}
-			close $fh;
+			close $fh1;
+			close $fh2;
+			close $fh3;
 			system("rm states/slim_$seed.txt");
-			system("gzip -f $filename");
+			system("gzip -f $filename*");
 			$pm->finish
 		}
 	}
