@@ -25,7 +25,7 @@ $p{qtl_sd} = 1; #Standard deviation of qtl
 $p{fitness_sd} = 2.0; #Standard deviation of fitness landscape.
 $p{delta} = 1; #How fast the optimum shifts after the burn in
 my $reps =10;  #Number of repetitions per set of parameters
-$p{burn_in_gen} = 10000; #Number of generations of burn in before shift
+$p{burn_in_gen} = 100; #Number of generations of burn in before shift
 $p{shift_gen} = 100; #Number of generations of shifting optimum.
 
 my @parameters = sort keys %p;
