@@ -25,7 +25,7 @@ $p{qtl_sd} = 1; #Standard deviation of qtl
 $p{fitness_sd} = 2.0; #Standard deviation of fitness landscape.
 $p{delta} = 1; #How fast the optimum shifts after the burn in
 my $reps =10;  #Number of repetitions per set of parameters
-$p{burn_in_gen} = 100; #Number of generations of burn in before shift
+$p{burn_in_gen} = 10000; #Number of generations of burn in before shift
 $p{shift_gen} = 100; #Number of generations of shifting optimum.
 
 my @parameters = sort keys %p;
@@ -71,7 +71,8 @@ foreach my $parameter (@parameters){
         print $ph "$parameter\t";
 
 }
-print $ph "rep";
+print $ph "rep\t";
+print $ph "seed";
 close $ph;
 
 foreach my $varying_parameter (sort keys %varying_p){
@@ -83,21 +84,21 @@ foreach my $varying_parameter (sort keys %varying_p){
 		foreach my $rep (1..$reps){
 			$pm->start and next;
 			srand();
+			my $seed = int(rand(100000000000));
 			my $filename = "output";
 			foreach my $parameter (@parameters){
 				$filename .= "_$tmp_p{$parameter}";
 			}
-			$filename .= "_${rep}";
+			$filename .= "_${rep}_${seed}";
 			my $filename_1 = $filename."_out1.txt";
 			my $filename_2 = $filename."_out2.txt";
 			my $filename_3 = $filename."_out3.txt";
 			open (my $fh1,'>', $filename_1);
 			open (my $fh2,'>', $filename_2);
 			open (my $fh3,'>', $filename_3);
-			print $fh1 "seed\toutput\tversion\tgeneration\toptimum\tp1fit\tp1mean\tp1sd\tp2fit\tp2mean\tp2sd";
-			print $fh2 "seed\toutput\tversion\tp1home\tp2home\tfit_dif";
-			print $fh3 "seed\toutput\tversion\tpop\tmut_position\tmut_subpopID\tmutFreq\tmut_selectionCoeff";
-			my $seed = int(rand(100000000000));
+			print $fh1 "output\tversion\tgeneration\toptimum\tp1fit\tp1mean\tp1sd\tp2fit\tp2mean\tp2sd";
+			print $fh2 "output\tversion\tp1home\tp2home\tfit_dif";
+			print $fh3 "output\tversion\tpop\tmut_position\tmut_subpopID\tmutFreq\tmut_selectionCoeff";
 			print STDERR "Running burn in for $filename\n";
 			my $command_1 = "$slim";
                         foreach my $parameter (@parameters){
@@ -111,11 +112,11 @@ foreach my $varying_parameter (sort keys %varying_p){
                         my @lines = split(/\n/,$output_1);
                         foreach my $line (@lines){
                                 if ($line =~ m/^OUT1/){
-					print $fh1 "\n$seed\t$line";
+					print $fh1 "\n$line";
 				}elsif ($line =~ m/^OUT2/){
-					print $fh2 "\n$seed\t$line";
+					print $fh2 "\n$line";
 				}elsif ($line =~ m/^OUT3/){
-					print $fh3 "\n$seed\t$line";
+					print $fh3 "\n$line";
 				}
 			}
 			print STDERR "Running test shift for $filename\n";
@@ -131,11 +132,11 @@ foreach my $varying_parameter (sort keys %varying_p){
 			@lines = split(/\n/,$output_2);
                         foreach my $line (@lines){
                                 if ($line =~ m/^OUT1/){
-					print $fh1 "\n$seed\t$line";
+					print $fh1 "\n$line";
 				}elsif ($line =~ m/^OUT2/){
-					print $fh2 "\n$seed\t$line";
+					print $fh2 "\n$line";
 				}elsif ($line =~ m/^OUT3/){
-					print $fh3 "\n$seed\t$line";
+					print $fh3 "\n$line";
 				}
 			}
 			my $longer_gen = $tmp_p{burn_in_gen} + $tmp_p{shift_gen};
@@ -157,11 +158,11 @@ foreach my $varying_parameter (sort keys %varying_p){
 
 			foreach my $line (@lines){
                                 if ($line =~ m/^OUT1/){
-					print $fh1 "\n$seed\t$line";
+					print $fh1 "\n$line";
 				}elsif ($line =~ m/^OUT2/){
-					print $fh2 "\n$seed\t$line";
+					print $fh2 "\n$line";
 				}elsif ($line =~ m/^OUT3/){
-					print $fh3 "\n$seed\t$line";
+					print $fh3 "\n$line";
 				}
 			}
 			close $fh1;
