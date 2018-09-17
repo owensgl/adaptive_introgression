@@ -1,4 +1,4 @@
-output/
-states/
+analysis/output/
+analysis/states/
 .Rproj.user
 .Rhistory
