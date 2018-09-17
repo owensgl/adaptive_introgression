@@ -411,9 +411,13 @@ fitness(NULL) {
 		} else{
 			current_optimum = initial_optimum + delta * (sim.generation - burn_in_generations);
 		}
+		
+		//generate the OUT1 columns
 		cat("OUT1\t"+ version + "\t" + sim.generation + "\t" + current_optimum + "\t");
 		cat(mean(p1.cachedFitness(NULL)) + "\t" + mean(p1.individuals.x) + "\t" + sd(p1.individuals.x) + "\t");
-		cat(mean(p2.cachedFitness(NULL)) + "\t" + mean(p2.individuals.x) + "\t" + sd(p2.individuals.x) + "\n");	
+		cat(mean(log(p1.individuals.x)) + "\t" + sd(log(p1.individuals.x)) + "\t");
+		cat(mean(p2.cachedFitness(NULL)) + "\t" + mean(p2.individuals.x) + "\t" + sd(p2.individuals.x) + "\t");
+		cat(mean(log(p2.individuals.x)) + "\t" + sd(log(p2.individuals.x)) + "\n");	
 	}	
  	if (sim.generation == burn_in_generations){
 		if (version == "burn"){
