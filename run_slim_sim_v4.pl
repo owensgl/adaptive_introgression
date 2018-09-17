@@ -48,14 +48,14 @@ $starting_p{total_div} = 0.1;
 $starting_p{m} = 0.001;
 
 #Ending point of parameters
-$ending_p{delta}= 2;
-$ending_p{qtl_sd}= 10;
-$ending_p{mutation_rate} = 1e-6;
+$ending_p{delta}= 5;
+$ending_p{qtl_sd}= 5;
+$ending_p{mutation_rate} = 5e-7;
 $ending_p{total_div} = 1;
 $ending_p{m} = 0.1;
 
 #Increment for parameters
-$increment_p{delta}= 0.1;
+$increment_p{delta}= 0.01;
 $increment_p{qtl_sd}= 0.1;
 $increment_p{mutation_rate} = 1e-8;
 $increment_p{total_div} = 0.01;
@@ -85,7 +85,7 @@ foreach my $varying_parameter (sort keys %varying_p){
 			$pm->start and next;
 			srand();
 			my $seed = int(rand(100000000000));
-			my $filename = "output";
+			my $filename = "output_$varying_paramater";
 			foreach my $parameter (@parameters){
 				$filename .= "_$tmp_p{$parameter}";
 			}
@@ -96,7 +96,7 @@ foreach my $varying_parameter (sort keys %varying_p){
 			open (my $fh1,'>', $filename_1);
 			open (my $fh2,'>', $filename_2);
 			open (my $fh3,'>', $filename_3);
-			print $fh1 "output\tversion\tgeneration\toptimum\tp1fit\tp1mean\tp1sd\tp2fit\tp2mean\tp2sd";
+			print $fh1 "output\tversion\tgeneration\toptimum\tp1fit\tp1mean\tp1sd\tp1logmean\tp1logsd\tp2fit\tp2mean\tp2sd\tp2logmean\p2logsd";
 			print $fh2 "output\tversion\tp1home\tp2home\tfit_dif";
 			print $fh3 "output\tversion\tpop\tmut_position\tmut_subpopID\tmutFreq\tmut_selectionCoeff";
 			print STDERR "Running burn in for $filename\n";
