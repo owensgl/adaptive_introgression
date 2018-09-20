@@ -85,7 +85,7 @@ foreach my $varying_parameter (sort keys %varying_p){
 			$pm->start and next;
 			srand();
 			my $seed = int(rand(100000000000));
-			my $filename = "output_$varying_paramater";
+			my $filename = "output_$varying_parameter";
 			foreach my $parameter (@parameters){
 				$filename .= "_$tmp_p{$parameter}";
 			}
