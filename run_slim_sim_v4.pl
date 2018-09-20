@@ -96,7 +96,7 @@ foreach my $varying_parameter (sort keys %varying_p){
 			open (my $fh1,'>', $filename_1);
 			open (my $fh2,'>', $filename_2);
 			open (my $fh3,'>', $filename_3);
-			print $fh1 "output\tversion\tgeneration\toptimum\tp1fit\tp1mean\tp1sd\tp1logmean\tp1logsd\tp2fit\tp2mean\tp2sd\tp2logmean\p2logsd";
+			print $fh1 "output\tversion\tgeneration\toptimum\tp1fit\tp1mean\tp1sd\tp1logmean\tp1logsd\tp2fit\tp2mean\tp2sd\tp2logmean\tp2logsd";
 			print $fh2 "output\tversion\tp1home\tp2home\tfit_dif";
 			print $fh3 "output\tversion\tpop\tmut_position\tmut_subpopID\tmutFreq\tmut_selectionCoeff";
 			print STDERR "Running burn in for $filename\n";
