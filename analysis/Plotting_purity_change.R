@@ -1,52 +1,38 @@
 #Plotting for the august+ version of the output
 library(tidyverse)
 
-setwd("/home/owens/working/adaptive_introgression/")
-parameters <- colnames(read_tsv("parameter_file.txt"))
-parameters <- c("blank",parameters,"tail")
-output2 <- list.files("output/august_15/", pattern = "out2")
 
-data <- data_frame(filename = output2) %>% # create a data frame
+parameters <- colnames(read_tsv("../parameter_file.txt"))
+parameters <- c("blank","target_param",parameters,"tail")
+output2 <- list.files("../output/sep24/", pattern = "out2") 
+
+output_tibble <- tibble(filename=as.character(output2))
+output_tibble %>% separate(.,filename,parameters,"_") 
+
+tail(output2[grepl("delta",output2)])
+
+data <- data_frame(filename = output2[grepl("delta",output2)]) %>% # create a data frame
   # holding the file names
   mutate(file_contents = map(filename,          # read files into
-                             ~ read_tsv(file.path("output/august_15/", .))) # a new data column
+                             ~ read_tsv(file.path("../output/sep24/", .))) # a new data column
   )  
 
 unnest(data) %>%
-  separate(.,filename,parameters,"_") ->output2_data
+  separate(.,filename,parameters,"_") ->output2_delta
 
-colnames(output2_data)[5:12] -> varying_parameters
-#Find the middle parameter that is common amongst the replicates.
-middle_parameter <- tibble(parameter=character(),value=numeric())
-for (chosen_par in varying_parameters){
-  output2_data %>% 
-    group_by_(.dots= chosen_par) %>% 
-    summarize(count = n()) %>% 
-    arrange(desc(count)) %>% 
-    head(n=1) %>% pull(chosen_par)-> tmp
-  loading_tibble <- tibble(parameter=chosen_par,value=tmp)
-  middle_parameter <- rbind(middle_parameter, loading_tibble)
-}
-
-middle_parameter
 
 pdf("Preliminary_august_simulations.pdf",height=10,width=10)
-output2_data %>% filter(blank == "output",
-                  #      delta = 1,
-                        div_sel_n == 100, 
-                        div_sel_s == 0.009, 
-                        fitness_sd == 2, 
-                        m == 0.01,
-                        mutation_rate == 1e-07,
-                        pop_size == 1000, 
-                        qtl_sd == 1) %>% 
+output2_delta %>% 
+  group_by(seed) %>%
+  mutate(n_lines = n()) %>% 
+  filter(n_lines == 3) %>%
   group_by(delta, seed) %>%
   summarize(burn_in_purity = (p1home[which(version == "burn_in")] + p2home[which(version == "burn_in")])/2,
             test_purity = (p1home[which(version == "test")] + p2home[which(version == "test")])/2,
             control_purity = (p1home[which(version == "control")] + p2home[which(version == "control")])/2) %>%
   mutate(test_change = burn_in_purity - test_purity,
          control_change = burn_in_purity - control_purity) %>% 
-  gather(., version, purity_change, c(test_change,control_change)) %>%
+  gather(., version, purity_change, c(test_change,control_change)) %>% 
   ungroup() %>%
   mutate(delta = as.numeric(delta)) %>%
   ggplot(.) + geom_point(aes(x=delta,y=purity_change,color=version),alpha=0.1) +

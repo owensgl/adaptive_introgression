@@ -25,6 +25,7 @@ initialize() {
 	defineConstant("m", d_m);   // the bidirectional migration rate
 	
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum	
+	defineConstant("optimum_bump", 100.0); // Added to phenotype during output to facilitate use of log
 	defineConstant("qtl_sd", d_qtl_sd); // the standard deviation of the QTL mutation distribution
 	defineConstant("fitness_sd", d_fitness_sd); // the standard deviation of the fitness function, i.e. the smoothness of the QTL peak
 	defineConstant("delta", d_delta); // the per-generation change in selective optimum	
@@ -413,11 +414,12 @@ fitness(NULL) {
 		}
 		
 		//generate the OUT1 columns
-		cat("OUT1\t"+ version + "\t" + sim.generation + "\t" + current_optimum + "\t");
-		cat(mean(p1.cachedFitness(NULL)) + "\t" + mean(p1.individuals.x) + "\t" + sd(p1.individuals.x) + "\t");
-		cat(mean(log(p1.individuals.x)) + "\t" + sd(log(p1.individuals.x)) + "\t");
-		cat(mean(p2.cachedFitness(NULL)) + "\t" + mean(p2.individuals.x) + "\t" + sd(p2.individuals.x) + "\t");
-		cat(mean(log(p2.individuals.x)) + "\t" + sd(log(p2.individuals.x)) + "\n");	
+		optimum_for_output = current_optimum + optimum_bump;
+		cat("OUT1\t"+ version + "\t" + sim.generation + "\t" +  optimum_for_output + "\t");
+		cat(mean(p1.cachedFitness(NULL)) + "\t" + mean(p1.individuals.x + optimum_bump) + "\t" + sd(p1.individuals.x + optimum_bump) + "\t");
+		cat(mean(log(p1.individuals.x + optimum_bump)) + "\t" + sd(log(p1.individuals.x + optimum_bump)) + "\t");
+		cat(mean(p2.cachedFitness(NULL)) + "\t" + mean(p2.individuals.x + optimum_bump) + "\t" + sd(p2.individuals.x + optimum_bump) + "\t");
+		cat(mean(log(p2.individuals.x + optimum_bump)) + "\t" + sd(log(p2.individuals.x + optimum_bump)) + "\n");	
 	}	
  	if (sim.generation == burn_in_generations){
 		if (version == "burn"){
