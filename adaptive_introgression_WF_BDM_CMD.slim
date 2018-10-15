@@ -272,7 +272,8 @@ fitness(NULL) {
 	if (sim.generation <= burn_in_generations){
 		
 		// cosine with 1/2 period = burn_in_fluct_period, amplitude = burn_in_optimum
-		current_optimum = cos((sim.generation - (burn_in_fluct_period/2))/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
+		current_optimum =  sin(3.141593 * sim.generation / burn_in_fluct_period) * burn_in_optimum;
+		//current_optimum = cos((sim.generation - (burn_in_fluct_period/2))/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
 	
 	} else{
 		
@@ -366,8 +367,8 @@ fitness(NULL) {
 	
 			if (sim.generation <= burn_in_generations){
 		
-				// cosine with 1/2 period = burn_in_fluct_period, amplitude = burn_in_optimum
-				current_optimum = cos((sim.generation - (burn_in_fluct_period/2))/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
+				// sin with 1/2 period = burn_in_fluct_period, amplitude = burn_in_optimum
+				current_optimum =  sin(3.141593 * sim.generation / burn_in_fluct_period) * burn_in_optimum;;
 	
 			} else{
 	

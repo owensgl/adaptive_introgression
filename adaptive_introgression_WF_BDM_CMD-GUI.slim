@@ -3,7 +3,7 @@ initialize() {
 	// **********************************
 	// Simulation execution parameters
 	// **********************************
-	defineConstant("work_dir", "/Users/gregoryowens/Documents/adaptive_introgression"); // The working directory.
+	defineConstant("work_dir", "/Users/ksamuk/Desktop"); // The working directory.
 
 	defineConstant("seed", 1112); // The seed for repeating running a simulation with and without the climate shift.
 	setSeed(seed); 
@@ -12,7 +12,7 @@ initialize() {
 	// This sets whether it is running the burn-in, or testing version. 
 	// In the burn-in version it stops at the end of the burn in and saves the state. 
 	// In test version it loads the saved state and continues forward to the end of the shift phase. 
-	defineConstant("version", "burn"); 	
+	defineConstant("version", "test"); 	
 	defineConstant("commandline",  "False"); //Set to False to make it output every 100 generations
 	defineConstant("rep", 100); //A rep number used to keep track of multi line output. 
 	// ******************************
@@ -20,13 +20,13 @@ initialize() {
 	// ******************************
 
 	defineConstant("chr_size", 99999); // the total length of the chromosome
-	defineConstant("pop_size", 1000); // initial population size for p1 and p2
+	defineConstant("pop_size", 200); // initial population size for p1 and p2
 	defineConstant("m", 0.01);   // the bidirectional migration rate
 	
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum	
 	defineConstant("qtl_sd", 1); // the standard deviation of the QTL mutation distribution
 	defineConstant("fitness_sd", 2.0); // the standard deviation of the fitness function, i.e. the smoothness of the QTL peak
-	defineConstant("delta", 0); // the per-generation change in selective optimum	
+	defineConstant("delta", 0.1); // the per-generation change in selective optimum	
 	defineConstant("shift_generations",0); // the number of post burn-in generations to run. 
 
 	initializeMutationRate(1e-7);
@@ -37,8 +37,8 @@ initialize() {
 	// Burn-in parameters
 	// ******************************
 	
-	defineConstant("burn_in_generations", 500); // the number of burn-in generations (not yet implemented)
-	defineConstant("burn_in_fluct_period", 1000); // no. generations between changes in optimum
+	defineConstant("burn_in_generations", 1000); // the number of burn-in generations (not yet implemented)
+	defineConstant("burn_in_fluct_period", 500); // no. generations between changes in optimum
 	defineConstant("burn_in_optimum", 5.0); // the amplitude of the burn-in flucation (opt1 = +, opt2 = -)
 	
 	// ******************************
@@ -275,7 +275,8 @@ fitness(NULL) {
 	if (sim.generation <= burn_in_generations){
 		
 		// cosine with 1/2 period = burn_in_fluct_period, amplitude = burn_in_optimum
-		current_optimum = cos((sim.generation - (burn_in_fluct_period/2))/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
+		current_optimum =  sin(3.141593 * sim.generation / burn_in_fluct_period) * burn_in_optimum;
+		//current_optimum = cos((sim.generation - (burn_in_fluct_period/2))/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
 	
 	} else{
 		
@@ -375,7 +376,8 @@ fitness(NULL) {
 			if (sim.generation <= burn_in_generations){
 		
 				// cosine with 1/2 period = burn_in_fluct_period, amplitude = burn_in_optimum
-				current_optimum = cos((sim.generation - (burn_in_fluct_period/2))/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
+				current_optimum =  sin(3.141593 * sim.generation / burn_in_fluct_period) * burn_in_optimum;
+				//current_optimum = cos((sim.generation - (burn_in_fluct_period/2))/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
 	
 			} else{
 	
