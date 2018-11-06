@@ -9,7 +9,7 @@ use Parallel::ForkManager;
 
 
 #NOTE: This is the path to your nonWF slim program
-my $slim = "/home/owens/working/SLiM/bin/slim";
+my $slim = "/scratch/gowens/SLiM/bin/slim";
 #PARALLEL EXECUTION
 my $pm = new Parallel::ForkManager(11);
 my %p;
@@ -24,7 +24,7 @@ $p{mutation_rate} = 1e-7; #Mutation rate for adaptive alleles
 $p{qtl_sd} = 1; #Standard deviation of qtl 
 $p{fitness_sd} = 2.0; #Standard deviation of fitness landscape.
 $p{delta} = 1; #How fast the optimum shifts after the burn in
-my $reps =10;  #Number of repetitions per set of parameters
+my $reps =1;  #Number of repetitions per set of parameters
 $p{burn_in_gen} = 10000; #Number of generations of burn in before shift
 $p{shift_gen} = 100; #Number of generations of shifting optimum.
 
@@ -39,6 +39,7 @@ $varying_p{qtl_sd}++;
 $varying_p{mutation_rate}++;
 $varying_p{total_div}++;
 $varying_p{m}++;
+$varying_p{div_sel_n}++;
 
 #Starting point of parameters
 $starting_p{delta}= 0.1;
@@ -46,6 +47,7 @@ $starting_p{qtl_sd}= 0.1;
 $starting_p{mutation_rate} = 1e-8;
 $starting_p{total_div} = 0.1;
 $starting_p{m} = 0.001;
+$starting_p{div_sel_n} = 5;
 
 #Ending point of parameters
 $ending_p{delta}= 5;
@@ -53,6 +55,7 @@ $ending_p{qtl_sd}= 5;
 $ending_p{mutation_rate} = 5e-7;
 $ending_p{total_div} = 1;
 $ending_p{m} = 0.1;
+$ending_p{div_sel_n} = 100;
 
 #Increment for parameters
 $increment_p{delta}= 0.01;
@@ -60,7 +63,7 @@ $increment_p{qtl_sd}= 0.1;
 $increment_p{mutation_rate} = 1e-8;
 $increment_p{total_div} = 0.01;
 $increment_p{m} = 0.001;
-
+$increment_p{div_sel_n} = 5;
 
 
 
@@ -85,7 +88,9 @@ foreach my $varying_parameter (sort keys %varying_p){
 			$pm->start and next;
 			srand();
 			my $seed = int(rand(100000000000));
-			my $filename = "output_$varying_parameter";
+			my $varying_parameter_reformat = $varying_parameter;
+			$varying_parameter_reformat =~ s/\_/\./g;
+			my $filename = "output_$varying_parameter_reformat";
 			foreach my $parameter (@parameters){
 				$filename .= "_$tmp_p{$parameter}";
 			}
