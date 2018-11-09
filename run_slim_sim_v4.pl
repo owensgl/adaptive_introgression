@@ -9,9 +9,9 @@ use Parallel::ForkManager;
 
 
 #NOTE: This is the path to your nonWF slim program
-my $slim = "/scratch/gowens/SLiM/bin/slim";
+my $slim = "/scratch/gowens/build/slim";
 #PARALLEL EXECUTION
-my $pm = new Parallel::ForkManager(11);
+my $pm = new Parallel::ForkManager(32);
 my %p;
 $p{pop_size} = 1000; #Population size
 $p{m} = 0.01; #Mutation rate
@@ -27,6 +27,9 @@ $p{delta} = 1; #How fast the optimum shifts after the burn in
 my $reps =1;  #Number of repetitions per set of parameters
 $p{burn_in_gen} = 10000; #Number of generations of burn in before shift
 $p{shift_gen} = 100; #Number of generations of shifting optimum.
+
+my $max_runs = 100; #Maximum number of replicates before it starts skipping.
+my $output_dir = "output";
 
 my @parameters = sort keys %p;
 my %varying_p; #each parameter that is going to vary individually. 
@@ -50,7 +53,7 @@ $starting_p{m} = 0.001;
 $starting_p{div_sel_n} = 5;
 
 #Ending point of parameters
-$ending_p{delta}= 5;
+$ending_p{delta}= 3;
 $ending_p{qtl_sd}= 5;
 $ending_p{mutation_rate} = 5e-7;
 $ending_p{total_div} = 1;
@@ -90,10 +93,14 @@ foreach my $varying_parameter (sort keys %varying_p){
 			my $seed = int(rand(100000000000));
 			my $varying_parameter_reformat = $varying_parameter;
 			$varying_parameter_reformat =~ s/\_/\./g;
-			my $filename = "output_$varying_parameter_reformat";
+			my $prefix = "output_$varying_parameter_reformat";
+			my $filename = "$output_dir/output_$varying_parameter_reformat";
 			foreach my $parameter (@parameters){
 				$filename .= "_$tmp_p{$parameter}";
+				$prefix .= "_$tmp_p{$parameter}";
 			}
+			my $run_count = `ls $output_dir | grep $prefix | grep out3.txt.gz | wc -l`;
+			if ($run_count >= $max_runs){next;} #Skip runs where we already have enough replicates
 			$filename .= "_${rep}_${seed}";
 			my $filename_1 = $filename."_out1.txt";
 			my $filename_2 = $filename."_out2.txt";
