@@ -2,30 +2,42 @@ library(tidyverse)
 library(ggthemes)
 library(forcats)
 
-###Calculating haldanes
-output1 <- list.files("../output/sep24/", pattern = "out1") 
 
-data <- data_frame(filename = output2) %>% # create a data frame
-  mutate(file_contents = map(filename,          # read files into
-                             ~ read_tsv(file.path("../output/sep24/", .)) %>% 
-                               filter(version != "burn") %>%
-                               select(generation,version,optimum,p1fit,p1mean,p1sd,
-                                      p2fit,p2mean,p2sd) %>%
-                               filter(generation >= 10001) %>%
-                               group_by(version) %>%
-                               mutate(., p1_pooled_sd = sqrt((999 *(p1sd^2)) +  (999 *(lag(p1sd)^2)) / 1998 ),
-                                      p1_delta = p1mean - lag(p1mean),
-                                      haldane_p1 = p1_delta/p1_pooled_sd) %>%   
-                               mutate(., p2_pooled_sd = sqrt((999 *(p2sd^2)) +  (999 *(lag(p2sd)^2)) / 1998 ),
-                                      p2_delta = p2mean - lag(p2mean),
-                                      haldane_p2 = p2_delta/p2_pooled_sd) %>% 
-                               mutate(mean_haldane = (haldane_p1 + haldane_p2)/2))# a new data column
-  )  
+###Measuring introgression
+iteration <- "nov5"
+#Not run divseln
+parameter <- "divseln"
+parameters_tested <- c("totaldiv","delta","mutationrate","qtlsd","m","divseln")
 
-parameters <- colnames(read_tsv("../parameter_file.txt"))
-parameters <- c("blank","target_param",parameters,"tail")
 
-unnest(data) %>%
-  separate(.,filename,parameters,"_") ->output1
-
-write_tsv(output1, "../sept24.out1.txt.gz")
+for (parameter in parameters_tested){
+  
+  parameters <- colnames(read_tsv("../parameter_file.txt"))
+  parameters <- c("blank","target_param",parameters,"tail")
+  parameter_full <- parameter
+  parameter_full <- gsub("totaldiv","total_div",parameter_full)
+  parameter_full <- gsub("mutationrate","mutation_rate",parameter_full)
+  parameter_full <- gsub("qtlsd","qtl_sd",parameter_full)
+  parameter_full <- gsub("divseln","div_sel_n",parameter_full)
+  
+  system( paste("cd  ../output/",iteration,"/",parameter, "; ls | perl ../../../analysis/process_output1.pl | gzip > ../../../",iteration,".",parameter,".out1.txt.gz; cd ../../../analysis",sep=""))
+  
+  output1 <- read_tsv(paste("../",iteration,".",parameter,".out1.txt.gz",sep="")) %>%
+    separate(.,filename,parameters,"_") %>%  
+    group_by(.dots=parameter_full) %>% 
+    top_n(.,(198*100),seed)
+  
+  pdf( paste("../",iteration,".",parameter,".out1.pdf",sep=""))
+  print(
+    output1 %>% 
+      mutate_("parameter_chosen" = parameter_full) %>%
+      mutate(parameter_chosen = as.numeric(parameter_chosen)) %>% 
+      filter(version == "test") %>%
+      ggplot(.,aes(x=gen,y=mean_haldane,group=seed,color=as.numeric(parameter_chosen))) + 
+      geom_line(alpha=0.2) + theme_few() + 
+      scale_color_distiller(palette = "Spectral",name=paste(parameter_full)) +
+      ylab("Average Haldanes") + xlab("Generation")
+  )
+  dev.off()
+  
+}
