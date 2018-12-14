@@ -36,6 +36,15 @@ while(my $filename = <STDIN>){
     $phenotype{$version}{$gen}{"p1"}{"sd"} = $p1sd;
     $phenotype{$version}{$gen}{"p2"}{"sd"} = $p2sd;
   }
+  unless ($optimum{"test"}{"10100"}){
+    my @versions = qw( control test );
+    foreach my $version (@versions){
+      foreach my $gen (10002..10100){
+        print "\n$gen\t$version\tNA\tNA\tNA\tNA\t$filename";
+      }
+    } 
+    next;
+  }
   my @versions = qw( control test );
   foreach my $version (@versions){
     foreach my $gen (10002..10100){ 

@@ -18,7 +18,11 @@ while(my $filename = <STDIN>){
     $hash{$a[1]}{"p2"} = $a[3];
     $hash{$a[1]}{"fit"} = $a[4];
   }
-  unless($hash{"test"}{"p1"}){next;}
+  unless($hash{"test"}{"p1"}){
+    print "\ncontrol\tNA\tNA\t$filename";
+    print "\ntest\tNA\tNA\t$filename";
+    next;
+  }
   my $purity_start = ($hash{"burn_in"}{"p1"} + $hash{"burn_in"}{"p1"}) /2;
   my $purity_end_control = ($hash{"control"}{"p1"} + $hash{"control"}{"p1"}) /2;
   my $purity_end_test = ($hash{"test"}{"p1"} + $hash{"test"}{"p1"}) /2;
