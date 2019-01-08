@@ -50,6 +50,7 @@ for (n in 1:length(parameters_tested)){
       scale_color_distiller(palette = "Spectral",name=paste(parameter_print)) +
       ylab("Average Haldanes") + xlab("Generation")   +
       theme(legend.position="bottom") +
+      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
       labs(tag = LETTERS[n])
 
     
@@ -62,8 +63,10 @@ for (n in 1:length(parameters_tested)){
       group_by(seed, parameter_chosen) %>%
       summarize(mean_haldane = mean(mean_haldane)) %>%
       ggplot(.,aes(x=as.numeric(parameter_chosen),y=mean_haldane)) + 
-      geom_point(alpha=0.2) + theme_few() + 
+      geom_point(alpha = 0.1, shape = 16, size = 0.6) +
+      geom_smooth(se = FALSE, size = 1.5, span = 0.80,color="black") + theme_bw() + 
       ylab("Average Haldanes") + xlab(paste(parameter_print)) +
+      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
       labs(tag = LETTERS[n])
     
     plots[[2*n]] <- plot_point
@@ -72,13 +75,14 @@ for (n in 1:length(parameters_tested)){
   
 }
 
-pdf(paste("../figures/",iteration,".haldanecurves.out1.pdf",sep=""),width=12,height=6)
+pdf(paste("../figures/",iteration,".haldanecurves.out1.pdf",sep=""),width=12,height=12)
 grid.arrange( plots[[1]],plots[[3]],
               plots[[5]],plots[[7]],
               plots[[9]],plots[[11]],
              # top = textGrob("Haldane Values",gp=gpar(fontsize=20,font=2)),
-              layout_matrix = rbind(c(1,2,3),
-                                    c(4,5,6)))
+             layout_matrix = rbind(c(1,2),
+                                   c(3,4),
+                                   c(5,6)))
 dev.off()
 
 pdf(paste("../figures/",iteration,".haldanepoint.out1.pdf",sep=""),width=12,height=6)
@@ -87,6 +91,7 @@ grid.arrange( plots[[2]],plots[[4]],
               plots[[6]],plots[[8]],
               plots[[10]],plots[[12]],
               # top = textGrob("Haldane Values",gp=gpar(fontsize=20,font=2)),
-              layout_matrix = rbind(c(1,2,3),
-                                    c(4,5,6)))
+              layout_matrix = rbind(c(1,2),
+                                    c(3,4),
+                                    c(5,6)))
 dev.off()
