@@ -38,29 +38,32 @@ for (n in 1:length(parameters_tested)){
     group_by(.dots=parameter_full) %>% 
     top_n(.,(100*2),seed) 
 
-  
-
-  
-  
   #pdf( paste("../",iteration,".",parameter,".out2.pdf",sep=""))
 
-  plot_dot <- output2 %>% mutate_("parameter_chosen" = parameter_full) %>%
+  plot_dot <- output2 %>% 
+    mutate_("parameter_chosen" = parameter_full) %>%
     mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
-    ggplot(.) + geom_point(aes(x=parameter_chosen,y=purity_change,color=version),alpha=0.2) +
-    scale_color_brewer(palette = "Set1",name="Version",labels=c("Control", "Climate change")) + theme_bw() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
-    geom_hline(yintercept=0) +
+    ggplot(aes(x = parameter_chosen, y = purity_change, color = rev(version))) + 
+    geom_point(alpha = 0.1, shape = 16, size = 0.6) +
+    geom_smooth(se = FALSE, size = 1.5, span = 0.80)+
+    scale_color_brewer(palette = "Set1", name = "Treatment", labels = c("Climate change", "Control")) + 
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+    geom_hline(yintercept = 0) +
     xlab(parameter_print) +
-    ylab("Additional introgression") +
+    ylab("Introgression") +
     labs(tag = LETTERS[n])
 
   plots[[n]] <- plot_dot
   
   plot_dot_RI <- output2 %>% mutate_("parameter_chosen" = parameter_full) %>%
     mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
-    ggplot(.) + geom_point(aes(x=parameter_chosen,y=fit_change,color=version),alpha=0.2) +
-    scale_color_brewer(palette = "Set1",name="Version",labels=c("Control", "Climate change")) + theme_bw() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+    ggplot(aes(x = parameter_chosen, y = purity_change, color = rev(version))) +
+    geom_point(alpha = 0.1, shape = 16, size = 0.6) +
+    geom_smooth(se = FALSE, size = 1.5, span = 0.80)+
+    scale_color_brewer(palette = "Set1", name="Treatment",labels=c("Climate change", "Control")) + 
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
     geom_hline(yintercept=0) +
     xlab(parameter_print) +
     ylab("RI loss") +
@@ -71,23 +74,35 @@ for (n in 1:length(parameters_tested)){
   
   
 }
+
+# extract the legend
+# modified from stackoverflow
+grid_arrange_shared_legend <- function(plots) {
+  
+  g <- ggplotGrob(plots[[1]] + theme(legend.position = "bottom"))$grobs
+  
+  legend <- g[[which(sapply(g, function(x) x$name) == "guide-box")]]
+  lheight <- sum(legend$height)
+  
+  grid.arrange(
+    do.call(arrangeGrob, lapply(plots, function(x)
+      x + theme(legend.position = "none"))),
+    legend,
+    ncol = 1,
+    heights = unit.c(unit(1, "npc") - lheight, lheight))
+  
+}
+
+
 pdf(paste("../figures/",iteration,".points.out2.pdf",sep=""),width=12,height=6)
 
-grid.arrange( plots[[1]],plots[[2]],
-              plots[[3]],plots[[4]],
-              plots[[5]],plots[[6]],
-              # top = textGrob("Haldane Values",gp=gpar(fontsize=20,font=2)),
-              layout_matrix = rbind(c(1,2,3),
-                                    c(4,5,6)))
+grid_arrange_shared_legend(plots)
+
 dev.off()
 
 pdf(paste("../figures/",iteration,".points.out2RI.pdf",sep=""),width=12,height=6)
 
-grid.arrange( plots_RI[[1]],plots_RI[[2]],
-              plots_RI[[3]],plots_RI[[4]],
-              plots_RI[[5]],plots_RI[[6]],
-              # top = textGrob("Haldane Values",gp=gpar(fontsize=20,font=2)),
-              layout_matrix = rbind(c(1,2,3),
-                                    c(4,5,6)))
+grid_arrange_shared_legend(plots_RI)
+
 dev.off()
   
