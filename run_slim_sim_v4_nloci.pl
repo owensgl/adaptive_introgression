@@ -11,7 +11,7 @@ use Parallel::ForkManager;
 #NOTE: This is the path to your nonWF slim program
 my $slim = "/home/owens/working/SLiM/bin/slim";
 #PARALLEL EXECUTION
-my $pm = new Parallel::ForkManager(10);
+my $pm = new Parallel::ForkManager(8);
 my %p;
 $p{pop_size} = 1000; #Population size
 $p{m} = 0.01; #Mutation rate
@@ -28,9 +28,6 @@ my $reps =100;  #Number of repetitions per set of parameters
 $p{burn_in_gen} = 10000; #Number of generations of burn in before shift
 $p{shift_gen} = 100; #Number of generations of shifting optimum.
 
-my $max_runs = 100; #Maximum number of replicates before it starts skipping.
-my $output_dir = "output";
-
 my @parameters = sort keys %p;
 my %varying_p; #each parameter that is going to vary individually. 
 my %starting_p; #The starting point for incrementing;
@@ -41,32 +38,29 @@ my %increment_p; #The amount it increases with each increment
 #$varying_p{qtl_sd}++;
 #$varying_p{mutation_rate}++;
 #$varying_p{total_div}++;
-$varying_p{m}++;
-#$varying_p{div_sel_n}++;
-
+#$varying_p{m}++;
+$varying_p{div_sel_n}++;
 #Starting point of parameters
 #$starting_p{delta}= 0.1;
 #$starting_p{qtl_sd}= 0.1;
 #$starting_p{mutation_rate} = 1e-8;
 #$starting_p{total_div} = 0.1;
-$starting_p{m} = 0.0;
-#$starting_p{div_sel_n} = 5;
-
+#$starting_p{m} = 0.001;
+$starting_p{div_sel_n} = 1;
 #Ending point of parameters
-#$ending_p{delta}= 3;
+#$ending_p{delta}= 5;
 #$ending_p{qtl_sd}= 5;
 #$ending_p{mutation_rate} = 5e-7;
 #$ending_p{total_div} = 1;
-$ending_p{m} = 0.0;
-#$ending_p{div_sel_n} = 100;
-
+#$ending_p{m} = 0.1;
+$ending_p{div_sel_n} = 4;
 #Increment for parameters
 #$increment_p{delta}= 0.01;
 #$increment_p{qtl_sd}= 0.1;
 #$increment_p{mutation_rate} = 1e-8;
 #$increment_p{total_div} = 0.01;
-$increment_p{m} = 0.001;
-#$increment_p{div_sel_n} = 5;
+#$increment_p{m} = 0.001;
+$increment_p{div_sel_n} = 1;
 
 
 
@@ -91,16 +85,10 @@ foreach my $varying_parameter (sort keys %varying_p){
 			$pm->start and next;
 			srand();
 			my $seed = int(rand(100000000000));
-			my $varying_parameter_reformat = $varying_parameter;
-			$varying_parameter_reformat =~ s/\_/\./g;
-			my $prefix = "output_$varying_parameter_reformat";
-			my $filename = "$output_dir/output_$varying_parameter_reformat";
+			my $filename = "output_$varying_parameter";
 			foreach my $parameter (@parameters){
 				$filename .= "_$tmp_p{$parameter}";
-				$prefix .= "_$tmp_p{$parameter}";
 			}
-			my $run_count = `ls $output_dir | grep $prefix | grep out3.txt.gz | wc -l`;
-			if ($run_count >= $max_runs){next;} #Skip runs where we already have enough replicates
 			$filename .= "_${rep}_${seed}";
 			my $filename_1 = $filename."_out1.txt";
 			my $filename_2 = $filename."_out2.txt";
