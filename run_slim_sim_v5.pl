@@ -9,9 +9,9 @@ use Parallel::ForkManager;
 
 
 #NOTE: This is the path to your nonWF slim program
-my $slim = "/home/owens/working/SLiM/bin/slim";
+my $slim = "/scratch/gowens/build/slim";
 #PARALLEL EXECUTION
-my $pm = new Parallel::ForkManager(10);
+my $pm = new Parallel::ForkManager(30);
 my %p;
 $p{"popsize"} = 1000; #Population size
 $p{"m"} = 0.01; #Mutation rate
