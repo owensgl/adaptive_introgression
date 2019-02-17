@@ -3,12 +3,12 @@ library(RColorBrewer)
 library(ggthemes)
 library(grid)
 library(gridExtra)
-out3 <- read_tsv("Documents/adaptive_introgression/example_sim_nov28_out3.txt",
+out3 <- read_tsv("Documents/adaptive_introgression/example_sim_jan29_delta2_out3.txt",
                  col_names = c("spacer","version","type", "gen","pop","mut_pos",
                                "mut_popID","mut_freq","mut_sel")) %>%
   filter(gen > 1)
 
-out2 <- read_tsv("Documents/adaptive_introgression/example_sim_nov28_out2.txt",
+out2 <- read_tsv("Documents/adaptive_introgression/example_sim_jan29_delta2_out2.txt",
                  col_names = c("spacer","version","gen","p1_home","p2_home",
                                "fit_dif","spacer2")) %>%
   filter(gen > 1)
@@ -75,11 +75,11 @@ plot_introgression <- out3 %>%
              filter(pop == "Pop_2" ) %>%
              mutate(mut_popID = fct_rev(as.factor(mut_popID))),
            aes(x=mut_pos,y=-mut_freq,fill=as.factor(mut_popID)),stat="identity",position="stack") +
-  theme_few() + scale_fill_manual(values = pop_colors,name="RI allele origin",
+  theme_few() + scale_fill_manual(values = pop_colors,name="Neutral allele origin",
                                   labels=c("Pop_1", "Pop_2")) +
   facet_grid(.~gen) +
   geom_hline(yintercept=0) +
-  ylab("RI allele frequency") +
+  ylab("Neutral allele frequency") +
   xlab("Position") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
@@ -116,7 +116,7 @@ plot_phenosum <- out3 %>%
 
 
 
-pdf("Documents/adaptive_introgression/example_sim_delta2.plots.v1.pdf",width=15,height=8)
+pdf("Documents/adaptive_introgression/example_sim_delta2.plots.v2.pdf",width=15,height=8)
 
 
 grid.arrange( plot_RI,plot_introgression,plot_phenosum,plot_linkage,
