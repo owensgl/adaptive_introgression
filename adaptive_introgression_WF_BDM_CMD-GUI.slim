@@ -3,7 +3,7 @@ initialize() {
 	// **********************************
 	// Simulation execution parameters
 	// **********************************
-	defineConstant("work_dir", "/Users/gregoryowens/Documents/adaptive_introgression"); // The working directory.
+	defineConstant("work_dir", "/Users/ksamuk/Desktop"); // The working directory.
 
 	defineConstant("seed", 1112); // The seed for repeating running a simulation with and without the climate shift.
 	setSeed(seed); 
@@ -47,11 +47,12 @@ initialize() {
 	// BDM parameters
 	// ******************************
 	
-	defineConstant("bdm_n",  10); // the number of bdm_loci (minimum 2)
-	defineConstant("bdm_s", 0.0); // the effect size of BDM interactions
+	defineConstant("bdm_sel_max",  1.0); // the maximum strength of intrinsic isolation
+	defineConstant("bdm_n", 75); // the number of bdm_loci (minimum 2)
+	defineConstant("bdm_s", bdm_sel_max/(bdm_n)); // the effect size of BDM interactions (note that denom is *not* multiplied by two)
 	
 	// parameters for spatial arrangement of BDMs
-	defineConstant("cluster_proportion", 2); // the size of the cluster, 1 = whole chromosome, 2 = half, 3 = third, etc.
+	defineConstant("cluster_proportion", 1); // the size of the cluster, 1 = whole chromosome, 2 = half, 3 = third, etc.
 	defineConstant("cluster_size", integerDiv(chr_size, cluster_proportion)); // the size of the BDM cluster, in bp
 	defineConstant("cluster_start", integerDiv(chr_size, 2) - integerDiv(chr_size, cluster_proportion*2)); // the starting locus of the cluster
 	
@@ -74,8 +75,9 @@ initialize() {
 	// Divergent selection parameters
 	// ******************************
 	
-	defineConstant("div_sel_n", 75); // the number of loci subject to divergent selection
-	defineConstant("div_sel_s", 0.09); // selection coefficient for divergently seleted alleles
+	defineConstant("div_sel_max", 1.0); // the maximum strength of divergent selection
+	defineConstant("div_sel_n", 100); // the number of loci subject to    selection
+   defineConstant("div_sel_s", div_sel_max/(div_sel_n*2)); // selection coefficient for divergently seleted alleles (denom * 2 for diploidy)
 
 	// disperse div sel loci evenly along genome
 	defineConstant("div_sel_loci", c(1:div_sel_n) * integerDiv(chr_size, (div_sel_n+1))); 
@@ -98,8 +100,8 @@ initialize() {
 	initializeMutationType("m1", 0.5, "n", 0, qtl_sd);  // Environmentally-sensitive QTL, mean zero, sd = 1
 	initializeMutationType("m2", 0.5, "f", 0.0);  // The BDM allele in p1 
 	initializeMutationType("m3", 0.5, "f", 0.0);  // The BDM allele in p2 
-	initializeMutationType("m4", 0.5, "f", div_sel_s);  // The divergently selected allele in p1
-	initializeMutationType("m5", 0.5, "f", div_sel_s);  // The divergently selected allele in p2
+	initializeMutationType("m4", 0.5, "f", 0.0);  // The divergently selected allele in p1
+	initializeMutationType("m5", 0.5, "f", 0.0);  // The divergently selected allele in p2
 	initializeMutationType("m6", 0.5, "f", 0.0);  // Neutral mutations from p1  for tracking local introgression
 	initializeMutationType("m7", 0.5, "f", 0.0);  // Neutral mutations from p2  for tracking local introgression
 	
@@ -133,8 +135,8 @@ initialize() {
 	// ******************************
 
 	initializeGenomicElementType("g1", c(m1),  c(1.0)); // only QTL alleles are allows to arise via new mutation
-	initializeGenomicElementType("g2", c(m1,m2,m3),  c(1e-200,0.0,0.0)); // RI loci are static (m1 included to allow fitness calc)
-	initializeGenomicElementType("g3", c(m1,m4,m5),  c(1e-200,0.0,0.0)); // div loci are static (m1 included to allow fitness calc)
+	initializeGenomicElementType("g2", c(m1,m2,m3),  c(1e-200,0.0,0.0)); // BDM loci are static (m1 included to allow fitness calc)
+	initializeGenomicElementType("g3", c(m1,m4,m5),  c(1e-200,0.0,0.0)); // div sel loci are static (m1 included to allow fitness calc)
 	initializeGenomicElementType("g4", c(m1,m6,m7),  c(1e-200,0.0,0.0)); // neutral alleles are static 
 	
 	// define the neutral alleles
@@ -249,16 +251,14 @@ fitness(m3) {
 	return 1.0;		
 }
 
-fitness(m4, p2) {
-	// divergent selection
-//	return 1/relFitness;		
-        return 1.0 - (1.0 * div_sel_s);
+fitness(m4) {
+	// the p1 divergently selected allelees themselves are neutral; their effect is handled below 
+	return 1.0;		
 }
 
-fitness(m5, p1) {
-	// divergent selection
-//	return 1/relFitness;	
-	return 1.0 - (1.0 * div_sel_s);	
+fitness(m5) {
+	// the p2 divergently selected allelees are neutral; their effect is handled below 
+	return 1.0;		
 }
 
 fitness(NULL) {
@@ -280,8 +280,29 @@ fitness(NULL) {
 		current_optimum = initial_optimum + delta * (sim.generation - burn_in_generations);
 	}
 	
-	// the fitness of this individual, based on the current optimum
+	// the qtl fitness of this individual, based on the current optimum
 	qtl_fitness = dnorm(current_optimum - individual.x, 0.0, fitness_sd);
+	
+	// ***************************************************************
+	// Divergent selection fitness calcuation (additive)
+	// ***************************************************************
+	
+	p1_div_sel_alleles = genome1.countOfMutationsOfType(m4) + genome2.countOfMutationsOfType(m4);
+	p2_div_sel_alleles = genome1.countOfMutationsOfType(m5) + genome2.countOfMutationsOfType(m5);
+	
+	
+	// fitness penalty for divergent selection alleles is the proportion of your div_sel alleles that do not match your home pop
+	
+	if (individual.subpopulation.id == 1){
+		
+		div_sel_fitness = p2_div_sel_alleles  / (p1_div_sel_alleles + p2_div_sel_alleles);
+	
+	} else {
+	
+		div_sel_fitness = p1_div_sel_alleles  / (p1_div_sel_alleles + p2_div_sel_alleles);
+
+	}
+	
 
 	// ***************************************************************
 	// BDM pairwise negative epistasis
@@ -335,10 +356,31 @@ fitness(NULL) {
 	
 	// discount the qtl fitness by the amount of negative epistatsis
 	
-	// the maxmimum total epistasis penalty is 1 (total lethality)
-	epistasis_penalty = ifelse(sum(negative_epistasis) > 1, 1.0, sum(negative_epistasis));
+	// the maxmimum total epistasis penalty is 0 
+	epistasis_penalty = ifelse(sum(negative_epistasis) > 1, 0.0, sum(negative_epistasis));
+	epistasis_penalty = epistasis_penalty;
 	
-	return (qtl_fitness * (1-epistasis_penalty));
+
+	// TOTAL FITNESS CALCULATION
+	total_fitness = ((1-epistasis_penalty) + (1- div_sel_fitness)) * qtl_fitness;
+	//total_fitness = ifelse(total_fitness < 0, 1.0, 1 + total_fitness);
+	
+	
+	// PRINT FITNESS TO CONSOLE
+	
+	print("individual index : " + individual.index);
+	print("subpop " + individual.subpopulation.id);
+	print("p1 div sel alleles " + p1_div_sel_alleles);
+	print("p2 div sel alleles " + p2_div_sel_alleles);
+	print("qtl fitness = " + qtl_fitness);
+	print("div sel penalty = " + div_sel_fitness);
+	print("bdm penalty = " + epistasis_penalty);
+	print("total fitness = " + (1 + total_fitness));
+	print("\n");	
+	
+	return (1.0 + total_fitness);
+	
+	//return (1.0);
 	
 }
 
