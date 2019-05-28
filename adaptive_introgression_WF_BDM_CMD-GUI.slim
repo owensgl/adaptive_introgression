@@ -13,7 +13,7 @@ initialize() {
 	// In the burn-in version it stops at the end of the burn in and saves the state. 
 	// In test version it loads the saved state and continues forward to the end of the shift phase.
 	// In control version in loads the saved state and continues for an extra "shift_generations" of burn in. 
-	defineConstant("version", "test"); 	
+	defineConstant("version", "burn"); 	
 	defineConstant("commandline",  "True"); //Set to False to make it output every 100 generations
 	defineConstant("rep", 100); //A rep number used to keep track of multi line output. 
 	// ******************************
@@ -48,7 +48,7 @@ initialize() {
 	// ******************************
 	
 	defineConstant("ri_max", 0.9); // The maximum strength of divergent selection and BDMs
-	defineConstant("proportion_bdm", 0.5); // The proportion of loci that BDM versus divergent selection
+	defineConstant("proportion_bdm", 0.999); // The proportion of loci that BDM versus divergent selection
 	defineConstant("total_div_bdm_n", 100); // The total number of BDM and divergent selected loci. 
 	defineConstant("bdm_div_s", ri_max/(total_div_bdm_n)); // the effect size of BDM  and RI interactions (note that denom is *not* multiplied by two)
 	
@@ -151,7 +151,7 @@ initialize() {
 	for (i in non_neutral_statics){
 	
 		while (any(neutral_loci == i)){
-	
+						
 			neutral_loci[neutral_loci == i] = (neutral_loci[neutral_loci == i] + 1);
 	
 		}
