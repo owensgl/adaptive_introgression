@@ -3,7 +3,7 @@ initialize() {
 	// **********************************
 	// Simulation execution parameters
 	// **********************************
-	defineConstant("work_dir", "/Users/ksamuk/Desktop"); // The working directory.
+	defineConstant("work_dir", "/Users/gregoryowens/Documents/adaptive_introgression"); // The working directory.
 
 	defineConstant("seed", 1112); // The seed for repeating running a simulation with and without the climate shift.
 	setSeed(seed); 
@@ -13,7 +13,7 @@ initialize() {
 	// In the burn-in version it stops at the end of the burn in and saves the state. 
 	// In test version it loads the saved state and continues forward to the end of the shift phase.
 	// In control version in loads the saved state and continues for an extra "shift_generations" of burn in. 
-	defineConstant("version", "burn"); 	
+	defineConstant("version", "test"); 	
 	defineConstant("commandline",  "True"); //Set to False to make it output every 100 generations
 	defineConstant("rep", 100); //A rep number used to keep track of multi line output. 
 	// ******************************
@@ -47,9 +47,12 @@ initialize() {
 	// BDM parameters
 	// ******************************
 	
-	defineConstant("bdm_sel_max",  1.0); // the maximum strength of intrinsic isolation
-	defineConstant("bdm_n", 75); // the number of bdm_loci (minimum 2)
-	defineConstant("bdm_s", bdm_sel_max/(bdm_n)); // the effect size of BDM interactions (note that denom is *not* multiplied by two)
+	defineConstant("ri_max", 0.9); // The maximum strength of divergent selection and BDMs
+	defineConstant("proportion_bdm", 0.5); // The proportion of loci that BDM versus divergent selection
+	defineConstant("total_div_bdm_n", 100); // The total number of BDM and divergent selected loci. 
+	defineConstant("bdm_div_s", ri_max/(total_div_bdm_n)); // the effect size of BDM  and RI interactions (note that denom is *not* multiplied by two)
+	
+	defineConstant("bdm_n", asInteger(floor(total_div_bdm_n * proportion_bdm))); // the number of bdm_loci (minimum 2)
 	
 	// parameters for spatial arrangement of BDMs
 	defineConstant("cluster_proportion", 1); // the size of the cluster, 1 = whole chromosome, 2 = half, 3 = third, etc.
@@ -75,9 +78,7 @@ initialize() {
 	// Divergent selection parameters
 	// ******************************
 	
-	defineConstant("div_sel_max", 1.0); // the maximum strength of divergent selection
-	defineConstant("div_sel_n", 100); // the number of loci subject to    selection
-   defineConstant("div_sel_s", div_sel_max/(div_sel_n*2)); // selection coefficient for divergently seleted alleles (denom * 2 for diploidy)
+	defineConstant("div_sel_n", asInteger(floor(total_div_bdm_n * (1- proportion_bdm)))); // the number of divergently selected loci
 
 	// disperse div sel loci evenly along genome
 	defineConstant("div_sel_loci", c(1:div_sel_n) * integerDiv(chr_size, (div_sel_n+1))); 
@@ -173,7 +174,7 @@ initialize() {
 			if(((statics[index+1]-1) - (statics[index]+1)) > 1)
 				initializeGenomicElement(g1, statics[index]+1, statics[index+1]-1);
 	
-	// next, define the RI regions (again, to prevent back-mutations at the RI loci)
+	// next, define the BDM regions (again, to prevent back-mutations at the RI loci)
 	for (index in 0:(size(bdm_loci)-1))
 			initializeGenomicElement(g2, bdm_loci[index], bdm_loci[index]);
 	
@@ -253,12 +254,12 @@ fitness(m3) {
 
 fitness(m4) {
 	// the p1 divergently selected allelees themselves are neutral; their effect is handled below 
-	return 1.0;		
+	return 1.0;
 }
 
 fitness(m5) {
 	// the p2 divergently selected allelees are neutral; their effect is handled below 
-	return 1.0;		
+	return 1.0;	
 }
 
 fitness(NULL) {
@@ -284,7 +285,7 @@ fitness(NULL) {
 	qtl_fitness = dnorm(current_optimum - individual.x, 0.0, fitness_sd);
 	
 	// ***************************************************************
-	// Divergent selection fitness calcuation (additive)
+	// Divergent selection fitness calcuation (multiplicative)
 	// ***************************************************************
 	
 	p1_div_sel_alleles = genome1.countOfMutationsOfType(m4) + genome2.countOfMutationsOfType(m4);
@@ -295,11 +296,10 @@ fitness(NULL) {
 	
 	if (individual.subpopulation.id == 1){
 		
-		div_sel_fitness = p2_div_sel_alleles  / (p1_div_sel_alleles + p2_div_sel_alleles);
+		div_sel_count = p2_div_sel_alleles/2.0;
 	
 	} else {
-	
-		div_sel_fitness = p1_div_sel_alleles  / (p1_div_sel_alleles + p2_div_sel_alleles);
+		div_sel_count = p1_div_sel_alleles/2.0;
 
 	}
 	
@@ -317,7 +317,7 @@ fitness(NULL) {
 	
 	// scan each pair of negatively interacting bdm loci (assigned in the starting parameters)
 	
-	for (i in 0:((bdm_n/2) -1)){
+	for (i in 0:(floor(bdm_n/2)-1)){
 	
 		// identify the two negatively interacting loci
 		// (indexes the bdm_pairs vector by 2s)
@@ -339,15 +339,15 @@ fitness(NULL) {
 
 		if(bdm_genotype == 1){
 			
-			negative_epistasis[i] = bdm_s;
+			negative_epistasis[i] = 1;
 			
 		}	else if (bdm_genotype == 2){
 		
-			negative_epistasis[i] = 1.5 * bdm_s;
+			negative_epistasis[i] = 1.5;
 		
 		}  else if (bdm_genotype == 4){
 		
-			negative_epistasis[i] = 2 * bdm_s;
+			negative_epistasis[i] = 2;
 		
 		} 
 		
@@ -356,29 +356,31 @@ fitness(NULL) {
 	
 	// discount the qtl fitness by the amount of negative epistatsis
 	
-	// the maxmimum total epistasis penalty is 0 
-	epistasis_penalty = ifelse(sum(negative_epistasis) > 1, 0.0, sum(negative_epistasis));
-	epistasis_penalty = epistasis_penalty;
+	// the total number of mismatched BDMs
+	bdm_count = sum(negative_epistasis);
+	
+	// the total number of divergently selected alleles and BDMs
+	bdm_div_count = bdm_count + div_sel_count;
 	
 
 	// TOTAL FITNESS CALCULATION
-	total_fitness = ((1-epistasis_penalty) + (1- div_sel_fitness)) * qtl_fitness;
+	total_fitness = qtl_fitness * (1-bdm_div_s)^bdm_div_count;
 	//total_fitness = ifelse(total_fitness < 0, 1.0, 1 + total_fitness);
 	
 	
 	// PRINT FITNESS TO CONSOLE
 	
-	print("individual index : " + individual.index);
-	print("subpop " + individual.subpopulation.id);
-	print("p1 div sel alleles " + p1_div_sel_alleles);
-	print("p2 div sel alleles " + p2_div_sel_alleles);
-	print("qtl fitness = " + qtl_fitness);
-	print("div sel penalty = " + div_sel_fitness);
-	print("bdm penalty = " + epistasis_penalty);
-	print("total fitness = " + (1 + total_fitness));
-	print("\n");	
+	//print("individual index : " + individual.index);
+	//print("subpop " + individual.subpopulation.id);
+	//print("p1 div sel alleles " + p1_div_sel_alleles);
+	//print("p2 div sel alleles " + p2_div_sel_alleles);
+	//print("qtl fitness = " + qtl_fitness);
+	//print("div sel count = " + div_sel_count);
+	//print("bdm count = " + bdm_count);
+	//print("total fitness = " + (total_fitness));
+	//print("\n");	
 	
-	return (1.0 + total_fitness);
+	return (total_fitness);
 	
 	//return (1.0);
 	
@@ -478,7 +480,7 @@ fitness(NULL) {
 			p2total_away = sum(p2g.countOfMutationsOfType(m6));
 			p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-			fit_dif = (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
+			fit_dif = (p2_home_percent * bdm_div_s * div_sel_n) - ((1-p1_home_percent) * bdm_div_s * div_sel_n);
 
 				
 			cat("OUT2\tburn_in\t" + p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif  + "\n");
@@ -522,7 +524,7 @@ fitness(NULL) {
 			p2total_away = sum(p2g.countOfMutationsOfType(m6));
 			p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-			fit_dif =  (p2_home_percent * div_sel_s * div_sel_n) - ((1-p1_home_percent) * div_sel_s * div_sel_n);
+			fit_dif =  (p2_home_percent * bdm_div_s * div_sel_n) - ((1-p1_home_percent) * bdm_div_s * div_sel_n);
 
 				
 			cat("OUT2\t"+version+"\t" + p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t"  + "\n");
