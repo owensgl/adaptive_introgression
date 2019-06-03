@@ -3,6 +3,10 @@ initialize() {
 	// **********************************
 	// Simulation execution parameters
 	// **********************************
+	
+	// toggle working dir for local testing
+	
+	//defineConstant("work_dir", "/Users/ksamuk/Dropbox (Duke Bio_Ea)/Projects/adaptive_introgression"); // The working directory.
 	defineConstant("work_dir", "/Users/gregoryowens/Documents/adaptive_introgression"); // The working directory.
 
 	defineConstant("seed", 1112); // The seed for repeating running a simulation with and without the climate shift.
@@ -48,19 +52,14 @@ initialize() {
 	// ******************************
 	
 	defineConstant("ri_max", 0.9); // The maximum strength of divergent selection and BDMs
-	defineConstant("proportion_bdm", 0.999); // The proportion of loci that BDM versus divergent selection
+	defineConstant("proportion_bdm", 0.10); // The proportion of loci that BDM versus divergent selection
 	defineConstant("total_div_bdm_n", 100); // The total number of BDM and divergent selected loci. 
 	defineConstant("bdm_div_s", ri_max/(total_div_bdm_n)); // the effect size of BDM  and RI interactions (note that denom is *not* multiplied by two)
 	
 	defineConstant("bdm_n", asInteger(floor(total_div_bdm_n * proportion_bdm))); // the number of bdm_loci (minimum 2)
 	
-	// parameters for spatial arrangement of BDMs
-	defineConstant("cluster_proportion", 1); // the size of the cluster, 1 = whole chromosome, 2 = half, 3 = third, etc.
-	defineConstant("cluster_size", integerDiv(chr_size, cluster_proportion)); // the size of the BDM cluster, in bp
-	defineConstant("cluster_start", integerDiv(chr_size, 2) - integerDiv(chr_size, cluster_proportion*2)); // the starting locus of the cluster
-	
-	// assign BDMs to loci based on the above
-	defineConstant("bdm_loci", c(1:bdm_n) * integerDiv(cluster_size, (bdm_n+1)) + cluster_start); // define the bdm loci
+	// assign BDMs to loci (eventually distributed relative to each other)
+	defineConstant("bdm_loci", c(1:bdm_n) * integerDiv(chr_size, (bdm_n+1)) +1 ); // define the bdm loci
 	
 	// ******************************
 	// BDM pairwise locus assignments
@@ -157,8 +156,26 @@ initialize() {
 		}
 	}
 	
-	// a list of all the static genomic elements
-	statics = sort(c(bdm_loci, div_sel_loci, neutral_loci));
+	// generate a list of all the static elements
+
+	if(bdm_n > 0 & div_sel_n > 0){
+		cat("There are BDMs + div_sel_loci");
+		statics = sort(c(bdm_loci, div_sel_loci, neutral_loci));
+	} else if(bdm_n > 0 & div_sel_n <= 0){
+	
+			cat("There are only BDMs");
+	  		statics = sort(c(bdm_loci, neutral_loci));
+	  	}
+	  else if(bdm_n <= 0 & div_sel_n > 0){
+	  		cat("There are only div_sel_loci");
+			statics = sort(c(div_sel_loci, neutral_loci));
+		}
+	  else{
+	  		cat("There are NO RI LOCI");
+	  		statics = sort(c(neutral_loci));
+		}
+	cat("\n");
+	cat("Statics:\n " + paste(statics) + "\n");
 
 	
 	// lay down the mutatable regions of the genome (g1) around the statics
@@ -174,14 +191,17 @@ initialize() {
 			if(((statics[index+1]-1) - (statics[index]+1)) > 1)
 				initializeGenomicElement(g1, statics[index]+1, statics[index+1]-1);
 	
+	if(bdm_n > 0){
 	// next, define the BDM regions (again, to prevent back-mutations at the RI loci)
 	for (index in 0:(size(bdm_loci)-1))
 			initializeGenomicElement(g2, bdm_loci[index], bdm_loci[index]);
+	}
 	
+	if(div_sel_n > 0){
 	// define the divergently selected regions (no mutations allowed here as well)
 	for (index in 0:(size(div_sel_loci)-1))
 			initializeGenomicElement(g3, div_sel_loci[index], div_sel_loci[index]);
-			
+	}		
 	// finally, add in neutral alleles (for ancestry tracking!)
 		for (index in 0:(size(neutral_loci)-1))
 			initializeGenomicElement(g4, neutral_loci[index], neutral_loci[index]);			
@@ -198,6 +218,7 @@ initialize() {
 	p1.setMigrationRates(p2, m);   
 	p2.setMigrationRates(p1, m); 
 	
+	if(bdm_n > 0){
 	// add in BDM alleles
 	for (i in bdm_loci){
 	
@@ -205,7 +226,9 @@ initialize() {
 		p2.individuals.genomes.addNewDrawnMutation(m3, i);
 				
 	}
+	}
 	
+	if(div_sel_n > 0){
 	
 	// add in divergently selcted alleles
 	for (i in div_sel_loci){
@@ -213,6 +236,7 @@ initialize() {
 	 	p1.individuals.genomes.addNewDrawnMutation(m4, i);
 		p2.individuals.genomes.addNewDrawnMutation(m5, i);
 				
+	}
 	}
 	
 	// add in neutral alleles
@@ -308,6 +332,10 @@ fitness(NULL) {
 	// BDM pairwise negative epistasis
 	// ***************************************************************
 	
+	// check if there are any bdms
+	
+	if(bdm_n >0){
+	
 	// initialize fitness pairwise fitness penalities at 0
 	negative_epistasis = rep(0.0, bdm_n);
 	
@@ -354,11 +382,12 @@ fitness(NULL) {
 			
 	}
 	
-	// discount the qtl fitness by the amount of negative epistatsis
-	
 	// the total number of mismatched BDMs
 	bdm_count = sum(negative_epistasis);
-	
+	} else{
+		// if there are no BDMS, set the count to 0
+		bdm_count = 0;
+	}
 	// the total number of divergently selected alleles and BDMs
 	bdm_div_count = bdm_count + div_sel_count;
 	
