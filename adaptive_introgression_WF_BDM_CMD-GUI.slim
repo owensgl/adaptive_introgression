@@ -411,6 +411,19 @@ fitness(NULL) {
 	total_fitness = qtl_fitness * (1-bdm_div_s)^bdm_div_count;
 	//total_fitness = ifelse(total_fitness < 0, 1.0, 1 + total_fitness);
 	
+	// PRINT FITNESS AND GENOTYPE TO CONSOLE
+	// output each individuals population, ID, fitness, and total list of mutations at the last generation
+	// split into OUT4 (fitness) and OUT5 (genotype)
+	// ** SET AT GEN 50 FOR DEBUG PURPOSES **
+	
+	if (sim.generation  == 50){
+	//if (sim.generation  == (burn_in_generations + shift_generations)){
+	
+		cat(paste(c("OUT4_FITNESS ",individual.subpopulation.id, individual.index, total_fitness, "\n"),  sep = "\t"));
+		cat(paste(c("OUT5_GENOTYPE ", individual.subpopulation.id, individual.index, individual.genomes.mutations.id, "\n"), sep = "\t"));
+
+	}
+	
 	return (total_fitness);
 	
 	//return (1.0);
