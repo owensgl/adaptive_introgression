@@ -533,10 +533,8 @@ fitness(NULL) {
 			
 			// Output BDM allele frequencies
 
-			cat("OUT6_BDM\tburn_in\t" + "p1\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
-			cat("OUT6_BDM\tburn_in\t" + "p2\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
-			cat("OUT6_BDM\tburn_in\t" + "p1\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p1[bdm_pairs] + "\n");
-			cat("OUT6_BDM\tburn_in\t" + "p2\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p2[bdm_pairs] + "\n");
+			cat("OUT6_BDM\tburn_in\t" + "p1\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
+			cat("OUT6_BDM\tburn_in\t" + "p2\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
 		
 			
 			
@@ -588,10 +586,8 @@ fitness(NULL) {
 		
 			// Output BDM allele frequencies
 
-			cat("OUT6_BDM\t" + version + "\t" + "p1\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
-			cat("OUT6_BDM\t" + version + "\t"+ "p2\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
-			cat("OUT6_BDM\t" + version + "\t" + "p1\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p1[bdm_pairs] + "\n");
-			cat("OUT6_BDM\t" + version + "\t" + "p2\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p2[bdm_pairs] + "\n");
+			cat("OUT6_BDM\tburn_in\t" + "p1\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
+			cat("OUT6_BDM\tburn_in\t" + "p2\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
 		
 			p1g = p1.genomes;
 			p1total_home = sum(p1g.countOfMutationsOfType(m6));
