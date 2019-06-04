@@ -504,7 +504,7 @@ fitness(NULL) {
 		//generate the OUT1 columns
 		optimum_for_output = current_optimum;
 		cat("OUT1\t"+ version + "\t" + sim.generation + "\t" +  optimum_for_output + "\t");
-		cat(mean(p1.cachedFitness(NULL)) + "\t" + mean(p1.individuals.x) + "\t" + sd(p1.individuals.x) + "\n");
+		cat(mean(p1.cachedFitness(NULL)) + "\t" + mean(p1.individuals.x) + "\t" + sd(p1.individuals.x) + "\t");
 		cat(mean(p2.cachedFitness(NULL)) + "\t" + mean(p2.individuals.x) + "\t" + sd(p2.individuals.x) + "\n");
 		
 		
