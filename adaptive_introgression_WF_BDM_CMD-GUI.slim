@@ -29,7 +29,6 @@ initialize() {
 	defineConstant("m", 0.01);   // the bidirectional migration rate
 	
 	defineConstant("initial_optimum", 0.0); // the (initial) phenotypic optimum	
-	defineConstant("optimum_bump", 0.0); // Added to phenotype during output to facilitate use of log
 	defineConstant("qtl_sd", 1); // the standard deviation of the QTL mutation distribution
 	defineConstant("fitness_sd", 2.0); // the standard deviation of the fitness function, i.e. the smoothness of the QTL peak
 	defineConstant("delta", 0.1); // the per-generation change in selective optimum	
@@ -418,8 +417,8 @@ fitness(NULL) {
 	if (sim.generation  == 50){
 		//if (sim.generation  == (burn_in_generations + shift_generations)){
 		
-		cat(paste(c("OUT4_FITNESS ",individual.subpopulation.id, individual.index, total_fitness, "\n"),  sep = "\t"));
-		cat(paste(c("OUT5_GENOTYPE ", individual.subpopulation.id, individual.index, individual.genomes.mutations.id, "\n"), sep = "\t"));
+		//cat(paste(c("OUT4_FITNESS ",individual.subpopulation.id, individual.index, total_fitness, "\n"),  sep = "\t"));
+		//cat(paste(c("OUT5_GENOTYPE ", individual.subpopulation.id, individual.index, individual.genomes.mutations.id, "\n"), sep = "\t"));
 	
 	}
 	
@@ -503,12 +502,10 @@ fitness(NULL) {
 		}
 		
 		//generate the OUT1 columns
-		optimum_for_output = current_optimum + optimum_bump;
+		optimum_for_output = current_optimum;
 		cat("OUT1\t"+ version + "\t" + sim.generation + "\t" +  optimum_for_output + "\t");
-		cat(mean(p1.cachedFitness(NULL)) + "\t" + mean(p1.individuals.x + optimum_bump) + "\t" + sd(p1.individuals.x + optimum_bump) + "\t");
-		cat(mean(log(p1.individuals.x + optimum_bump)) + "\t" + sd(log(p1.individuals.x + optimum_bump)) + "\t");
-		cat(mean(p2.cachedFitness(NULL)) + "\t" + mean(p2.individuals.x + optimum_bump) + "\t" + sd(p2.individuals.x + optimum_bump) + "\t");
-		cat(mean(log(p2.individuals.x + optimum_bump)) + "\t" + sd(log(p2.individuals.x + optimum_bump)) + "\n");
+		cat(mean(p1.cachedFitness(NULL)) + "\t" + mean(p1.individuals.x) + "\t" + sd(p1.individuals.x) + "\n");
+		cat(mean(p2.cachedFitness(NULL)) + "\t" + mean(p2.individuals.x) + "\t" + sd(p2.individuals.x) + "\n");
 		
 		
 		// Collect BDM allele frequencies
@@ -528,14 +525,21 @@ fitness(NULL) {
 		
 		// Output BDM allele frequencies
 		
-		cat("OUT6_BDM\t" + "p1\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
-		cat("OUT6_BDM\t" + "p2\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
-		cat("OUT6_BDM\t" + "p1\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p1[bdm_pairs] + "\n");
-		cat("OUT6_BDM\t" + "p2\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p2[bdm_pairs] + "\n");
+
 		
 	}
 	if (sim.generation == burn_in_generations){
 		if (version == "burn"){
+			
+			// Output BDM allele frequencies
+
+			cat("OUT6_BDM\tburn_in\t" + "p1\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
+			cat("OUT6_BDM\tburn_in\t" + "p2\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
+			cat("OUT6_BDM\tburn_in\t" + "p1\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p1[bdm_pairs] + "\n");
+			cat("OUT6_BDM\tburn_in\t" + "p2\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p2[bdm_pairs] + "\n");
+		
+			
+			
 			
 			p1g = p1.genomes;
 			p1total_home = sum(p1g.countOfMutationsOfType(m6));
@@ -581,6 +585,14 @@ fitness(NULL) {
 	
 	if (sim.generation  == (burn_in_generations + shift_generations)){
 		if (version != "burn"){
+		
+			// Output BDM allele frequencies
+
+			cat("OUT6_BDM\t" + version + "\t" + "p1\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
+			cat("OUT6_BDM\t" + version + "\t"+ "p2\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
+			cat("OUT6_BDM\t" + version + "\t" + "p1\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p1[bdm_pairs] + "\n");
+			cat("OUT6_BDM\t" + version + "\t" + "p2\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p2[bdm_pairs] + "\n");
+		
 			p1g = p1.genomes;
 			p1total_home = sum(p1g.countOfMutationsOfType(m6));
 			p1total_away = sum(p1g.countOfMutationsOfType(m7));
