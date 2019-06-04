@@ -52,7 +52,7 @@ initialize() {
 	// ******************************
 	
 	defineConstant("ri_max", 0.9); // The maximum strength of divergent selection and BDMs
-	defineConstant("proportion_bdm", 0.10); // The proportion of loci that BDM versus divergent selection
+	defineConstant("proportion_bdm", 0.40); // The proportion of loci that BDM versus divergent selection
 	defineConstant("total_div_bdm_n", 100); // The total number of BDM and divergent selected loci. 
 	defineConstant("bdm_div_s", ri_max/(total_div_bdm_n)); // the effect size of BDM  and RI interactions (note that denom is *not* multiplied by two)
 	
@@ -157,32 +157,28 @@ initialize() {
 	}
 	
 	// generate a list of all the static elements
+	// check for missing BDMs/div sel loci
+	// neutral sites are always in the statics list
 	
 	if(bdm_n > 0 & div_sel_n > 0){
 		
-		//cat("There are BDMs + div_sel_loci");
 		statics = sort(c(bdm_loci, div_sel_loci, neutral_loci));
 	
 	} else if(bdm_n > 0 & div_sel_n <= 0){
 		
-		//cat("There are only BDMs");
 		statics = sort(c(bdm_loci, neutral_loci));
 	
 	}
 	else if(bdm_n <= 0 & div_sel_n > 0){
 		
-		//cat("There are only div_sel_loci");
 		statics = sort(c(div_sel_loci, neutral_loci));
 	
 	}
 	else{
 		
-		//cat("There are NO RI LOCI");
 		statics = sort(c(neutral_loci));
 	
 	}
-	cat("\n");
-	cat("Statics:\n " + paste(statics) + "\n");
 	
 	
 	// lay down the mutatable regions of the genome (g1) around the statics
@@ -200,11 +196,11 @@ initialize() {
 	
 	// next, define the BDM regions (again, to prevent back-mutations at the RI loci)
 	if(bdm_n > 0){
-	
+		
 		
 		for (index in 0:(size(bdm_loci)-1))
 			initializeGenomicElement(g2, bdm_loci[index], bdm_loci[index]);
-			
+	
 	}
 	
 	// define the divergently selected regions (no mutations allowed here as well)
@@ -258,6 +254,9 @@ initialize() {
 		p2.individuals.genomes.addNewDrawnMutation(m7, i);
 	
 	}
+
+
+
 }
 
 1: late() {
@@ -335,7 +334,7 @@ fitness(NULL) {
 		div_sel_count = p2_div_sel_alleles/2.0;
 	
 	} else {
-	
+		
 		div_sel_count = p1_div_sel_alleles/2.0;
 	
 	}
@@ -397,9 +396,9 @@ fitness(NULL) {
 		
 		// the total number of mismatched BDMs
 		bdm_count = sum(negative_epistasis);
-		
-	} else{
 	
+	} else{
+		
 		// if there are no BDMS, set the count to 0
 		bdm_count = 0;
 	}
@@ -417,11 +416,11 @@ fitness(NULL) {
 	// ** SET AT GEN 50 FOR DEBUG PURPOSES **
 	
 	if (sim.generation  == 50){
-	//if (sim.generation  == (burn_in_generations + shift_generations)){
-	
+		//if (sim.generation  == (burn_in_generations + shift_generations)){
+		
 		cat(paste(c("OUT4_FITNESS ",individual.subpopulation.id, individual.index, total_fitness, "\n"),  sep = "\t"));
 		cat(paste(c("OUT5_GENOTYPE ", individual.subpopulation.id, individual.index, individual.genomes.mutations.id, "\n"), sep = "\t"));
-
+	
 	}
 	
 	return (total_fitness);
@@ -510,6 +509,30 @@ fitness(NULL) {
 		cat(mean(log(p1.individuals.x + optimum_bump)) + "\t" + sd(log(p1.individuals.x + optimum_bump)) + "\t");
 		cat(mean(p2.cachedFitness(NULL)) + "\t" + mean(p2.individuals.x + optimum_bump) + "\t" + sd(p2.individuals.x + optimum_bump) + "\t");
 		cat(mean(log(p2.individuals.x + optimum_bump)) + "\t" + sd(log(p2.individuals.x + optimum_bump)) + "\n");
+		
+		
+		// Collect BDM allele frequencies
+
+		bdm_muts1 = sim.mutationsOfType(m2);
+		bdm_muts2 = sim.mutationsOfType(m3);
+		
+		bdm_mut1_freq_p1 = sim.mutationFrequencies(p1, bdm_muts1);
+		bdm_mut1_freq_p2 = sim.mutationFrequencies(p2, bdm_muts1);
+		
+		bdm_mut2_freq_p1 = sim.mutationFrequencies(p1, bdm_muts2);
+		bdm_mut2_freq_p2 = sim.mutationFrequencies(p2, bdm_muts2);
+		
+		
+		// debug list of pairs/loci
+		// cat("BDM PAIRS " + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_pairs + "\t" + bdm_loci[bdm_pairs] + "\n");
+		
+		// Output BDM allele frequencies
+		
+		cat("OUT6_BDM\t" + "p1\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
+		cat("OUT6_BDM\t" + "p2\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
+		cat("OUT6_BDM\t" + "p1\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p1[bdm_pairs] + "\n");
+		cat("OUT6_BDM\t" + "p2\t" + "bdm_2 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_muts2.id[bdm_pairs] + "\t" + bdm_muts2.position[bdm_pairs] + "\t" + bdm_mut2_freq_p2[bdm_pairs] + "\n");
+		
 	}
 	if (sim.generation == burn_in_generations){
 		if (version == "burn"){
@@ -596,6 +619,8 @@ fitness(NULL) {
 					}
 				}
 			}
+			
+			
 			
 			sim.simulationFinished();
 		}
