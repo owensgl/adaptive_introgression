@@ -51,7 +51,7 @@ initialize() {
 	// ******************************
 	
 	defineConstant("ri_max", 0.9); // The maximum strength of divergent selection and BDMs
-	defineConstant("proportion_bdm", 0.40); // The proportion of loci that BDM versus divergent selection
+	defineConstant("proportion_bdm", 0.10); // The proportion of loci that BDM versus divergent selection
 	defineConstant("total_div_bdm_n", 100); // The total number of BDM and divergent selected loci. 
 	defineConstant("bdm_div_s", ri_max/(total_div_bdm_n)); // the effect size of BDM  and RI interactions (note that denom is *not* multiplied by two)
 	
@@ -60,6 +60,7 @@ initialize() {
 	// assign BDMs to loci (eventually distributed relative to each other)
 	defineConstant("bdm_loci", c(1:bdm_n) * integerDiv(chr_size, (bdm_n+1)) +1 ); // define the bdm loci
 	
+	cat("ALL BDM LOCI: " + bdm_loci);
 	// ******************************
 	// BDM pairwise locus assignments
 	// ******************************
@@ -363,12 +364,15 @@ fitness(NULL) {
 			p1_locus = bdm_loci[bdm_pairs[i*2]];
 			p2_locus = bdm_loci[bdm_pairs[i*2 + 1]];
 			
+			
 			// count the number of BDM alleles in each genome (if any)
 			num_p1_alleles = sum(p1_bdm_locations == p1_locus);
 			num_p2_alleles = sum(p2_bdm_locations == p2_locus);
 			
+			
 			// multiply these together to get a 'bdm_genotype'
 			bdm_genotype = num_p1_alleles * num_p2_alleles;
+			//cat(bdm_pairs[i*2] + " " + num_p1_alleles + " " + bdm_pairs[i*2 + 1] + " " + num_p2_alleles + " " + bdm_genotype + "\n");
 			
 			// assign a value to the negative epistasis vector 
 			// based on the bdm genotype
@@ -439,6 +443,8 @@ fitness(NULL) {
 }
 
 1:100000 early() {
+	
+
 	
 	// ***************************************************************
 	// Output and console reports
@@ -519,7 +525,9 @@ fitness(NULL) {
 		bdm_mut2_freq_p1 = sim.mutationFrequencies(p1, bdm_muts2);
 		bdm_mut2_freq_p2 = sim.mutationFrequencies(p2, bdm_muts2);
 		
-		
+			cat("OUT6_BDM\tburn_in\t" + "p1\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
+			cat("OUT6_BDM\tburn_in\t" + "p2\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
+
 		// debug list of pairs/loci
 		// cat("BDM PAIRS " + sort(rep(1:(bdm_n/2), 2)) + "\t" + bdm_pairs + "\t" + bdm_loci[bdm_pairs] + "\n");
 		
