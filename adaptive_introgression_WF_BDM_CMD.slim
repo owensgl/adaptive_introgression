@@ -532,17 +532,30 @@ fitness(NULL) {
 			
 			
 			
+			// Measure the amount of introgression at neutral sites and also RI div sites.
+			
 			p1g = p1.genomes;
 			p1total_home = sum(p1g.countOfMutationsOfType(m6));
-			//p1total_away = sum(p1g.countOfMutationsOfType(m7));
-			p1_home_count = p1total_home/ (2 * pop_size);
+			p1total_away = sum(p1g.countOfMutationsOfType(m7));
+			p1_home_percent = p1total_home/ pop_size;
 			
 			p2g = p2.genomes;
 			p2total_home = sum(p2g.countOfMutationsOfType(m7));
-			//p2total_away = sum(p2g.countOfMutationsOfType(m6));
-			p2_home_count =  p2total_home/ (2 *pop_size);
+			p2total_away = sum(p2g.countOfMutationsOfType(m6));
+			p2_home_percent =  p2total_home/ pop_size;
 			
-			cat("OUT2\tburn_in\t" + p1_home_count + "\t" +p2_home_count + "\n");
+
+			
+			p1total_div_home = sum(p1g.countOfMutationsOfType(m4));
+			//p1total_away = sum(p1g.countOfMutationsOfType(m5));
+			p1_home_count = p1total_div_home/ (2 * pop_size);
+			
+			p2total_div_home = sum(p2g.countOfMutationsOfType(m5));
+			//p2total_away = sum(p2g.countOfMutationsOfType(m4));
+			p2_home_count =  p2total_div_home/ (2 *pop_size);
+			
+			
+			cat("OUT2\tburn_in\t" + p1_home_percent + "\t" +p2_home_percent + "\t" + p1_home_count + "\t" +  p2_home_count + "\n");
 			
 			counts = p1.genomes.countOfMutationsOfType(m1);
 			
@@ -590,17 +603,30 @@ fitness(NULL) {
 				cat("OUT6_BDM\t" + version +"\t" + "p2\t" + "bdm_1 \t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
 			}
 		
+			// Measure the amount of introgression at neutral sites and also RI div sites.
+			
 			p1g = p1.genomes;
 			p1total_home = sum(p1g.countOfMutationsOfType(m6));
 			p1total_away = sum(p1g.countOfMutationsOfType(m7));
-			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
+			p1_home_percent = p1total_home/ pop_size;
 			
 			p2g = p2.genomes;
 			p2total_home = sum(p2g.countOfMutationsOfType(m7));
 			p2total_away = sum(p2g.countOfMutationsOfType(m6));
-			p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
+			p2_home_percent =  p2total_home/ pop_size;
 			
-			fit_dif =  (p2_home_percent * bdm_div_s * div_sel_n) - ((1-p1_home_percent) * bdm_div_s * div_sel_n);
+
+			
+			p1total_div_home = sum(p1g.countOfMutationsOfType(m4));
+			//p1total_away = sum(p1g.countOfMutationsOfType(m5));
+			p1_home_count = p1total_div_home/ (2 * pop_size);
+			
+			p2total_div_home = sum(p2g.countOfMutationsOfType(m5));
+			//p2total_away = sum(p2g.countOfMutationsOfType(m4));
+			p2_home_count =  p2total_div_home/ (2 *pop_size);
+			
+			
+			cat("OUT2\t" + version + "\t" + p1_home_percent + "\t" +p2_home_percent + "\t" + p1_home_count + "\t" +  p2_home_count + "\n");
 			
 			
 			cat("OUT2\t"+version+"\t" + p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t"  + "\n");
