@@ -6,8 +6,8 @@ initialize() {
 	
 	// toggle working dir for local testing
 	
-	//defineConstant("work_dir", "/Users/ksamuk/Dropbox (Duke Bio_Ea)/Projects/adaptive_introgression"); // The working directory.
-	defineConstant("work_dir", "/Users/gregoryowens/Documents/adaptive_introgression"); // The working directory.
+	defineConstant("work_dir", "/Users/ksamuk/Dropbox (Duke Bio_Ea)/Projects/adaptive_introgression"); // The working directory.
+	//defineConstant("work_dir", "/Users/gregoryowens/Documents/adaptive_introgression"); // The working directory.
 	
 	defineConstant("seed", 1112); // The seed for repeating running a simulation with and without the climate shift.
 	setSeed(seed);
@@ -234,6 +234,10 @@ initialize() {
 			p2.individuals.genomes.addNewDrawnMutation(m3, i);
 		
 		}
+		
+		// save the ids of all the bdm alleles
+		defineConstant("bdm_muts1_all", sim.mutationsOfType(m2).id);
+		defineConstant("bdm_muts2_all", sim.mutationsOfType(m3).id);
 	}
 	
 	if(div_sel_n > 0){
@@ -444,16 +448,60 @@ fitness(NULL) {
 
 1:100000 early() {
 	// TESTING PART
-				bdm_muts1 = sim.mutationsOfType(m2);
-				bdm_muts2 = sim.mutationsOfType(m3);
+	bdm_muts1 = sim.mutationsOfType(m2);
+	bdm_muts2 = sim.mutationsOfType(m3);
+	
+	/*
+	cat("BDM pairs \n");
+	cat(bdm_pairs);
+	cat("\n");
+	
+	cat("BDM m2 ids \n");
+	cat(bdm_muts1_all);
+	cat("\n");
+	
+	cat("BDM m3 ids \n");
+	cat(bdm_muts2_all);
+	cat("\n");
+	*/
+	
+	bdm_mut1_freq_p1 = sim.mutationFrequencies(p1, bdm_muts1);
+	bdm_mut1_freq_p2 = sim.mutationFrequencies(p2, bdm_muts1);
+	
+	bdm_mut2_freq_p1 = sim.mutationFrequencies(p1, bdm_muts2);
+	bdm_mut2_freq_p2 = sim.mutationFrequencies(p2, bdm_muts2);
+	
+	if (length(bdm_muts1.id) != length(bdm_muts1_all)){
 		
-				bdm_mut1_freq_p1 = sim.mutationFrequencies(p1, bdm_muts1);
-				bdm_mut1_freq_p2 = sim.mutationFrequencies(p2, bdm_muts1);
+		bdm_mut1_freq_p1_old = bdm_mut1_freq_p1 ;
+		bdm_mut1_freq_p1 = rep(0.0, length(bdm_muts1_all));
+		bdm_mut1_freq_p1[which(match(bdm_muts1_all, bdm_muts1.id) != -1)] = bdm_mut1_freq_p1_old[which(match(bdm_muts1.id, bdm_muts1_all) != -1)];
 		
-				bdm_mut2_freq_p1 = sim.mutationFrequencies(p1, bdm_muts2);
-				bdm_mut2_freq_p2 = sim.mutationFrequencies(p2, bdm_muts2);
-				cat("OUT6_BDM\tburn_in\t" + "p1\t" + "bdm_1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
-				cat("OUT6_BDM\tburn_in\t" + "p2\t" + "bdm_1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs]  + "\n");
+		bdm_mut1_freq_p2_old = bdm_mut1_freq_p2 ;
+		bdm_mut1_freq_p2 = rep(0.0, length(bdm_muts1_all));
+		bdm_mut1_freq_p2[which(match(bdm_muts1_all, bdm_muts1.id) != -1)] = bdm_mut1_freq_p2_old[which(match(bdm_muts1.id, bdm_muts1_all) != -1)];
+		
+	}
+	
+	if (length(bdm_muts2.id) != length(bdm_muts2_all)){
+		
+		bdm_mut2_freq_p1_old = bdm_mut2_freq_p1 ;
+		bdm_mut2_freq_p1 = rep(0.0, length(bdm_muts2_all));
+		bdm_mut2_freq_p1[which(match(bdm_muts2_all, bdm_muts2.id) != -1)] = bdm_mut2_freq_p1_old[which(match(bdm_muts2.id, bdm_muts2_all) != -1)];
+		
+		bdm_mut2_freq_p2_old = bdm_mut1_freq_p2 ;
+		bdm_mut2_freq_p2 = rep(0.0, length(bdm_muts2_all));
+		bdm_mut2_freq_p2[which(match(bdm_muts2_all, bdm_muts2.id) != -1)] = bdm_mut2_freq_p2_old[which(match(bdm_muts2.id, bdm_muts2_all) != -1)];
+	
+	}
+	
+	
+	
+	//cat("BDM 1 ID_" + bdm_muts1_all + "\t" + bdm_mut1_freq_p1 + "\t" + bdm_mut1_freq_p2 + "\n");
+	//cat("BDM 2 ID_" + bdm_muts2_all + "\t" + bdm_mut2_freq_p1 + "\t" + bdm_mut2_freq_p2 + "\n");
+	
+	cat("OUT6_BDM\tburn_in\t" + "p1\t" + "bdm_1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p1[bdm_pairs] + "\n");
+	cat("OUT6_BDM\tburn_in\t" + "p2\t" + "bdm_1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p2[bdm_pairs]  + "\n");
 	// TESTING PART
 	
 	
@@ -523,29 +571,29 @@ fitness(NULL) {
 		cat("OUT1\t"+ version + "\t" + sim.generation + "\t" +  optimum_for_output + "\t");
 		cat(mean(p1.cachedFitness(NULL)) + "\t" + mean(p1.individuals.x) + "\t" + sd(p1.individuals.x) + "\t");
 		cat(mean(p2.cachedFitness(NULL)) + "\t" + mean(p2.individuals.x) + "\t" + sd(p2.individuals.x) + "\n");
-		
-
-		
+	
+	
+	
 	}
 	if (sim.generation == burn_in_generations){
 		if (version == "burn"){
 			
 			// Output BDM allele frequencies
 			if (bdm_n > 0){
-			// Collect BDM allele frequencies
-
-				bdm_muts1 = sim.mutationsOfType(m2);
-				bdm_muts2 = sim.mutationsOfType(m3);
-		
+				// Collect BDM allele frequencies
+				
+				//bdm_muts1 = sim.mutationsOfType(m2);
+				//bdm_muts2 = sim.mutationsOfType(m3);
+				
 				bdm_mut1_freq_p1 = sim.mutationFrequencies(p1, bdm_muts1);
 				bdm_mut1_freq_p2 = sim.mutationFrequencies(p2, bdm_muts1);
-		
+				
 				bdm_mut2_freq_p1 = sim.mutationFrequencies(p1, bdm_muts2);
 				bdm_mut2_freq_p2 = sim.mutationFrequencies(p2, bdm_muts2);
-				cat("OUT6_BDM\tburn_in\t" + "p1\t" + "bdm_1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
-				cat("OUT6_BDM\tburn_in\t" + "p2\t" + "bdm_1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs]  + "\n");
+				//cat("OUT6_BDM\tburn_in\t" + "p1\t" + "bdm_1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
+				//cat("OUT6_BDM\tburn_in\t" + "p2\t" + "bdm_1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs]  + "\n");
 			}
-		
+			
 			
 			
 			
@@ -593,23 +641,23 @@ fitness(NULL) {
 	
 	if (sim.generation  == (burn_in_generations + shift_generations)){
 		if (version != "burn"){
-		
+			
 			// Output BDM allele frequencies
 			if (bdm_n > 0){
 				// Collect BDM allele frequencies
-
-				bdm_muts1 = sim.mutationsOfType(m2);
-				bdm_muts2 = sim.mutationsOfType(m3);
-		
+				
+				//bdm_muts1 = sim.mutationsOfType(m2);
+				//bdm_muts2 = sim.mutationsOfType(m3);
+				
 				bdm_mut1_freq_p1 = sim.mutationFrequencies(p1, bdm_muts1);
 				bdm_mut1_freq_p2 = sim.mutationFrequencies(p2, bdm_muts1);
-		
+				
 				bdm_mut2_freq_p1 = sim.mutationFrequencies(p1, bdm_muts2);
 				bdm_mut2_freq_p2 = sim.mutationFrequencies(p2, bdm_muts2);
 				cat("OUT6_BDM\t" + version + "\t" + "p1\t" + "bdm_1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
 				cat("OUT6_BDM\t" + version +"\t" + "p2\t" + "bdm_1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
 			}
-		
+			
 			p1g = p1.genomes;
 			p1total_home = sum(p1g.countOfMutationsOfType(m6));
 			p1total_away = sum(p1g.countOfMutationsOfType(m7));
