@@ -559,8 +559,8 @@ fitness(NULL) {
 	
 				// inter and noninter refer to alleles that negatively interact in the BDM and ones that don't. In a 
 				// derived-derived BDM, this refers to derived and ancestral alleles respectively
-				cat("OUT6_BDM\tburn_in\t" + "p1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p1[bdm_pairs] + "\n");
-				cat("OUT6_BDM\tburn_in\t" + "p2\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p2[bdm_pairs]  + "\n");
+				cat("OUT6_BDM\tburn\t" + "p1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p1[bdm_pairs] + "\n");
+				cat("OUT6_BDM\tburn\t" + "p2\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p2[bdm_pairs]  + "\n");
 
 			}
 			
@@ -652,8 +652,8 @@ fitness(NULL) {
 	
 				// inter and noninter refer to alleles that negatively interact in the BDM and ones that don't. In a 
 				// derived-derived BDM, this refers to derived and ancestral alleles respectively
-				cat("OUT6_BDM\tburn_in\t" + "p1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p1[bdm_pairs] + "\n");
-				cat("OUT6_BDM\tburn_in\t" + "p2\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p2[bdm_pairs]  + "\n");
+				cat("OUT6_BDM\t" + version+ "\t" + "p1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p1[bdm_pairs] + "\n");
+				cat("OUT6_BDM\t" + version+ "\t" + "p2\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p2[bdm_pairs]  + "\n");
 			}
 			
 			p1g = p1.genomes;
