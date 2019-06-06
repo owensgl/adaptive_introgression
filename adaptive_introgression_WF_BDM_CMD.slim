@@ -233,6 +233,10 @@ initialize() {
 			p2.individuals.genomes.addNewDrawnMutation(m3, i);
 		
 		}
+		
+		// save the ids of all the bdm alleles
+		defineConstant("bdm_muts1_all", sim.mutationsOfType(m2).id);
+		defineConstant("bdm_muts2_all", sim.mutationsOfType(m3).id);
 	}
 	
 	if(div_sel_n > 0){
@@ -363,12 +367,15 @@ fitness(NULL) {
 			p1_locus = bdm_loci[bdm_pairs[i*2]];
 			p2_locus = bdm_loci[bdm_pairs[i*2 + 1]];
 			
+			
 			// count the number of BDM alleles in each genome (if any)
 			num_p1_alleles = sum(p1_bdm_locations == p1_locus);
 			num_p2_alleles = sum(p2_bdm_locations == p2_locus);
 			
+			
 			// multiply these together to get a 'bdm_genotype'
 			bdm_genotype = num_p1_alleles * num_p2_alleles;
+			//cat(bdm_pairs[i*2] + " " + num_p1_alleles + " " + bdm_pairs[i*2 + 1] + " " + num_p2_alleles + " " + bdm_genotype + "\n");
 			
 			// assign a value to the negative epistasis vector 
 			// based on the bdm genotype
@@ -440,6 +447,7 @@ fitness(NULL) {
 
 1:100000 early() {
 	
+	
 	// ***************************************************************
 	// Output and console reports
 	// ***************************************************************
@@ -492,70 +500,87 @@ fitness(NULL) {
 		}
 	}
 	if (commandline == "True"){
-		if (sim.generation <= burn_in_generations){
-			// cosine with 1/2 period = burn_in_fluct_period, amplitude = burn_in_optimum
-			current_optimum =  sin(3.141593 * sim.generation / burn_in_fluct_period) * burn_in_optimum;
-			// current_optimum = cos((sim.generation - (burn_in_fluct_period/2))/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
+		if (version != "burn"){
+			if (sim.generation <= burn_in_generations){
+				// cosine with 1/2 period = burn_in_fluct_period, amplitude = burn_in_optimum
+				current_optimum =  sin(3.141593 * sim.generation / burn_in_fluct_period) * burn_in_optimum;
+				// current_optimum = cos((sim.generation - (burn_in_fluct_period/2))/(3.14159 * (burn_in_fluct_period/10))) * burn_in_optimum;
 		
-		} else{
-			current_optimum = initial_optimum + delta * (sim.generation - burn_in_generations);
+			} else{
+				current_optimum = initial_optimum + delta * (sim.generation - burn_in_generations);
+			}
+		
+			//generate the OUT1 columns
+			optimum_for_output = current_optimum;
+			cat("OUT1\t"+ version + "\t" + sim.generation + "\t" +  optimum_for_output + "\t");
+			cat(mean(p1.cachedFitness(NULL)) + "\t" + mean(p1.individuals.x) + "\t" + sd(p1.individuals.x) + "\t");
+			cat(mean(p2.cachedFitness(NULL)) + "\t" + mean(p2.individuals.x) + "\t" + sd(p2.individuals.x) + "\n");
 		}
-		
-		//generate the OUT1 columns
-		optimum_for_output = current_optimum;
-		cat("OUT1\t"+ version + "\t" + sim.generation + "\t" +  optimum_for_output + "\t");
-		cat(mean(p1.cachedFitness(NULL)) + "\t" + mean(p1.individuals.x) + "\t" + sd(p1.individuals.x) + "\t");
-		cat(mean(p2.cachedFitness(NULL)) + "\t" + mean(p2.individuals.x) + "\t" + sd(p2.individuals.x) + "\n");
-		
-
-		
+	
+	
 	}
 	if (sim.generation == burn_in_generations){
 		if (version == "burn"){
 			
 			// Output BDM allele frequencies
 			if (bdm_n > 0){
-			// Collect BDM allele frequencies
-
 				bdm_muts1 = sim.mutationsOfType(m2);
 				bdm_muts2 = sim.mutationsOfType(m3);
 		
 				bdm_mut1_freq_p1 = sim.mutationFrequencies(p1, bdm_muts1);
 				bdm_mut1_freq_p2 = sim.mutationFrequencies(p2, bdm_muts1);
-		
+	
 				bdm_mut2_freq_p1 = sim.mutationFrequencies(p1, bdm_muts2);
 				bdm_mut2_freq_p2 = sim.mutationFrequencies(p2, bdm_muts2);
-				cat("OUT6_BDM\tburn_in\t" + "p1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
-				cat("OUT6_BDM\tburn_in\t" + "p2\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
-			}
+	
+				if (size(bdm_muts1.id) != size(bdm_muts1_all)){
 		
+					bdm_mut1_freq_p1_old = bdm_mut1_freq_p1 ;
+					bdm_mut1_freq_p1 = rep(0.0, size(bdm_muts1_all));
+					bdm_mut1_freq_p1[which(match(bdm_muts1_all, bdm_muts1.id) != -1)] = 	bdm_mut1_freq_p1_old[which(match(bdm_muts1.id, bdm_muts1_all) != -1)];
+		
+					bdm_mut1_freq_p2_old = bdm_mut1_freq_p2 ;
+					bdm_mut1_freq_p2 = rep(0.0, size(bdm_muts1_all));
+					bdm_mut1_freq_p2[which(match(bdm_muts1_all, bdm_muts1.id) != -1)] = bdm_mut1_freq_p2_old[which(match(bdm_muts1.id, bdm_muts1_all) != -1)];
+		
+				}
+	
+				if (size(bdm_muts2.id) != size(bdm_muts2_all)){
+		
+					bdm_mut2_freq_p1_old = bdm_mut2_freq_p1 ;
+					bdm_mut2_freq_p1 = rep(0.0, size(bdm_muts2_all));
+					bdm_mut2_freq_p1[which(match(bdm_muts2_all, bdm_muts2.id) != -1)] = bdm_mut2_freq_p1_old[which(match(bdm_muts2.id, bdm_muts2_all) != -1)];
+		
+					bdm_mut2_freq_p2_old = bdm_mut2_freq_p2 ;
+					bdm_mut2_freq_p2 = rep(0.0, size(bdm_muts2_all));
+					bdm_mut2_freq_p2[which(match(bdm_muts2_all, bdm_muts2.id) != -1)] = bdm_mut2_freq_p2_old[which(match(bdm_muts2.id, bdm_muts2_all) != -1)];
+	
+				}
+	
+				// inter and noninter refer to alleles that negatively interact in the BDM and ones that don't. In a 
+				// derived-derived BDM, this refers to derived and ancestral alleles respectively
+				cat("OUT6_BDM\tburn_in\t" + "p1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p1[bdm_pairs] + "\n");
+				cat("OUT6_BDM\tburn_in\t" + "p2\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p2[bdm_pairs]  + "\n");
+
+			}
 			
 			
 			
-			// Measure the amount of introgression at neutral sites and also RI div sites.
 			
 			p1g = p1.genomes;
 			p1total_home = sum(p1g.countOfMutationsOfType(m6));
 			p1total_away = sum(p1g.countOfMutationsOfType(m7));
-			p1_home_percent = p1total_home/ pop_size;
+			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
 			
 			p2g = p2.genomes;
 			p2total_home = sum(p2g.countOfMutationsOfType(m7));
 			p2total_away = sum(p2g.countOfMutationsOfType(m6));
-			p2_home_percent =  p2total_home/ pop_size;
+			p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-
-			
-			p1total_div_home = sum(p1g.countOfMutationsOfType(m4));
-			//p1total_away = sum(p1g.countOfMutationsOfType(m5));
-			p1_home_count = p1total_div_home/ (2 * pop_size);
-			
-			p2total_div_home = sum(p2g.countOfMutationsOfType(m5));
-			//p2total_away = sum(p2g.countOfMutationsOfType(m4));
-			p2_home_count =  p2total_div_home/ (2 *pop_size);
+			fit_dif = (p2_home_percent * bdm_div_s * div_sel_n) - ((1-p1_home_percent) * bdm_div_s * div_sel_n);
 			
 			
-			cat("OUT2\tburn_in\t" + p1_home_percent + "\t" +p2_home_percent + "\t" + p1_home_count + "\t" +  p2_home_count + "\n");
+			cat("OUT2\tburn_in\t" + p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif  + "\n");
 			
 			counts = p1.genomes.countOfMutationsOfType(m1);
 			
@@ -586,47 +611,59 @@ fitness(NULL) {
 	
 	if (sim.generation  == (burn_in_generations + shift_generations)){
 		if (version != "burn"){
-		
+			
 			// Output BDM allele frequencies
 			if (bdm_n > 0){
-				// Collect BDM allele frequencies
-
 				bdm_muts1 = sim.mutationsOfType(m2);
 				bdm_muts2 = sim.mutationsOfType(m3);
 		
 				bdm_mut1_freq_p1 = sim.mutationFrequencies(p1, bdm_muts1);
 				bdm_mut1_freq_p2 = sim.mutationFrequencies(p2, bdm_muts1);
-		
+	
 				bdm_mut2_freq_p1 = sim.mutationFrequencies(p1, bdm_muts2);
 				bdm_mut2_freq_p2 = sim.mutationFrequencies(p2, bdm_muts2);
-				cat("OUT6_BDM\t" + version + "\t" + "p1\t"  + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p1 + "\n");
-				cat("OUT6_BDM\t" + version +"\t" + "p2\t"  + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("der","anc"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1.id[bdm_pairs] + "\t" + bdm_muts1.position[bdm_pairs] + "\t" + bdm_mut1_freq_p2[bdm_pairs] + "\n");
-			}
+	
+				if (size(bdm_muts1.id) != size(bdm_muts1_all)){
 		
-			// Measure the amount of introgression at neutral sites and also RI div sites.
+					bdm_mut1_freq_p1_old = bdm_mut1_freq_p1 ;
+					bdm_mut1_freq_p1 = rep(0.0, size(bdm_muts1_all));
+					bdm_mut1_freq_p1[which(match(bdm_muts1_all, bdm_muts1.id) != -1)] = 	bdm_mut1_freq_p1_old[which(match(bdm_muts1.id, bdm_muts1_all) != -1)];
+		
+					bdm_mut1_freq_p2_old = bdm_mut1_freq_p2 ;
+					bdm_mut1_freq_p2 = rep(0.0, size(bdm_muts1_all));
+					bdm_mut1_freq_p2[which(match(bdm_muts1_all, bdm_muts1.id) != -1)] = bdm_mut1_freq_p2_old[which(match(bdm_muts1.id, bdm_muts1_all) != -1)];
+		
+				}
+	
+				if (size(bdm_muts2.id) != size(bdm_muts2_all)){
+		
+					bdm_mut2_freq_p1_old = bdm_mut2_freq_p1 ;
+					bdm_mut2_freq_p1 = rep(0.0, size(bdm_muts2_all));
+					bdm_mut2_freq_p1[which(match(bdm_muts2_all, bdm_muts2.id) != -1)] = bdm_mut2_freq_p1_old[which(match(bdm_muts2.id, bdm_muts2_all) != -1)];
+		
+					bdm_mut2_freq_p2_old = bdm_mut2_freq_p2 ;
+					bdm_mut2_freq_p2 = rep(0.0, size(bdm_muts2_all));
+					bdm_mut2_freq_p2[which(match(bdm_muts2_all, bdm_muts2.id) != -1)] = bdm_mut2_freq_p2_old[which(match(bdm_muts2.id, bdm_muts2_all) != -1)];
+	
+				}
+	
+				// inter and noninter refer to alleles that negatively interact in the BDM and ones that don't. In a 
+				// derived-derived BDM, this refers to derived and ancestral alleles respectively
+				cat("OUT6_BDM\tburn_in\t" + "p1\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p1[bdm_pairs] + "\n");
+				cat("OUT6_BDM\tburn_in\t" + "p2\t" + "pair_" + sort(rep(1:(bdm_n/2), 2)) + "\t" + rep(c("inter","noninter"),asInteger(floor(bdm_n/2))) + "\t" + bdm_muts1_all[bdm_pairs] + "\t"  + bdm_mut1_freq_p2[bdm_pairs]  + "\n");
+			}
 			
 			p1g = p1.genomes;
 			p1total_home = sum(p1g.countOfMutationsOfType(m6));
 			p1total_away = sum(p1g.countOfMutationsOfType(m7));
-			p1_home_percent = p1total_home/ pop_size;
+			p1_home_percent = p1total_home/ (p1total_home + p1total_away);
 			
 			p2g = p2.genomes;
 			p2total_home = sum(p2g.countOfMutationsOfType(m7));
 			p2total_away = sum(p2g.countOfMutationsOfType(m6));
-			p2_home_percent =  p2total_home/ pop_size;
+			p2_home_percent =  p2total_home/ (p2total_home + p2total_away);
 			
-
-			
-			p1total_div_home = sum(p1g.countOfMutationsOfType(m4));
-			//p1total_away = sum(p1g.countOfMutationsOfType(m5));
-			p1_home_count = p1total_div_home/ (2 * pop_size);
-			
-			p2total_div_home = sum(p2g.countOfMutationsOfType(m5));
-			//p2total_away = sum(p2g.countOfMutationsOfType(m4));
-			p2_home_count =  p2total_div_home/ (2 *pop_size);
-			
-			
-			cat("OUT2\t" + version + "\t" + p1_home_percent + "\t" +p2_home_percent + "\t" + p1_home_count + "\t" +  p2_home_count + "\n");
+			fit_dif =  (p2_home_percent * bdm_div_s * div_sel_n) - ((1-p1_home_percent) * bdm_div_s * div_sel_n);
 			
 			
 			cat("OUT2\t"+version+"\t" + p1_home_percent + "\t" +p2_home_percent + "\t" + fit_dif + "\t"  + "\n");
