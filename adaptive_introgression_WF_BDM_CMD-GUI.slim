@@ -489,7 +489,7 @@ fitness(NULL) {
 		bdm_mut2_freq_p1 = rep(0.0, length(bdm_muts2_all));
 		bdm_mut2_freq_p1[which(match(bdm_muts2_all, bdm_muts2.id) != -1)] = bdm_mut2_freq_p1_old[which(match(bdm_muts2.id, bdm_muts2_all) != -1)];
 		
-		bdm_mut2_freq_p2_old = bdm_mut1_freq_p2 ;
+		bdm_mut2_freq_p2_old = bdm_mut2_freq_p2 ;
 		bdm_mut2_freq_p2 = rep(0.0, length(bdm_muts2_all));
 		bdm_mut2_freq_p2[which(match(bdm_muts2_all, bdm_muts2.id) != -1)] = bdm_mut2_freq_p2_old[which(match(bdm_muts2.id, bdm_muts2_all) != -1)];
 	
