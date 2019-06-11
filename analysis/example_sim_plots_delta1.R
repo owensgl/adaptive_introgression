@@ -3,16 +3,38 @@ library(RColorBrewer)
 library(ggthemes)
 library(grid)
 library(gridExtra)
-out3 <- read_tsv("Documents/adaptive_introgression/example_sim_jan29_delta1_out3.txt",
+out3 <- read_tsv("Documents/adaptive_introgression/example_sim_jun7_delta1_test_out3.txt",
                  col_names = c("spacer","version","type", "gen","pop","mut_pos",
-                               "mut_popID","mut_freq","mut_sel")) %>%
+                              "mutID","mut_popID","mut_freq","mut_sel")) %>%
   filter(gen > 1)
 
-out2 <- read_tsv("Documents/adaptive_introgression/example_sim_jan29_delta1_out2.txt",
+out2 <- read_tsv("Documents/adaptive_introgression/example_sim_jun7_delta1_test_out2.txt",
                  col_names = c("spacer","version","gen","p1_home","p2_home",
-                               "fit_dif","spacer2")) %>%
+                              "p1_home_count","p2_home_count","fit_dif")) %>%
   filter(gen > 1)
 
+#Sample fitness
+out4 <- read_tsv("Documents/adaptive_introgression/example_sim_jun7_delta1_test_out4.txt",
+                 col_names = c("spacer","version","gen","pop","id","fitness","spacer2"))
+
+out5 <- read_tsv("Documents/adaptive_introgression/example_sim_jun7_delta1_test_out5_processed.txt.gz")
+ #Gene identities
+out9 <- read_tsv("Documents/adaptive_introgression/example_sim_jun7_delta1_test_out9.txt",
+                 col_names = c("spacer","version","pop","mut_pos","mut_popID","mut_freq","mut_sel","mutID")) %>%
+  select(mut_popID,mut_sel,mutID) %>%
+  rename(mut_ID = mutID)
+
+
+inner_join(out9,out5) %>%
+  group_by(mut_ID,mut_sel) %>%
+  summarize(sample_count = n(),geno_count = sum(geno),freq=(geno_count/2)/sample_count) %>% View()
+
+#234271 is a good test case
+inner_join(out9,out5) %>%
+  inner_join(.,out4) %>%
+  group_by(mut_ID, gen,pop, geno) %>%
+  filter(geno != 1, gen > 1) %>%
+  summarize(mean_fit = mean(fitness))
 
 pop_colors <- brewer.pal(5,"Set1")[c(3,5)]
 
@@ -20,7 +42,7 @@ plot_RI <- out2 %>%
   filter(gen != 1) %>%
   gather(pop,percent, p1_home:p2_home) %>% 
   ggplot(aes(x=gen,y=1-percent,color=pop)) + geom_line(size=3) +
-  geom_line(aes(x=gen,y=fit_dif),color="black",linetype="dotted",size=2) +
+  geom_line(aes(x=gen,y=fit_dif/max(fit_dif)),color="black",linetype="dotted",size=2) +
   theme_bw() + 
   scale_color_manual(values=pop_colors,name="Population",
                      labels=c("Pop_1", "Pop_2")) +
