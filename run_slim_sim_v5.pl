@@ -9,14 +9,14 @@ use Parallel::ForkManager;
 
 
 #NOTE: This is the path to your nonWF slim program
-#my $slim = "/scratch/gowens/build/slim";
-my $slim = "/home/owens/working/SLiM/bin/slim";
+my $slim = "/scratch/gowens/build/slim";
+#my $slim = "/home/owens/working/SLiM/bin/slim";
 #PARALLEL EXECUTION
-my $pm = new Parallel::ForkManager(3);
+my $pm = new Parallel::ForkManager(32);
 my %p;
 $p{"popsize"} = 1000; #Population size
 $p{"m"} = 0.01; #Mutation rate
-$p{"rimax"} = 2.0; #Total amount of reproductive isolation amongst all divergently selected sites and BDM pairs
+$p{"rimax"} = 1.5; #Total amount of reproductive isolation amongst all divergently selected sites and BDM pairs
 $p{"totaldivbdmn"} = 100; #Number of divergently selected loci and BDM
 $p{"proportionbdm"} = 0.0; #Proportion of loci that are BDM (from BDM + Divergent selected sites)
 $p{"mutationrate"} = 1e-7; #Mutation rate for adaptive alleles
@@ -27,7 +27,7 @@ my $reps =1;  #Number of repetitions per set of parameters
 $p{"burningen"} = 10000; #Number of generations of burn in before shift
 $p{"shiftgen"} = 100; #Number of generations of shifting optimum.
 $p{"recombinationrate"} = 1e-5; #Number of generations of shifting optimum.
-my $max_runs = 100; #Maximum number of replicates before it starts skipping.
+my $max_runs = 105; #Maximum number of replicates before it starts skipping.
 my $output_dir = "output";
 
 my @parameters = sort keys %p;
@@ -36,24 +36,24 @@ my %starting_p; #The starting point for incrementing;
 my %ending_p; #The ending point
 my %increment_p; #The amount it increases with each increment
 #PARAMETERS TO VARY
-$varying_p{"delta"}++;
-$varying_p{"qtlsd"}++;
-$varying_p{"mutationrate"}++;
-$varying_p{"rimax"}++;
-$varying_p{"m"}++;
-$varying_p{"totaldivbdmn"}++;
-$varying_p{"recombinationrate"}++;
+#$varying_p{"delta"}++;
+#$varying_p{"qtlsd"}++;
+#$varying_p{"mutationrate"}++;
+#$varying_p{"rimax"}++;
+#$varying_p{"m"}++;
+#$varying_p{"totaldivbdmn"}++;
+#$varying_p{"recombinationrate"}++;
 $varying_p{"proportionbdm"}++;
 
 #Starting point of parameters
 $starting_p{"delta"}= 0.1;
 $starting_p{"qtlsd"}= 0.1;
 $starting_p{"mutationrate"} = 1e-8;
-$starting_p{"rimax"} = 0.3;
+$starting_p{"rimax"} = 0.7;
 $starting_p{"m"} = 0.0;
 $starting_p{"totaldivbdmn"} = 5;
 $starting_p{"recombinationrate"} = 1e-5;
-$starting_p{"proportionbdm"} = 0;
+$starting_p{"proportionbdm"} = 0.05;
 
 #Ending point of parameters
 $ending_p{"delta"}= 3;
@@ -63,10 +63,10 @@ $ending_p{"rimax"} = 2;
 $ending_p{"m"} = 0.1;
 $ending_p{"totaldivbdmn"} = 100;
 $ending_p{"recombinationrate"} = 5e-5;
-$ending_p{"proprtionbdm"} = 1.0;
+$ending_p{"proportionbdm"} = 1.0;
 
 #Increment for parameters
-$increment_p{"delta"}= 0.01;
+$increment_p{"delta"}= 0.05;
 $increment_p{"qtlsd"}= 0.1;
 $increment_p{"mutationrate"} = 1e-8;
 $increment_p{"rimax"} = 0.05;
