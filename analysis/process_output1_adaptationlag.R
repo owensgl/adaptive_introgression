@@ -11,7 +11,7 @@ no_mig <- read_tsv("../june2019.delta_nomig.climate.out1.txt.gz") %>%
 mig <- read_tsv("../june2019.delta_mig.climate.out1.txt.gz") %>%
   mutate(type = "Migration")
 
-pdf("../figures/June2019.adaptationlag.pdf")
+pdf("../figures/June2019.adaptationlag.pdf",height=3,width=6)
 mig %>% 
   rbind(.,no_mig) %>%
   filter(version == "test",gen == 10100) %>%
