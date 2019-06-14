@@ -5,10 +5,10 @@ library(grid)
 library(gridExtra)
 
 ###Measuring introgression
-iteration <- "nov20"
+iteration <- "june2019"
 #Not run divseln
 parameter <- "qtlsd"
-parameters_tested <- c("totaldiv","delta","mutationrate","qtlsd","m","divseln")
+parameters_tested <- c("qtlsd","delta","m","mutationrate", "proportionbdm","recombinationrate","rimax","totaldivbdmn")
 
 plots <- list()
 for (n in 1:length(parameters_tested)){
@@ -16,33 +16,40 @@ for (n in 1:length(parameters_tested)){
   parameters <- colnames(read_tsv("../parameter_file.txt"))
   parameters <- c("blank","target_param",parameters,"tail")
   parameter_full <- parameter
-  parameter_full <- gsub("totaldiv","total_div",parameter_full)
+  parameter_full <- gsub("totaldivdbmn","total_div_bdm_n",parameter_full)
   parameter_full <- gsub("mutationrate","mutation_rate",parameter_full)
   parameter_full <- gsub("qtlsd","qtl_sd",parameter_full)
-  parameter_full <- gsub("divseln","div_sel_n",parameter_full)
+  parameter_full <- gsub("proportionbdm","proportion_bdm",parameter_full)
+  parameter_full <- gsub("recombinationrate","recombination_rate",parameter_full)
+  parameter_full <- gsub("rimax","ri_max",parameter_full)
   
   parameter_print <- parameter
-  parameter_print <- gsub("totaldiv","Total divergent selection",parameter_print)
+  parameter_print <- gsub("totaldivbdmn","Total RI loci",parameter_print)
   parameter_print <- gsub("mutationrate","Mutation rate",parameter_print)
-  parameter_print <- gsub("qtlsd","QTL Stdev",parameter_print)
+  parameter_print <- gsub("qtlsd","Climate QTL Stdev",parameter_print)
   parameter_print <- gsub("divseln","RI loci",parameter_print)
   parameter_print <- gsub("delta","Delta",parameter_print)
-  parameter_print <- gsub("m","Migration rate",parameter_print)
+  parameter_print <- gsub("\\bm\\b","Migration rate",parameter_print)
+  parameter_print <- gsub("proportionbdmn","Proportion BDM loci",parameter_print)
+  parameter_print <- gsub("recombinationrate","Recombination rate",parameter_print)
+  parameter_print <- gsub("rimax","RI fitness effect",parameter_print)
+  
   
   
   #system( paste("cd  ../output/",iteration,"/",parameter, "; ls | perl ../../../analysis/process_output1.pl | gzip > ../../../",iteration,".",parameter,".out1.txt.gz; cd ../../../analysis",sep=""))
   
   output1 <- read_tsv(paste("../",iteration,".",parameter,".out1.txt.gz",sep="")) %>%
     separate(.,filename,parameters,"_") %>%  
-    group_by(.dots=parameter_full) %>% 
+    group_by(.dots=parameter) %>% 
     top_n(.,(198*100),seed)
   
   #pdf( paste("../",iteration,".",parameter,".out1.pdf",sep=""))
-
+  
+  if (parameter == "rimax"){
     plot_curve <- output1 %>% 
       filter(version == "test") %>%
-      mutate_("parameter_chosen" = parameter_full) %>%
-      mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
+      mutate_("parameter_chosen" = parameter) %>%
+      mutate(parameter_chosen = as.numeric(parameter_chosen)/as.numeric(totaldivbdmn)) %>%
       group_by(parameter_chosen,gen) %>%
       summarize(mean_mean_haldane = mean(mean_haldane)) %>% 
       ggplot(.,aes(x=gen,y=mean_mean_haldane,group=parameter_chosen,color=as.numeric(parameter_chosen))) + 
@@ -52,13 +59,40 @@ for (n in 1:length(parameters_tested)){
       theme(legend.position="bottom") +
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
       labs(tag = LETTERS[n])
-
-    
-    plots[[2*n-1]] <- plot_curve
-
+  }
+  plot_curve <- output1 %>% 
+    filter(version == "test") %>%
+    mutate_("parameter_chosen" = parameter) %>%
+    mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
+    group_by(parameter_chosen,gen) %>%
+    summarize(mean_mean_haldane = mean(mean_haldane)) %>% 
+    ggplot(.,aes(x=gen,y=mean_mean_haldane,group=parameter_chosen,color=as.numeric(parameter_chosen))) + 
+    geom_line(alpha=0.5,size=2) + theme_few() + 
+    scale_color_distiller(palette = "Spectral",name=paste(parameter_print)) +
+    ylab("Average Haldanes") + xlab("Generation")   +
+    theme(legend.position="bottom") +
+    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+    labs(tag = LETTERS[n])
+  
+  
+  plots[[2*n-1]] <- plot_curve
+  if (parameter == "rimax"){
     plot_point <- output1 %>% 
       filter(version == "test") %>%
-      mutate_("parameter_chosen" = parameter_full) %>%
+      mutate_("parameter_chosen" = parameter) %>%
+      mutate(parameter_chosen = as.numeric(parameter_chosen)/as.numeric(totaldivbdmn)) %>%
+      group_by(seed, parameter_chosen) %>%
+      summarize(mean_haldane = mean(mean_haldane)) %>%
+      ggplot(.,aes(x=as.numeric(parameter_chosen),y=mean_haldane)) + 
+      geom_point(alpha = 0.1, shape = 16, size = 0.6) +
+      geom_smooth(se = FALSE, size = 1.5, span = 0.80,color="black") + theme_bw() + 
+      ylab("Average Haldanes") + xlab(paste(parameter_print)) +
+      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+      labs(tag = LETTERS[n])
+  }else{
+    plot_point <- output1 %>% 
+      filter(version == "test") %>%
+      mutate_("parameter_chosen" = parameter) %>%
       mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
       group_by(seed, parameter_chosen) %>%
       summarize(mean_haldane = mean(mean_haldane)) %>%
@@ -68,8 +102,9 @@ for (n in 1:length(parameters_tested)){
       ylab("Average Haldanes") + xlab(paste(parameter_print)) +
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
       labs(tag = LETTERS[n])
-    
-    plots[[2*n]] <- plot_point
+  }
+  
+  plots[[2*n]] <- plot_point
   
   #dev.off()
   
@@ -79,10 +114,12 @@ pdf(paste("../figures/",iteration,".haldanecurves.out1.pdf",sep=""),width=12,hei
 grid.arrange( plots[[1]],plots[[3]],
               plots[[5]],plots[[7]],
               plots[[9]],plots[[11]],
+              plots[[13]],plots[[15]],
              # top = textGrob("Haldane Values",gp=gpar(fontsize=20,font=2)),
              layout_matrix = rbind(c(1,2),
                                    c(3,4),
-                                   c(5,6)))
+                                   c(5,6),
+                                   c(7,8)))
 dev.off()
 
 pdf(paste("../figures/",iteration,".haldanepoint.out1.pdf",sep=""),width=12,height=6)
@@ -90,8 +127,10 @@ pdf(paste("../figures/",iteration,".haldanepoint.out1.pdf",sep=""),width=12,heig
 grid.arrange( plots[[2]],plots[[4]],
               plots[[6]],plots[[8]],
               plots[[10]],plots[[12]],
+              plots[[14]],plots[[16]],
               # top = textGrob("Haldane Values",gp=gpar(fontsize=20,font=2)),
               layout_matrix = rbind(c(1,2),
                                     c(3,4),
-                                    c(5,6)))
+                                    c(5,6),
+                                    c(7,8)))
 dev.off()

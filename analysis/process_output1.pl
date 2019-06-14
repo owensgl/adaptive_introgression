@@ -4,8 +4,8 @@ use strict;
 
 #This takes a list of output1 files, and processes them into a single file. 
 #Doesn't use the logged values;
-my $optimum_add = 100; #The value added to the phenotype to make it non-negative.
 
+#my $output_directory = $ARGV[0];
 
 print "gen\tversion\tmean_haldane\tcurrent_optimum\tmean_fitness\tmean_phenotype\tfilename";
 while(my $filename = <STDIN>){
@@ -21,13 +21,14 @@ while(my $filename = <STDIN>){
     my @a = split(/\t/,$line);
     my $version = $a[1];
     my $gen = $a[2];
-    my $optimum = $a[3] - $optimum_add;
+    if ($gen <= 10001){next;}
+    my $optimum = $a[3];
     my $p1fit = $a[4];
-    my $p1mean = $a[5] - $optimum_add;
+    my $p1mean = $a[5];
     my $p1sd = $a[6];
-    my $p2fit = $a[9];
-    my $p2mean = $a[10] - $optimum_add;
-    my $p2sd = $a[11];
+    my $p2fit = $a[7];
+    my $p2mean = $a[8];
+    my $p2sd = $a[9];
     $optimum{$version}{$gen} = $optimum;
     $fitness{$version}{$gen}{"p1"} = $p1fit;
     $fitness{$version}{$gen}{"p2"} = $p2fit;
@@ -39,7 +40,7 @@ while(my $filename = <STDIN>){
   unless ($optimum{"test"}{"10100"}){
     my @versions = qw( control test );
     foreach my $version (@versions){
-      foreach my $gen (10002..10100){
+      foreach my $gen (10003..10100){
         print "\n$gen\t$version\tNA\tNA\tNA\tNA\t$filename";
       }
     } 
@@ -47,7 +48,7 @@ while(my $filename = <STDIN>){
   }
   my @versions = qw( control test );
   foreach my $version (@versions){
-    foreach my $gen (10002..10100){ 
+    foreach my $gen (10003..10100){ 
       my $last_gen = $gen - 1;
       my $p1_pooled_sd = sqrt(((999 * ($phenotype{$version}{$gen}{"p1"}{"sd"}**2)) +  (999 * ($phenotype{$version}{$last_gen}{"p1"}{"sd"}**2))/ 1998));
       my $p1_delta = $phenotype{$version}{$gen}{"p1"}{"mean"} - $phenotype{$version}{$last_gen}{"p1"}{"mean"};
