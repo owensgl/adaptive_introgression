@@ -30,7 +30,7 @@ for (n in 1:length(parameters_tested)){
   parameter_print <- gsub("divseln","RI loci",parameter_print)
   parameter_print <- gsub("delta","Delta",parameter_print)
   parameter_print <- gsub("\\bm\\b","Migration rate",parameter_print)
-  parameter_print <- gsub("proportionbdmn","Proportion BDM loci",parameter_print)
+  parameter_print <- gsub("proportionbdm","Proportion BDM loci",parameter_print)
   parameter_print <- gsub("recombinationrate","Recombination rate",parameter_print)
   parameter_print <- gsub("rimax","RI fitness effect",parameter_print)
   

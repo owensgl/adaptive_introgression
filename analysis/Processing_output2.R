@@ -98,7 +98,7 @@ for (n in 1:length(parameters_tested)){
     gather(., condition, RI_retained, rel_fitness_change_control:rel_fitness_test, factor_key=TRUE)  %>%
     filter(condition != "rel_fitness_change_control", condition != "rel_fitness_change_test") %>% 
     mutate(starting_RI_loci = (as.numeric(totaldivbdmn)*(1-as.numeric(proportionbdm)))+
-             (as.numeric(totaldivbdmn)*as.numeric(proportionbdm)*0.5),
+             (as.numeric(totaldivbdmn)*as.numeric(proportionbdm)),
            starting_RI_away = (1-(as.numeric(rimax)/as.numeric(totaldivbdmn)))^starting_RI_loci,
            starting_RI = 1/starting_RI_away) %>% 
     ggplot(aes(x = parameter_chosen, y =  RI_retained,group=condition,color=fct_rev(condition))) +

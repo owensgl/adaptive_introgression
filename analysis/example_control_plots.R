@@ -3,23 +3,83 @@ library(RColorBrewer)
 library(ggthemes)
 library(grid)
 library(gridExtra)
-out3 <- read_tsv("Documents/adaptive_introgression/example_sim_jan29_control_out3.txt",
+out3 <- read_tsv("../example/example_sim_jun14_delta1p5_control_out3.txt",
                  col_names = c("spacer","version","type", "gen","pop","mut_pos",
-                               "mut_popID","mut_freq","mut_sel")) %>%
+                               "mutID","mut_popID","mut_freq","mut_sel")) %>%
   filter(gen > 1)
 
-out2 <- read_tsv("Documents/adaptive_introgression/example_sim_jan29_control_out2.txt",
+
+
+out2 <- read_tsv("../example/example_sim_jun14_delta1p5_control_out2.txt",
                  col_names = c("spacer","version","gen","p1_home","p2_home",
-                               "fit_dif","spacer2")) %>%
+                               "p1_home_count","p2_home_count","fit_dif")) %>%
   filter(gen > 1)
+
+#Sample fitness
+out4 <- read_tsv("../example/example_sim_jun14_delta1p5_control_out4.txt",
+                 col_names = c("spacer","version","gen","pop","id","fitness","spacer2"))
+
+#Gene identities
+out3 %>%
+  filter(type == "M1") %>%
+  select(mutID, mut_popID, mut_sel) %>% unique() %>%
+  rename(mut_ID = mutID)-> QTL_loci
+
+#Genotypes
+out5 <- read_tsv("../example/example_sim_jun14_delta1p5_control_out5_processed.txt")
+
+
+
+
+
+mut_s <- tibble(gen=numeric(),rel_fitness=numeric(),pop=character(),
+                mut_ID=numeric(),mut_sel=numeric(),mut_popID=numeric())
+
+for (i in 1:nrow(QTL_loci)){
+  print(i)
+  chosen_mut_ID = QTL_loci$mut_ID[i]
+  chosen_mut_sel = QTL_loci$mut_sel[i]
+  chosen_mut_popID = QTL_loci$mut_popID[i]
+  out5 %>%
+    filter(mut_ID == chosen_mut_ID) %>%
+    group_by(gen,pop,geno) %>%
+    summarize(mean_fitness = mean(fitness), n = n()) %>%
+    group_by(gen,pop) %>%
+    filter(n > 4) %>%
+    mutate(count=n()) %>%
+    filter(count == 3) -> tmp_intermediate
+  if (nrow(tmp_intermediate) > 0 ){
+    tmp_intermediate %>%
+      summarize(rel_fitness = (mean_fitness[which(geno == 2)] - mean_fitness[which(geno == 0)])/mean_fitness[which(geno == 0)]  )  %>%
+      mutate(poptmp = case_when(pop == 1 ~ "p1",
+                                pop == 2 ~ "p2")) %>%
+      select(-pop) %>% rename(pop = poptmp) %>%
+      mutate(mut_ID = chosen_mut_ID, mut_sel = chosen_mut_sel, mut_popID = chosen_mut_popID) %>%
+      ungroup()-> tmpdata
+    mut_s <- rbind(mut_s, tmpdata)
+  }
+}
+
+
+write_tsv(mut_s,"../example/example_sim_jun14_delta1p5_control_mutS.txt")
+
+
+
+
+
+
+
+
+
 
 
 pop_colors <- brewer.pal(5,"Set1")[c(3,5)]
+
 plot_RI <- out2 %>%
   filter(gen != 1) %>%
   gather(pop,percent, p1_home:p2_home) %>% 
   ggplot(aes(x=gen,y=1-percent,color=pop)) + geom_line(size=3) +
-  geom_line(aes(x=gen,y=fit_dif),color="black",linetype="dotted",size=2) +
+  geom_line(aes(x=gen,y=fit_dif/max(fit_dif)),color="black",linetype="dotted",size=2) +
   theme_bw() + 
   scale_color_manual(values=pop_colors,name="Population",
                      labels=c("Pop_1", "Pop_2")) +
@@ -33,6 +93,8 @@ plot_RI <- out2 %>%
 
 
 plot_linkage <- out3 %>%
+  full_join(.,mut_s) %>%
+  filter(type != "M4", type != "M5") %>%
   mutate(mut_origin = case_when(pop == "p1" & mut_popID == "1" ~ "Native",
                                 pop == "p2" & mut_popID == "2" ~ "Native",
                                 TRUE ~ "Introgressed")) %>%
@@ -41,9 +103,17 @@ plot_linkage <- out3 %>%
                           TRUE ~ "RI_loci")) %>%
   mutate(pop = case_when(pop == "p1" ~ "Pop_1",
                          TRUE ~ "Pop_2")) %>%
+  mutate(qtl_category = case_when(mut_sel < 0 ~"Negative",
+                                  mut_sel > 2 ~ "Strongly Positive",
+                                  mut_sel > 0 ~ "Positive",
+                                  TRUE ~ "NA")) %>%
   filter(mut_origin == "Introgressed") %>%
-  ggplot(.,aes(x=gen,y=mut_freq,group=unique_id,color=as.factor(type))) + geom_line(alpha=0.4,size=1) +
-  theme_few() + scale_color_brewer(name="Introgressed mutation type", palette = "Set1") +
+  group_by(mutID, pop) %>%
+  mutate(meanfitness = mean(rel_fitness,na.rm=T)) %>%
+  ggplot(.,aes(x=gen,y=mut_freq,group=mutID,color=qtl_category)) + 
+  geom_line(alpha=0.7,size=2) +
+  theme_few() + 
+  scale_color_manual(name="QTL direction",values=c("#377EB8", "#FF7575","#B30C0C")) +
   facet_grid(pop~.) +
   ylab("Allele frequency") + 
   xlab("Generation") +
@@ -51,6 +121,7 @@ plot_linkage <- out3 %>%
   labs(tag = "B") +
   coord_cartesian(ylim=c(0,1))
 
+pop_colors <- brewer.pal(5,"Set1")[c(3,5)]
 
 plot_introgression <- out3 %>%
   filter(type != "M1") %>% 
@@ -88,43 +159,55 @@ plot_introgression <- out3 %>%
   labs(tag = "C")
 
 
-curve.fun <- function(x) {
-  sin(3.141593 * x / 1000) * 5
-}
 
-plot_phenosum <- out3 %>%
-  mutate(direction = case_when(mut_sel > 0 ~ "pos",
-                               mut_sel < 0 ~ "neg")) %>%
+
+plot_selection <-out3 %>%
+  full_join(.,mut_s) %>%
+  filter(gen >10002) %>%
+  filter(type != "M4", type != "M5") %>%
   mutate(mut_origin = case_when(pop == "p1" & mut_popID == "1" ~ "Native",
                                 pop == "p2" & mut_popID == "2" ~ "Native",
                                 TRUE ~ "Introgressed")) %>%
+  mutate(unique_id = paste(mut_pos,".",mut_popID,sep="")) %>%
+  mutate(type = case_when(type == "M1" ~ "QTL_loci",
+                          TRUE ~ "RI_loci")) %>%
   mutate(pop = case_when(pop == "p1" ~ "Pop_1",
                          TRUE ~ "Pop_2")) %>%
-  group_by(pop,mut_origin,gen) %>%
-  summarise(count=sum(mut_freq*mut_sel*2,na.rm=T)) %>% 
-  ggplot(.,aes(x=gen,y=count)) + geom_bar(aes(x=gen,y=count,fill=as.factor(mut_origin)),stat="identity",position="stack") +
-  scale_fill_manual(values=c("grey","black"),name="Mutation origin") +
+  filter(mut_origin == "Introgressed") %>%
+  mutate(qtl_category = case_when(mut_sel < 0 ~"Negative",
+                                  mut_sel > 2 ~ "Strongly Positive",
+                                  mut_sel > 0 ~ "Positive",
+                                  TRUE ~ "NA")) %>%
+  filter(mut_freq > 0.1 & mut_freq < 0.9) %>%
+  #filter(mut_freq < 0.9) %>%
+  ggplot(.,aes(x=rel_fitness,color=qtl_category,fill=qtl_category)) + 
+  geom_density(alpha=0.5,size=2) +
   theme_few() + 
-  stat_function(aes(x=gen),fun = curve.fun,color=brewer.pal(3,"Set1")[1]) +
-  facet_grid(pop~.) +
-  xlab("Generation") +
-  ylab("Phenotype")+
+  scale_color_manual(name="QTL direction",values=c("#377EB8", "#FF7575","#B30C0C")) +
+  scale_fill_manual(name="QTL direction",values=c("#377EB8", "#FF7575","#B30C0C")) +
+  ylab("Density") + 
+  xlab(expression(italic(s)~' (fitness)')) +
+  #xlab("s (fitness)") +
   theme(legend.position="bottom") +
-  labs(tag = "D")
+  labs(tag = "B") +
+  geom_vline(xintercept = 0,linetype="dotted") +
+  labs(tag = "D") +
+  coord_cartesian(xlim=c(-1,2.2))
 
 
 
 
-pdf("Documents/adaptive_introgression/example_sim_control.plots.v2.pdf",width=15,height=8)
+
+pdf("../figures/example_sim_delta1p5control.plots.v2.pdf",width=15,height=8)
 
 
-grid.arrange( plot_RI,plot_introgression,plot_phenosum,plot_linkage,
+grid.arrange( plot_RI,plot_introgression,plot_selection,plot_linkage,
               #nrow=3,
-              top = textGrob("Example simulation, Control",gp=gpar(fontsize=20,font=2)),
+              top = textGrob("Example simulation, Delta = 1.5",gp=gpar(fontsize=20,font=2)),
               layout_matrix = rbind(c(1,4),
                                     c(2,3)))
-
 dev.off()
+
 
 #Back up plots
 out3 %>%
@@ -155,3 +238,37 @@ out3 %>%
   facet_grid(pop~mut_popID,labeller = label_both) +
   ggtitle("Mutation trajectory") +
   xlab("Generation") +ylab("Allele frequency")
+
+
+out3 %>%
+  full_join(.,mut_s) %>%
+  filter(type != "M4", type != "M5") %>%
+  mutate(mut_origin = case_when(pop == "p1" & mut_popID == "1" ~ "Native",
+                                pop == "p2" & mut_popID == "2" ~ "Native",
+                                TRUE ~ "Introgressed")) %>%
+  mutate(unique_id = paste(mut_pos,".",mut_popID,sep="")) %>%
+  mutate(type = case_when(type == "M1" ~ "QTL_loci",
+                          TRUE ~ "RI_loci")) %>%
+  mutate(pop = case_when(pop == "p1" ~ "Pop_1",
+                         TRUE ~ "Pop_2")) %>%
+  filter(mut_origin == "Native") %>%
+  mutate(fitness_category = case_when(rel_fitness > 2 ~ "2+",
+                                      rel_fitness >1 & rel_fitness <= 2 ~ "1 - 2",
+                                      rel_fitness > 0.5 & rel_fitness <= 1 ~"0.5 - 1",
+                                      rel_fitness > 0.1 & rel_fitness <= 0.5 ~ "0.1 - 0.5",
+                                      rel_fitness > -0.1 & rel_fitness <= 0.1 ~ "-0.1 - 0.1",
+                                      rel_fitness > -0.5 & rel_fitness <= -0.1 ~ "-0.5 - -0.1",
+                                      rel_fitness <= 0.5 ~ "-0.5",
+                                      TRUE ~ "NA")) %>%
+  #filter(mut_freq > 0.1 & mut_freq < 0.9) %>%
+  ggplot(.,aes(x=rel_fitness,y=mut_freq,group=mutID,color=mut_sel)) + 
+  geom_point(alpha=0.5,size=2) +
+  theme_few() + 
+  scale_color_distiller(name="qtl_strength",palette = "RdBu",limits=c(-3.5,3.5)) +
+  ylab("Allele frequency") + 
+  xlab("s (fitness)") +
+  theme(legend.position="bottom") +
+  labs(tag = "B")
+
+
+

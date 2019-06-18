@@ -6,6 +6,12 @@ use POSIX;
 
 #my $output_directory = $ARGV[0];
 
+my %bdm_penalty;
+$bdm_penalty{"AABB"} = 2;
+$bdm_penalty{"AaBB"} = 2;
+$bdm_penalty{"AABb"} = 2;
+$bdm_penalty{"AaBb"} = 2;
+
 my @parameters;
 open(PAR, "../../../parameter_file.txt");
 while (my $line = <PAR>){
@@ -110,15 +116,15 @@ foreach my $id ( sort keys %div_hash){
       foreach my $pair (sort keys %{$test_hash{$id}{$version}}){
 	#For expected fitness with home cross
 	foreach my $pop (@pops){
-          my $home_count_AABB = (2 * ($test_hash{$id}{$version}{$pair}{$pop}{"s1"}**2) 
+          my $home_count_AABB = ($bdm_penalty{"AABB"} * ($test_hash{$id}{$version}{$pair}{$pop}{"s1"}**2) 
 		* ($test_hash{$id}{$version}{$pair}{$pop}{"s2"}**2) );
-    	  my $home_count_AaBB = (1.5 * 2 * ($test_hash{$id}{$version}{$pair}{$pop}{"s1"} 
+    	  my $home_count_AaBB = ($bdm_penalty{"AaBB"} * 2 * ($test_hash{$id}{$version}{$pair}{$pop}{"s1"} 
 		* (1- $test_hash{$id}{$version}{$pair}{$pop}{"s1"})) 
 		* ($test_hash{$id}{$version}{$pair}{$pop}{"s2"}**2));
-	  my $home_count_AABb = (1.5 * 2 * ($test_hash{$id}{$version}{$pair}{$pop}{"s2"} 
+	  my $home_count_AABb = ($bdm_penalty{"AABb"} * 2 * ($test_hash{$id}{$version}{$pair}{$pop}{"s2"} 
 		* (1- $test_hash{$id}{$version}{$pair}{$pop}{"s2"})) 
 		* ($test_hash{$id}{$version}{$pair}{$pop}{"s1"}**2));
-	  my $home_count_AaBb = ( 2 * ($test_hash{$id}{$version}{$pair}{$pop}{"s2"} 
+	  my $home_count_AaBb = ($bdm_penalty{"AaBb"} * 2 * ($test_hash{$id}{$version}{$pair}{$pop}{"s2"} 
 		* (1- $test_hash{$id}{$version}{$pair}{$pop}{"s2"})) * 2 
 		* ($test_hash{$id}{$version}{$pair}{$pop}{"s1"} 
 		* (1- $test_hash{$id}{$version}{$pair}{$pop}{"s1"})));
