@@ -77,19 +77,25 @@ for (n in 1:length(parameters_tested)){
     mutate_("parameter_chosen" = parameter) %>%
     mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
     gather(., condition, introgression, control_purity_change:test_purity, factor_key=TRUE)  %>%
-    filter(condition != "control_purity_change", condition != "test_purity_change") %>% 
-    ggplot(aes(x = parameter_chosen, y = (1-introgression) ,group=condition,color=fct_rev(condition))) + 
-    geom_point(alpha = 0.1, shape = 16, size = 0.5) +
-    geom_smooth(se = FALSE, size = 1.3, span = 0.80)+
-    scale_color_brewer(palette = "Set1", name = "Treatment", labels = c("Climate change","Control" )) + 
-    theme_bw() +
+    filter(condition != "control_purity_change", condition != "test_purity_change") %>%
+    droplevels(.$condition) %>%
+    group_by(parameter_chosen,condition) %>%
+    do(data.frame(t(quantile(.$introgression, probs = c(0.025,0.50, 0.975))))) %>%
+    rename(bottom = X2.5., mid = X50., top =X97.5.) %>%    
+    ggplot(.,aes()) + 
+    geom_ribbon(aes(x=parameter_chosen,ymin=(1-bottom),ymax=(1-top),fill=condition),alpha=0.5) +
+    geom_line(aes(x=parameter_chosen,y=(1-mid),linetype=condition),alpha=0.4,size=0.7) +
+    scale_fill_manual(values=c("light grey","dark grey"),
+                      name = "Treatment", labels = c("Control","Climate change")) +
+    scale_linetype_manual(values=c("solid","dotted"),name = "Treatment", labels = c("Control","Climate change")) +
+
+    theme_few() +
     theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
     xlab(parameter_print) +
     ylab("Introgression") +
-    labs(tag = LETTERS[n]) + 
-    geom_hline(yintercept=0.5,linetype="dotted") 
-    #coord_cartesian(ylim=c(0,0.5))
-
+    labs(tag = letters[n]) + 
+    geom_hline(yintercept=0.5,linetype="dashed") 
+  
   plots[[n]] <- plot_dot
   
   plot_dot_RI <- output2_ri %>% 
@@ -97,20 +103,27 @@ for (n in 1:length(parameters_tested)){
     mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
     gather(., condition, RI_retained, rel_fitness_change_control:rel_fitness_test, factor_key=TRUE)  %>%
     filter(condition != "rel_fitness_change_control", condition != "rel_fitness_change_test") %>% 
+    droplevels(.$condition) %>%
     mutate(starting_RI_loci = (as.numeric(totaldivbdmn)*(1-as.numeric(proportionbdm)))+
              (as.numeric(totaldivbdmn)*as.numeric(proportionbdm)),
            starting_RI_away = (1-(as.numeric(rimax)/as.numeric(totaldivbdmn)))^starting_RI_loci,
            starting_RI = 1/starting_RI_away) %>% 
-    ggplot(aes(x = parameter_chosen, y =  RI_retained,group=condition,color=fct_rev(condition))) +
-    geom_point(alpha = 0.1, shape = 16, size = 0.5) +
-    geom_smooth(se = FALSE, size = 1.3, span = 0.80)+
-    geom_point(aes(x=parameter_chosen,y=starting_RI),color="black",size=0.5) +
-    scale_color_brewer(palette = "Set1", name="Treatment",labels=c("Climate change", "Control")) + 
-    theme_bw() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+    group_by(parameter_chosen,condition,starting_RI) %>%
+    do(data.frame(t(quantile(.$RI_retained, probs = c(0.025,0.50, 0.975))))) %>%
+    rename(bottom = X2.5., mid = X50., top =X97.5.)  %>%
+      ggplot(.,aes()) + 
+      geom_ribbon(aes(x=parameter_chosen,ymin=bottom,ymax=top,fill=condition),alpha=0.5) +
+      geom_line(aes(x=parameter_chosen,y=mid,linetype=condition),alpha=0.4,size=0.7) +
+      scale_fill_manual(values=c("light grey","dark grey"),
+                        name = "Treatment", labels = c("Control","Climate change")) +
+      scale_linetype_manual(values=c("solid","dotted"),name = "Treatment", labels = c("Control","Climate change"))  +
+      
+    geom_line(aes(x=parameter_chosen,y=starting_RI),color="black",size=0.5,linetype="dashed") +
+      theme_few() +
+      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
     xlab(parameter_print) +
-    ylab("Home fitness advantage") +
-    labs(tag = LETTERS[n]) 
+    ylab("RI") +
+    labs(tag = letters[n]) 
     #coord_cartesian(ylim=c(1,6))
   
   plots_RI[[n]] <- plot_dot_RI
@@ -138,13 +151,13 @@ grid_arrange_shared_legend <- function(plots) {
 }
 
 
-pdf(paste("../figures/",iteration,".points.out2.pdf",sep=""),width=12,height=6)
+pdf(paste("../figures/",iteration,".points.out2.pdf",sep=""),width=9,height=9)
 
 grid_arrange_shared_legend(plots)
 
 dev.off()
 
-pdf(paste("../figures/",iteration,".points.out2RI.pdf",sep=""),width=12,height=6)
+pdf(paste("../figures/",iteration,".points.out2RI.pdf",sep=""),width=9,height=9)
 
 grid_arrange_shared_legend(plots_RI)
 

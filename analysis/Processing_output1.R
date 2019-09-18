@@ -83,12 +83,16 @@ for (n in 1:length(parameters_tested)){
       mutate(parameter_chosen = as.numeric(parameter_chosen)/as.numeric(totaldivbdmn)) %>%
       group_by(seed, parameter_chosen) %>%
       summarize(mean_haldane = mean(mean_haldane)) %>%
-      ggplot(.,aes(x=as.numeric(parameter_chosen),y=mean_haldane)) + 
-      geom_point(alpha = 0.1, shape = 16, size = 0.6) +
-      geom_smooth(se = FALSE, size = 1.5, span = 0.80,color="black") + theme_bw() + 
+      group_by(parameter_chosen) %>%
+      do(data.frame(t(quantile(.$mean_haldane, probs = c(0.025,0.50, 0.975))))) %>%
+      rename(bottom = X2.5., mid = X50., top =X97.5.) %>%
+      ggplot(.,aes()) + 
+      geom_ribbon(aes(x=parameter_chosen,ymin=bottom,ymax=top),alpha=0.5) +
+      geom_line(aes(x=parameter_chosen,y=mid),alpha=0.4,size=0.7) +
+      theme_few() +
       ylab("Average Haldanes") + xlab(paste(parameter_print)) +
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
-      labs(tag = LETTERS[n])
+      labs(tag = letters[n])
   }else{
     plot_point <- output1 %>% 
       filter(version == "test") %>%
@@ -96,12 +100,16 @@ for (n in 1:length(parameters_tested)){
       mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
       group_by(seed, parameter_chosen) %>%
       summarize(mean_haldane = mean(mean_haldane)) %>%
-      ggplot(.,aes(x=as.numeric(parameter_chosen),y=mean_haldane)) + 
-      geom_point(alpha = 0.1, shape = 16, size = 0.6) +
-      geom_smooth(se = FALSE, size = 1.5, span = 0.80,color="black") + theme_bw() + 
+      group_by(parameter_chosen) %>%
+      do(data.frame(t(quantile(.$mean_haldane, probs = c(0.025,0.50, 0.975))))) %>%
+      rename(bottom = X2.5., mid = X50., top =X97.5.) %>%
+      ggplot(.,aes()) + 
+      geom_ribbon(aes(x=parameter_chosen,ymin=bottom,ymax=top),alpha=0.5) +
+      geom_line(aes(x=parameter_chosen,y=mid),alpha=0.4,size=0.7) +
+      theme_few() +
       ylab("Average Haldanes") + xlab(paste(parameter_print)) +
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
-      labs(tag = LETTERS[n])
+      labs(tag = letters[n])
   }
   
   plots[[2*n]] <- plot_point
@@ -122,15 +130,14 @@ grid.arrange( plots[[1]],plots[[3]],
                                    c(7,8)))
 dev.off()
 
-pdf(paste("../figures/",iteration,".haldanepoint.out1.pdf",sep=""),width=12,height=6)
+pdf(paste("../figures/",iteration,".haldanepoint.out1.pdf",sep=""),width=9,height=9)
 
 grid.arrange( plots[[2]],plots[[4]],
               plots[[6]],plots[[8]],
               plots[[10]],plots[[12]],
               plots[[14]],plots[[16]],
               # top = textGrob("Haldane Values",gp=gpar(fontsize=20,font=2)),
-              layout_matrix = rbind(c(1,2),
-                                    c(3,4),
-                                    c(5,6),
-                                    c(7,8)))
+              layout_matrix = rbind(c(1,2,3),
+                                    c(4,5,6),
+                                    c(7,8,NA)))
 dev.off()
