@@ -29,7 +29,7 @@ for (n in 1:length(parameters_tested)){
   parameter_print <- parameter
   parameter_print <- gsub("totaldivbdmn","Total RI loci",parameter_print)
   parameter_print <- gsub("mutationrate","Mutation rate",parameter_print)
-  parameter_print <- gsub("qtlsd","Climate QTL Stdev",parameter_print)
+  parameter_print <- gsub("qtlsd","Climate QTL s.d.",parameter_print)
   parameter_print <- gsub("divseln","RI loci",parameter_print)
   parameter_print <- gsub("delta","Delta",parameter_print)
   parameter_print <- gsub("\\bm\\b","Migration rate",parameter_print)
@@ -72,10 +72,10 @@ for (n in 1:length(parameters_tested)){
     
 
   #pdf( paste("../",iteration,".",parameter,".out2.pdf",sep=""))
-
+  if (parameter == "rimax"){
   plot_dot <- output2_purity %>% 
     mutate_("parameter_chosen" = parameter) %>%
-    mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
+    mutate(parameter_chosen = as.numeric(parameter_chosen)/as.numeric(totaldivbdmn)) %>%
     gather(., condition, introgression, control_purity_change:test_purity, factor_key=TRUE)  %>%
     filter(condition != "control_purity_change", condition != "test_purity_change") %>%
     droplevels(.$condition) %>%
@@ -88,19 +88,14 @@ for (n in 1:length(parameters_tested)){
     scale_fill_manual(values=c("light grey","dark grey"),
                       name = "Treatment", labels = c("Control","Climate change")) +
     scale_linetype_manual(values=c("solid","dotted"),name = "Treatment", labels = c("Control","Climate change")) +
-
     theme_few() +
-    theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
     xlab(parameter_print) +
     ylab("Introgression") +
     labs(tag = letters[n]) + 
     geom_hline(yintercept=0.5,linetype="dashed") 
-  
-  plots[[n]] <- plot_dot
-  
   plot_dot_RI <- output2_ri %>% 
     mutate_("parameter_chosen" = parameter) %>%
-    mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
+    mutate(parameter_chosen = as.numeric(parameter_chosen)/as.numeric(totaldivbdmn)) %>%
     gather(., condition, RI_retained, rel_fitness_change_control:rel_fitness_test, factor_key=TRUE)  %>%
     filter(condition != "rel_fitness_change_control", condition != "rel_fitness_change_test") %>% 
     droplevels(.$condition) %>%
@@ -111,6 +106,53 @@ for (n in 1:length(parameters_tested)){
     group_by(parameter_chosen,condition,starting_RI) %>%
     do(data.frame(t(quantile(.$RI_retained, probs = c(0.025,0.50, 0.975))))) %>%
     rename(bottom = X2.5., mid = X50., top =X97.5.)  %>%
+    ggplot(.,aes()) + 
+    geom_ribbon(aes(x=parameter_chosen,ymin=bottom,ymax=top,fill=condition),alpha=0.5) +
+    geom_line(aes(x=parameter_chosen,y=mid,linetype=condition),alpha=0.4,size=0.7) +
+    scale_fill_manual(values=c("light grey","dark grey"),
+                      name = "Treatment", labels = c("Control","Climate change")) +
+    scale_linetype_manual(values=c("solid","dotted"),name = "Treatment", labels = c("Control","Climate change"))  +
+    
+    geom_line(aes(x=parameter_chosen,y=starting_RI),color="black",size=0.5,linetype="dashed") +
+    theme_few() +
+    xlab(parameter_print) +
+    ylab("RI") +
+    labs(tag = letters[n]) 
+  #coord_cartesian(ylim=c(1,6))
+  }else if (parameter == "mutationrate"){
+    plot_dot <- output2_purity %>% 
+      mutate_("parameter_chosen" = parameter) %>%
+      mutate(parameter_chosen = as.numeric(parameter_chosen)*10^7) %>%
+      gather(., condition, introgression, control_purity_change:test_purity, factor_key=TRUE)  %>%
+      filter(condition != "control_purity_change", condition != "test_purity_change") %>%
+      droplevels(.$condition) %>%
+      group_by(parameter_chosen,condition) %>%
+      do(data.frame(t(quantile(.$introgression, probs = c(0.025,0.50, 0.975))))) %>%
+      rename(bottom = X2.5., mid = X50., top =X97.5.) %>%    
+      ggplot(.,aes()) + 
+      geom_ribbon(aes(x=parameter_chosen,ymin=(1-bottom),ymax=(1-top),fill=condition),alpha=0.5) +
+      geom_line(aes(x=parameter_chosen,y=(1-mid),linetype=condition),alpha=0.4,size=0.7) +
+      scale_fill_manual(values=c("light grey","dark grey"),
+                        name = "Treatment", labels = c("Control","Climate change")) +
+      scale_linetype_manual(values=c("solid","dotted"),name = "Treatment", labels = c("Control","Climate change")) +
+      theme_few() +
+      xlab(bquote('Mutation rate ('*x~ 10^-7*')')) +
+      ylab("Introgression") +
+      labs(tag = letters[n]) + 
+      geom_hline(yintercept=0.5,linetype="dashed") 
+    plot_dot_RI <- output2_ri %>% 
+      mutate_("parameter_chosen" = parameter) %>%
+      mutate(parameter_chosen = as.numeric(parameter_chosen)*10^7) %>%
+      gather(., condition, RI_retained, rel_fitness_change_control:rel_fitness_test, factor_key=TRUE)  %>%
+      filter(condition != "rel_fitness_change_control", condition != "rel_fitness_change_test") %>% 
+      droplevels(.$condition) %>%
+      mutate(starting_RI_loci = (as.numeric(totaldivbdmn)*(1-as.numeric(proportionbdm)))+
+               (as.numeric(totaldivbdmn)*as.numeric(proportionbdm)),
+             starting_RI_away = (1-(as.numeric(rimax)/as.numeric(totaldivbdmn)))^starting_RI_loci,
+             starting_RI = 1/starting_RI_away) %>% 
+      group_by(parameter_chosen,condition,starting_RI) %>%
+      do(data.frame(t(quantile(.$RI_retained, probs = c(0.025,0.50, 0.975))))) %>%
+      rename(bottom = X2.5., mid = X50., top =X97.5.)  %>%
       ggplot(.,aes()) + 
       geom_ribbon(aes(x=parameter_chosen,ymin=bottom,ymax=top,fill=condition),alpha=0.5) +
       geom_line(aes(x=parameter_chosen,y=mid,linetype=condition),alpha=0.4,size=0.7) +
@@ -118,13 +160,111 @@ for (n in 1:length(parameters_tested)){
                         name = "Treatment", labels = c("Control","Climate change")) +
       scale_linetype_manual(values=c("solid","dotted"),name = "Treatment", labels = c("Control","Climate change"))  +
       
-    geom_line(aes(x=parameter_chosen,y=starting_RI),color="black",size=0.5,linetype="dashed") +
+      geom_line(aes(x=parameter_chosen,y=starting_RI),color="black",size=0.5,linetype="dashed") +
       theme_few() +
-      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
-    xlab(parameter_print) +
-    ylab("RI") +
-    labs(tag = letters[n]) 
+      xlab(bquote('Mutation rate ('*x~ 10^-7*')')) +
+      ylab("RI") +
+      labs(tag = letters[n]) 
     #coord_cartesian(ylim=c(1,6))
+  }else if (parameter == "recombinationrate"){
+    plot_dot <- output2_purity %>% 
+      mutate_("parameter_chosen" = parameter) %>%
+      mutate(parameter_chosen = as.numeric(parameter_chosen)*10^5) %>%
+      gather(., condition, introgression, control_purity_change:test_purity, factor_key=TRUE)  %>%
+      filter(condition != "control_purity_change", condition != "test_purity_change") %>%
+      droplevels(.$condition) %>%
+      group_by(parameter_chosen,condition) %>%
+      do(data.frame(t(quantile(.$introgression, probs = c(0.025,0.50, 0.975))))) %>%
+      rename(bottom = X2.5., mid = X50., top =X97.5.) %>%    
+      ggplot(.,aes()) + 
+      geom_ribbon(aes(x=parameter_chosen,ymin=(1-bottom),ymax=(1-top),fill=condition),alpha=0.5) +
+      geom_line(aes(x=parameter_chosen,y=(1-mid),linetype=condition),alpha=0.4,size=0.7) +
+      scale_fill_manual(values=c("light grey","dark grey"),
+                        name = "Treatment", labels = c("Control","Climate change")) +
+      scale_linetype_manual(values=c("solid","dotted"),name = "Treatment", labels = c("Control","Climate change")) +
+      theme_few() +
+      xlab(bquote('Recombination rate ('*x~ 10^-5*')')) +
+      ylab("Introgression") +
+      labs(tag = letters[n]) + 
+      geom_hline(yintercept=0.5,linetype="dashed") 
+    plot_dot_RI <- output2_ri %>% 
+      mutate_("parameter_chosen" = parameter) %>%
+      mutate(parameter_chosen = as.numeric(parameter_chosen)*10^5) %>%
+      gather(., condition, RI_retained, rel_fitness_change_control:rel_fitness_test, factor_key=TRUE)  %>%
+      filter(condition != "rel_fitness_change_control", condition != "rel_fitness_change_test") %>% 
+      droplevels(.$condition) %>%
+      mutate(starting_RI_loci = (as.numeric(totaldivbdmn)*(1-as.numeric(proportionbdm)))+
+               (as.numeric(totaldivbdmn)*as.numeric(proportionbdm)),
+             starting_RI_away = (1-(as.numeric(rimax)/as.numeric(totaldivbdmn)))^starting_RI_loci,
+             starting_RI = 1/starting_RI_away) %>% 
+      group_by(parameter_chosen,condition,starting_RI) %>%
+      do(data.frame(t(quantile(.$RI_retained, probs = c(0.025,0.50, 0.975))))) %>%
+      rename(bottom = X2.5., mid = X50., top =X97.5.)  %>%
+      ggplot(.,aes()) + 
+      geom_ribbon(aes(x=parameter_chosen,ymin=bottom,ymax=top,fill=condition),alpha=0.5) +
+      geom_line(aes(x=parameter_chosen,y=mid,linetype=condition),alpha=0.4,size=0.7) +
+      scale_fill_manual(values=c("light grey","dark grey"),
+                        name = "Treatment", labels = c("Control","Climate change")) +
+      scale_linetype_manual(values=c("solid","dotted"),name = "Treatment", labels = c("Control","Climate change"))  +
+      
+      geom_line(aes(x=parameter_chosen,y=starting_RI),color="black",size=0.5,linetype="dashed") +
+      theme_few() +
+      xlab(bquote('Recombination rate ('*x~ 10^-5*')')) +
+      ylab("RI") +
+      labs(tag = letters[n]) 
+    #coord_cartesian(ylim=c(1,6))
+  }else {
+    plot_dot <- output2_purity %>% 
+      mutate_("parameter_chosen" = parameter) %>%
+      mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
+      gather(., condition, introgression, control_purity_change:test_purity, factor_key=TRUE)  %>%
+      filter(condition != "control_purity_change", condition != "test_purity_change") %>%
+      droplevels(.$condition) %>%
+      group_by(parameter_chosen,condition) %>%
+      do(data.frame(t(quantile(.$introgression, probs = c(0.025,0.50, 0.975))))) %>%
+      rename(bottom = X2.5., mid = X50., top =X97.5.) %>%    
+      ggplot(.,aes()) + 
+      geom_ribbon(aes(x=parameter_chosen,ymin=(1-bottom),ymax=(1-top),fill=condition),alpha=0.5) +
+      geom_line(aes(x=parameter_chosen,y=(1-mid),linetype=condition),alpha=0.4,size=0.7) +
+      scale_fill_manual(values=c("light grey","dark grey"),
+                        name = "Treatment", labels = c("Control","Climate change")) +
+      scale_linetype_manual(values=c("solid","dotted"),name = "Treatment", labels = c("Control","Climate change")) +
+      theme_few() +
+      xlab(parameter_print) +
+      ylab("Introgression") +
+      labs(tag = letters[n]) + 
+      geom_hline(yintercept=0.5,linetype="dashed") 
+    plot_dot_RI <- output2_ri %>% 
+      mutate_("parameter_chosen" = parameter) %>%
+      mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
+      gather(., condition, RI_retained, rel_fitness_change_control:rel_fitness_test, factor_key=TRUE)  %>%
+      filter(condition != "rel_fitness_change_control", condition != "rel_fitness_change_test") %>% 
+      droplevels(.$condition) %>%
+      mutate(starting_RI_loci = (as.numeric(totaldivbdmn)*(1-as.numeric(proportionbdm)))+
+               (as.numeric(totaldivbdmn)*as.numeric(proportionbdm)),
+             starting_RI_away = (1-(as.numeric(rimax)/as.numeric(totaldivbdmn)))^starting_RI_loci,
+             starting_RI = 1/starting_RI_away) %>% 
+      group_by(parameter_chosen,condition,starting_RI) %>%
+      do(data.frame(t(quantile(.$RI_retained, probs = c(0.025,0.50, 0.975))))) %>%
+      rename(bottom = X2.5., mid = X50., top =X97.5.)  %>%
+      ggplot(.,aes()) + 
+      geom_ribbon(aes(x=parameter_chosen,ymin=bottom,ymax=top,fill=condition),alpha=0.5) +
+      geom_line(aes(x=parameter_chosen,y=mid,linetype=condition),alpha=0.4,size=0.7) +
+      scale_fill_manual(values=c("light grey","dark grey"),
+                        name = "Treatment", labels = c("Control","Climate change")) +
+      scale_linetype_manual(values=c("solid","dotted"),name = "Treatment", labels = c("Control","Climate change"))  +
+      
+      geom_line(aes(x=parameter_chosen,y=starting_RI),color="black",size=0.5,linetype="dashed") +
+      theme_few() +
+      xlab(parameter_print) +
+      ylab("RI") +
+      labs(tag = letters[n]) 
+    #coord_cartesian(ylim=c(1,6))
+  }
+  
+  plots[[n]] <- plot_dot
+  
+  
   
   plots_RI[[n]] <- plot_dot_RI
   

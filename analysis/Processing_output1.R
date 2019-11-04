@@ -26,7 +26,7 @@ for (n in 1:length(parameters_tested)){
   parameter_print <- parameter
   parameter_print <- gsub("totaldivbdmn","Total RI loci",parameter_print)
   parameter_print <- gsub("mutationrate","Mutation rate",parameter_print)
-  parameter_print <- gsub("qtlsd","Climate QTL Stdev",parameter_print)
+  parameter_print <- gsub("qtlsd","Climate QTL s.d.",parameter_print)
   parameter_print <- gsub("divseln","RI loci",parameter_print)
   parameter_print <- gsub("delta","Delta",parameter_print)
   parameter_print <- gsub("\\bm\\b","Migration rate",parameter_print)
@@ -92,6 +92,40 @@ for (n in 1:length(parameters_tested)){
       theme_few() +
       ylab("Average Haldanes") + xlab(paste(parameter_print)) +
       theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
+      labs(tag = letters[n])
+  }else if (parameter == "mutationrate"){
+    plot_point <- output1 %>% 
+      filter(version == "test") %>%
+      mutate_("parameter_chosen" = parameter) %>%
+      mutate(parameter_chosen = as.numeric(parameter_chosen)*10^7) %>%
+      group_by(seed, parameter_chosen) %>%
+      summarize(mean_haldane = mean(mean_haldane)) %>%
+      group_by(parameter_chosen) %>%
+      do(data.frame(t(quantile(.$mean_haldane, probs = c(0.025,0.50, 0.975))))) %>%
+      rename(bottom = X2.5., mid = X50., top =X97.5.) %>%
+      ggplot(.,aes()) + 
+      geom_ribbon(aes(x=parameter_chosen,ymin=bottom,ymax=top),alpha=0.5) +
+      geom_line(aes(x=parameter_chosen,y=mid),alpha=0.4,size=0.7) +
+      theme_few() +
+      ylab("Average Haldanes") + 
+      xlab(bquote('Mutation rate ('*x~ 10^-7*')')) +
+      labs(tag = letters[n])
+  }else if (parameter == "recombinationrate"){
+    plot_point <- output1 %>% 
+      filter(version == "test") %>%
+      mutate_("parameter_chosen" = parameter) %>%
+      mutate(parameter_chosen = as.numeric(parameter_chosen)*10^5) %>%
+      group_by(seed, parameter_chosen) %>%
+      summarize(mean_haldane = mean(mean_haldane)) %>%
+      group_by(parameter_chosen) %>%
+      do(data.frame(t(quantile(.$mean_haldane, probs = c(0.025,0.50, 0.975))))) %>%
+      rename(bottom = X2.5., mid = X50., top =X97.5.) %>%
+      ggplot(.,aes()) + 
+      geom_ribbon(aes(x=parameter_chosen,ymin=bottom,ymax=top),alpha=0.5) +
+      geom_line(aes(x=parameter_chosen,y=mid),alpha=0.4,size=0.7) +
+      theme_few() +
+      ylab("Average Haldanes") + 
+      xlab(bquote('Recombination rate ('*x~ 10^-5*')')) +
       labs(tag = letters[n])
   }else{
     plot_point <- output1 %>% 
