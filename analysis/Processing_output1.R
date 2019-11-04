@@ -80,7 +80,7 @@ for (n in 1:length(parameters_tested)){
     plot_point <- output1 %>% 
       filter(version == "test") %>%
       mutate_("parameter_chosen" = parameter) %>%
-      mutate(parameter_chosen = as.numeric(parameter_chosen)/as.numeric(totaldivbdmn)) %>%
+      mutate(parameter_chosen = (as.numeric(parameter_chosen)/as.numeric(totaldivbdmn))*10^2) %>%
       group_by(seed, parameter_chosen) %>%
       summarize(mean_haldane = mean(mean_haldane)) %>%
       group_by(parameter_chosen) %>%
@@ -90,9 +90,11 @@ for (n in 1:length(parameters_tested)){
       geom_ribbon(aes(x=parameter_chosen,ymin=bottom,ymax=top),alpha=0.5) +
       geom_line(aes(x=parameter_chosen,y=mid),alpha=0.4,size=0.7) +
       theme_few() +
-      ylab("Average Haldanes") + xlab(paste(parameter_print)) +
-      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
-      labs(tag = letters[n])
+      ylab("Average Haldanes") + 
+      xlab(bquote('RI fitness effect ('*x~ 10^-2*')')) +
+      labs(tag = letters[n]) +
+      theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+    
   }else if (parameter == "mutationrate"){
     plot_point <- output1 %>% 
       filter(version == "test") %>%
@@ -109,7 +111,10 @@ for (n in 1:length(parameters_tested)){
       theme_few() +
       ylab("Average Haldanes") + 
       xlab(bquote('Mutation rate ('*x~ 10^-7*')')) +
-      labs(tag = letters[n])
+      labs(tag = letters[n]) +
+      theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+    
+    
   }else if (parameter == "recombinationrate"){
     plot_point <- output1 %>% 
       filter(version == "test") %>%
@@ -126,7 +131,10 @@ for (n in 1:length(parameters_tested)){
       theme_few() +
       ylab("Average Haldanes") + 
       xlab(bquote('Recombination rate ('*x~ 10^-5*')')) +
-      labs(tag = letters[n])
+      labs(tag = letters[n]) +
+      theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+    
+    
   }else{
     plot_point <- output1 %>% 
       filter(version == "test") %>%
@@ -142,8 +150,9 @@ for (n in 1:length(parameters_tested)){
       geom_line(aes(x=parameter_chosen,y=mid),alpha=0.4,size=0.7) +
       theme_few() +
       ylab("Average Haldanes") + xlab(paste(parameter_print)) +
-      theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1)) +
-      labs(tag = letters[n])
+      labs(tag = letters[n]) +
+      theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+    
   }
   
   plots[[2*n]] <- plot_point

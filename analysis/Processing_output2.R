@@ -75,7 +75,7 @@ for (n in 1:length(parameters_tested)){
   if (parameter == "rimax"){
   plot_dot <- output2_purity %>% 
     mutate_("parameter_chosen" = parameter) %>%
-    mutate(parameter_chosen = as.numeric(parameter_chosen)/as.numeric(totaldivbdmn)) %>%
+    mutate(parameter_chosen = (as.numeric(parameter_chosen)/as.numeric(totaldivbdmn))*10^2) %>%
     gather(., condition, introgression, control_purity_change:test_purity, factor_key=TRUE)  %>%
     filter(condition != "control_purity_change", condition != "test_purity_change") %>%
     droplevels(.$condition) %>%
@@ -89,13 +89,15 @@ for (n in 1:length(parameters_tested)){
                       name = "Treatment", labels = c("Control","Climate change")) +
     scale_linetype_manual(values=c("solid","dotted"),name = "Treatment", labels = c("Control","Climate change")) +
     theme_few() +
-    xlab(parameter_print) +
+    xlab(bquote('RI fitness effect ('*x~ 10^-2*')')) +
     ylab("Introgression") +
     labs(tag = letters[n]) + 
-    geom_hline(yintercept=0.5,linetype="dashed") 
+    geom_hline(yintercept=0.5,linetype="dashed") +
+    theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+  
   plot_dot_RI <- output2_ri %>% 
     mutate_("parameter_chosen" = parameter) %>%
-    mutate(parameter_chosen = as.numeric(parameter_chosen)/as.numeric(totaldivbdmn)) %>%
+    mutate(parameter_chosen = (as.numeric(parameter_chosen)/as.numeric(totaldivbdmn))*10^2) %>%
     gather(., condition, RI_retained, rel_fitness_change_control:rel_fitness_test, factor_key=TRUE)  %>%
     filter(condition != "rel_fitness_change_control", condition != "rel_fitness_change_test") %>% 
     droplevels(.$condition) %>%
@@ -115,9 +117,11 @@ for (n in 1:length(parameters_tested)){
     
     geom_line(aes(x=parameter_chosen,y=starting_RI),color="black",size=0.5,linetype="dashed") +
     theme_few() +
-    xlab(parameter_print) +
+    xlab(bquote('RI fitness effect ('*x~ 10^-2*')')) +
     ylab("RI") +
-    labs(tag = letters[n]) 
+    labs(tag = letters[n]) +
+    theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+  
   #coord_cartesian(ylim=c(1,6))
   }else if (parameter == "mutationrate"){
     plot_dot <- output2_purity %>% 
@@ -139,7 +143,9 @@ for (n in 1:length(parameters_tested)){
       xlab(bquote('Mutation rate ('*x~ 10^-7*')')) +
       ylab("Introgression") +
       labs(tag = letters[n]) + 
-      geom_hline(yintercept=0.5,linetype="dashed") 
+      geom_hline(yintercept=0.5,linetype="dashed") +
+      theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+    
     plot_dot_RI <- output2_ri %>% 
       mutate_("parameter_chosen" = parameter) %>%
       mutate(parameter_chosen = as.numeric(parameter_chosen)*10^7) %>%
@@ -164,7 +170,9 @@ for (n in 1:length(parameters_tested)){
       theme_few() +
       xlab(bquote('Mutation rate ('*x~ 10^-7*')')) +
       ylab("RI") +
-      labs(tag = letters[n]) 
+      labs(tag = letters[n]) +
+      theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+    
     #coord_cartesian(ylim=c(1,6))
   }else if (parameter == "recombinationrate"){
     plot_dot <- output2_purity %>% 
@@ -186,7 +194,9 @@ for (n in 1:length(parameters_tested)){
       xlab(bquote('Recombination rate ('*x~ 10^-5*')')) +
       ylab("Introgression") +
       labs(tag = letters[n]) + 
-      geom_hline(yintercept=0.5,linetype="dashed") 
+      geom_hline(yintercept=0.5,linetype="dashed")  +
+      theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+    
     plot_dot_RI <- output2_ri %>% 
       mutate_("parameter_chosen" = parameter) %>%
       mutate(parameter_chosen = as.numeric(parameter_chosen)*10^5) %>%
@@ -211,7 +221,9 @@ for (n in 1:length(parameters_tested)){
       theme_few() +
       xlab(bquote('Recombination rate ('*x~ 10^-5*')')) +
       ylab("RI") +
-      labs(tag = letters[n]) 
+      labs(tag = letters[n]) +
+      theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+    
     #coord_cartesian(ylim=c(1,6))
   }else {
     plot_dot <- output2_purity %>% 
@@ -233,7 +245,9 @@ for (n in 1:length(parameters_tested)){
       xlab(parameter_print) +
       ylab("Introgression") +
       labs(tag = letters[n]) + 
-      geom_hline(yintercept=0.5,linetype="dashed") 
+      geom_hline(yintercept=0.5,linetype="dashed")  +
+      theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+    
     plot_dot_RI <- output2_ri %>% 
       mutate_("parameter_chosen" = parameter) %>%
       mutate(parameter_chosen = as.numeric(parameter_chosen)) %>%
@@ -258,7 +272,9 @@ for (n in 1:length(parameters_tested)){
       theme_few() +
       xlab(parameter_print) +
       ylab("RI") +
-      labs(tag = letters[n]) 
+      labs(tag = letters[n]) +
+      theme(plot.margin = margin(t = 0, r = 10, b = 0, l = 0, unit = "pt"))
+    
     #coord_cartesian(ylim=c(1,6))
   }
   
