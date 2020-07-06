@@ -1,0 +1,208 @@
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Running burn in for output/output_delta_10000_0.42_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_71041276359
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Running test shift for output/output_delta_10000_0.42_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_71041276359
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Running control for output/output_delta_10000_0.42_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_71041276359
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Running burn in for output/output_delta_10000_0.53_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_9864231043
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Running burn in for output/output_delta_10000_0.54_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_30073174445
+Running burn in for output/output_delta_10000_0.43_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_62594384823
+Running burn in for output/output_delta_10000_0.56_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_13445087902
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Running test shift for output/output_delta_10000_0.53_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_9864231043
+Running control for output/output_delta_10000_0.53_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_9864231043
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Running test shift for output/output_delta_10000_0.54_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_30073174445
+Running control for output/output_delta_10000_0.54_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_30073174445
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Running test shift for output/output_delta_10000_0.43_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_62594384823
+Running control for output/output_delta_10000_0.43_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_62594384823
+Running test shift for output/output_delta_10000_0.56_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_13445087902
+Running control for output/output_delta_10000_0.56_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_13445087902
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Running burn in for output/output_delta_10000_0.47_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_41754841509
+Running burn in for output/output_delta_10000_0.48_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_10997296923
+Cannot start another process while you are in the child process at /home/gowens/perl5/lib/perl5/Parallel/ForkManager.pm line 44.
+Running burn in for output/output_delta_10000_0.57_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_53222360562
+Running test shift for output/output_delta_10000_0.47_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_41754841509
+Running control for output/output_delta_10000_0.47_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_41754841509
+Running test shift for output/output_delta_10000_0.48_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_10997296923
+Running control for output/output_delta_10000_0.48_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_10997296923
+Running burn in for output/output_delta_10000_0.46_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_50888053637
+Running burn in for output/output_delta_10000_0.45_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_30316719583
+Running burn in for output/output_delta_10000_0.64_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_72858886241
+Running burn in for output/output_delta_10000_0.65_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_34948640510
+Running test shift for output/output_delta_10000_0.57_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_53222360562
+Running control for output/output_delta_10000_0.57_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_53222360562
+Running burn in for output/output_delta_10000_0.5_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_99412504311
+Running burn in for output/output_delta_10000_0.59_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91942566710
+Running burn in for output/output_delta_10000_0.44_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_33279398021
+Running burn in for output/output_delta_10000_0.58_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_56176550693
+Running burn in for output/output_delta_10000_0.49_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_1614864201
+Running burn in for output/output_delta_10000_0.66_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_39618775977
+Running test shift for output/output_delta_10000_0.45_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_30316719583
+Running test shift for output/output_delta_10000_0.46_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_50888053637
+Running control for output/output_delta_10000_0.45_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_30316719583
+Running control for output/output_delta_10000_0.46_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_50888053637
+Running burn in for output/output_delta_10000_0.52_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91211997142
+Running test shift for output/output_delta_10000_0.64_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_72858886241
+Running test shift for output/output_delta_10000_0.65_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_34948640510
+Running control for output/output_delta_10000_0.64_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_72858886241
+Running control for output/output_delta_10000_0.65_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_34948640510
+Running burn in for output/output_delta_10000_0.51_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_27096109448
+Running burn in for output/output_delta_10000_0.6_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_32923201432
+Running test shift for output/output_delta_10000_0.5_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_99412504311
+Running control for output/output_delta_10000_0.5_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_99412504311
+Running test shift for output/output_delta_10000_0.59_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91942566710
+Running control for output/output_delta_10000_0.59_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91942566710
+Running test shift for output/output_delta_10000_0.44_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_33279398021
+Running control for output/output_delta_10000_0.44_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_33279398021
+Running test shift for output/output_delta_10000_0.58_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_56176550693
+Running control for output/output_delta_10000_0.58_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_56176550693
+Running test shift for output/output_delta_10000_0.66_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_39618775977
+Running test shift for output/output_delta_10000_0.49_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_1614864201
+Running control for output/output_delta_10000_0.66_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_39618775977
+Running control for output/output_delta_10000_0.49_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_1614864201
+Running test shift for output/output_delta_10000_0.52_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91211997142
+Running control for output/output_delta_10000_0.52_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91211997142
+Running burn in for output/output_delta_10000_0.61_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_84649498674
+Running test shift for output/output_delta_10000_0.51_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_27096109448
+Running control for output/output_delta_10000_0.51_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_27096109448
+Running burn in for output/output_delta_10000_0.55_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_41065780942
+Running burn in for output/output_delta_10000_0.720000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_21095580661
+Running burn in for output/output_delta_10000_0.730000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_51344657650
+Running burn in for output/output_delta_10000_0.63_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_93794611825
+Running test shift for output/output_delta_10000_0.6_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_32923201432
+Running control for output/output_delta_10000_0.6_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_32923201432
+Running burn in for output/output_delta_10000_0.67_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_63842808253
+Running burn in for output/output_delta_10000_0.700000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_65668385296
+Running burn in for output/output_delta_10000_0.62_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_75230832405
+Running burn in for output/output_delta_10000_0.710000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_2539399064
+Running burn in for output/output_delta_10000_0.68_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_17930739147
+Running burn in for output/output_delta_10000_0.690000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_95789798892
+Running test shift for output/output_delta_10000_0.61_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_84649498674
+Running control for output/output_delta_10000_0.61_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_84649498674
+Running test shift for output/output_delta_10000_0.55_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_41065780942
+Running test shift for output/output_delta_10000_0.720000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_21095580661
+Running test shift for output/output_delta_10000_0.730000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_51344657650
+Running control for output/output_delta_10000_0.55_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_41065780942
+Running control for output/output_delta_10000_0.720000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_21095580661
+Running control for output/output_delta_10000_0.730000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_51344657650
+Running test shift for output/output_delta_10000_0.63_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_93794611825
+Running control for output/output_delta_10000_0.63_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_93794611825
+Running test shift for output/output_delta_10000_0.67_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_63842808253
+Running control for output/output_delta_10000_0.67_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_63842808253
+Running test shift for output/output_delta_10000_0.700000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_65668385296
+Running control for output/output_delta_10000_0.700000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_65668385296
+Running test shift for output/output_delta_10000_0.62_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_75230832405
+Running control for output/output_delta_10000_0.62_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_75230832405
+Running test shift for output/output_delta_10000_0.710000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_2539399064
+Running control for output/output_delta_10000_0.710000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_2539399064
+Running test shift for output/output_delta_10000_0.68_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_17930739147
+Running control for output/output_delta_10000_0.68_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_17930739147
+Running test shift for output/output_delta_10000_0.690000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_95789798892
+Running control for output/output_delta_10000_0.690000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_95789798892
+Running burn in for output/output_delta_10000_0.740000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91773220135
+Running burn in for output/output_delta_10000_0.780000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_46762364411
+Running burn in for output/output_delta_10000_0.790000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_84228236072
+Running burn in for output/output_delta_10000_0.750000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_43707839942
+Running burn in for output/output_delta_10000_0.760000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_79085426994
+Running test shift for output/output_delta_10000_0.740000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91773220135
+Running control for output/output_delta_10000_0.740000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91773220135
+Running burn in for output/output_delta_10000_0.770000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_60483795295
+Running test shift for output/output_delta_10000_0.780000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_46762364411
+Running control for output/output_delta_10000_0.780000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_46762364411
+Running test shift for output/output_delta_10000_0.790000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_84228236072
+Running control for output/output_delta_10000_0.790000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_84228236072
+Running burn in for output/output_delta_10000_0.800000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_18165529875
+Running test shift for output/output_delta_10000_0.750000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_43707839942
+Running control for output/output_delta_10000_0.750000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_43707839942
+Running test shift for output/output_delta_10000_0.760000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_79085426994
+Running control for output/output_delta_10000_0.760000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_79085426994
+Running burn in for output/output_delta_10000_0.820000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_73529740593
+Running test shift for output/output_delta_10000_0.770000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_60483795295
+Running control for output/output_delta_10000_0.770000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_60483795295
+Running burn in for output/output_delta_10000_0.830000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_41570580036
+Running burn in for output/output_delta_10000_0.810000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_65810626473
+Running test shift for output/output_delta_10000_0.800000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_18165529875
+Running control for output/output_delta_10000_0.800000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_18165529875
+Running test shift for output/output_delta_10000_0.820000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_73529740593
+Running control for output/output_delta_10000_0.820000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_73529740593
+Running burn in for output/output_delta_10000_0.890000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_16527589115
+Running burn in for output/output_delta_10000_0.860000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_60878615857
+Running burn in for output/output_delta_10000_0.850000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_51645550791
+Running test shift for output/output_delta_10000_0.830000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_41570580036
+Running control for output/output_delta_10000_0.830000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_41570580036
+Running burn in for output/output_delta_10000_0.920000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_71289663210
+Running burn in for output/output_delta_10000_0.900000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_29057722755
+Running test shift for output/output_delta_10000_0.810000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_65810626473
+Running control for output/output_delta_10000_0.810000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_65810626473
+Running burn in for output/output_delta_10000_0.840000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_83634958609
+Running test shift for output/output_delta_10000_0.890000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_16527589115
+Running burn in for output/output_delta_10000_0.870000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_44622773335
+Running control for output/output_delta_10000_0.890000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_16527589115
+Running test shift for output/output_delta_10000_0.860000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_60878615857
+Running test shift for output/output_delta_10000_0.850000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_51645550791
+Running control for output/output_delta_10000_0.860000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_60878615857
+Running control for output/output_delta_10000_0.850000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_51645550791
+Running burn in for output/output_delta_10000_0.910000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_21482975439
+Running burn in for output/output_delta_10000_0.880000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_88129865664
+Running burn in for output/output_delta_10000_0.960000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36018344231
+Running test shift for output/output_delta_10000_0.920000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_71289663210
+Running test shift for output/output_delta_10000_0.900000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_29057722755
+Running control for output/output_delta_10000_0.920000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_71289663210
+Running control for output/output_delta_10000_0.900000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_29057722755
+Running burn in for output/output_delta_10000_0.970000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_76867777931
+Running test shift for output/output_delta_10000_0.840000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_83634958609
+Running control for output/output_delta_10000_0.840000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_83634958609
+Running burn in for output/output_delta_10000_0.990000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_33417428199
+Running burn in for output/output_delta_10000_0.940000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_63981680462
+Running burn in for output/output_delta_10000_0.930000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_42607605767
+Running burn in for output/output_delta_10000_0.980000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_47717037967
+Running test shift for output/output_delta_10000_0.870000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_44622773335
+Running control for output/output_delta_10000_0.870000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_44622773335
+Running test shift for output/output_delta_10000_0.910000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_21482975439
+Running control for output/output_delta_10000_0.910000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_21482975439
+Running test shift for output/output_delta_10000_0.880000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_88129865664
+Running control for output/output_delta_10000_0.880000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_88129865664
+Running test shift for output/output_delta_10000_0.960000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36018344231
+Running control for output/output_delta_10000_0.960000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36018344231
+Running test shift for output/output_delta_10000_0.970000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_76867777931
+Running control for output/output_delta_10000_0.970000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_76867777931
+Running test shift for output/output_delta_10000_0.990000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_33417428199
+Running test shift for output/output_delta_10000_0.940000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_63981680462
+Running control for output/output_delta_10000_0.990000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_33417428199
+Running control for output/output_delta_10000_0.940000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_63981680462
+Running burn in for output/output_delta_10000_1.01_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_87308526605
+Running burn in for output/output_delta_10000_0.950000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_61828456942
+Running test shift for output/output_delta_10000_0.930000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_42607605767
+Running control for output/output_delta_10000_0.930000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_42607605767
+Running test shift for output/output_delta_10000_0.980000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_47717037967
+Running control for output/output_delta_10000_0.980000000000001_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_47717037967
+Running burn in for output/output_delta_10000_1.05_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_8562640597
+Running burn in for output/output_delta_10000_1.02_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_54616719351
+slurmstepd: error: *** JOB 22250537 ON cdr1264 CANCELLED AT 2019-06-07T17:27:42 DUE TO TIME LIMIT ***

@@ -1,0 +1,72 @@
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.24_1_1e-05_1.5_100_100_1_53467719473
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.84_1_1e-05_1.5_100_100_1_22814012675
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.64_1_1e-05_1.5_100_100_1_65617260064
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.56_1_1e-05_1.5_100_100_1_24818531640
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.96_1_1e-05_1.5_100_100_1_97756422062
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.76_1_1e-05_1.5_100_100_1_88435084962
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.92_1_1e-05_1.5_100_100_1_17722139864
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.4_1_1e-05_1.5_100_100_1_73781858368
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.36_1_1e-05_1.5_100_100_1_74323214900
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.48_1_1e-05_1.5_100_100_1_81426792366
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.16_1_1e-05_1.5_100_100_1_25058281987
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.28_1_1e-05_1.5_100_100_1_40820582614
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.72_1_1e-05_1.5_100_100_1_98675346149
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.68_1_1e-05_1.5_100_100_1_94364474791
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.44_1_1e-05_1.5_100_100_1_70812425676
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.04_1_1e-05_1.5_100_100_1_12688333664
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.2_1_1e-05_1.5_100_100_1_88283123036
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.6_1_1e-05_1.5_100_100_1_80470695540
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.88_1_1e-05_1.5_100_100_1_12476462994
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.52_1_1e-05_1.5_100_100_1_99668644119
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.12_1_1e-05_1.5_100_100_1_85956075725
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.08_1_1e-05_1.5_100_100_1_86261092995
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.32_1_1e-05_1.5_100_100_1_58589734773
+Running burn in for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.8_1_1e-05_1.5_100_100_1_68101849158
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.04_1_1e-05_1.5_100_100_1_12688333664
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.04_1_1e-05_1.5_100_100_1_12688333664
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.08_1_1e-05_1.5_100_100_1_86261092995
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.08_1_1e-05_1.5_100_100_1_86261092995
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.12_1_1e-05_1.5_100_100_1_85956075725
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.12_1_1e-05_1.5_100_100_1_85956075725
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.16_1_1e-05_1.5_100_100_1_25058281987
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.16_1_1e-05_1.5_100_100_1_25058281987
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.2_1_1e-05_1.5_100_100_1_88283123036
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.2_1_1e-05_1.5_100_100_1_88283123036
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.24_1_1e-05_1.5_100_100_1_53467719473
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.24_1_1e-05_1.5_100_100_1_53467719473
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.28_1_1e-05_1.5_100_100_1_40820582614
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.28_1_1e-05_1.5_100_100_1_40820582614
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.32_1_1e-05_1.5_100_100_1_58589734773
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.32_1_1e-05_1.5_100_100_1_58589734773
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.36_1_1e-05_1.5_100_100_1_74323214900
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.36_1_1e-05_1.5_100_100_1_74323214900
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.4_1_1e-05_1.5_100_100_1_73781858368
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.4_1_1e-05_1.5_100_100_1_73781858368
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.44_1_1e-05_1.5_100_100_1_70812425676
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.44_1_1e-05_1.5_100_100_1_70812425676
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.48_1_1e-05_1.5_100_100_1_81426792366
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.48_1_1e-05_1.5_100_100_1_81426792366
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.52_1_1e-05_1.5_100_100_1_99668644119
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.52_1_1e-05_1.5_100_100_1_99668644119
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.56_1_1e-05_1.5_100_100_1_24818531640
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.56_1_1e-05_1.5_100_100_1_24818531640
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.6_1_1e-05_1.5_100_100_1_80470695540
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.6_1_1e-05_1.5_100_100_1_80470695540
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.64_1_1e-05_1.5_100_100_1_65617260064
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.64_1_1e-05_1.5_100_100_1_65617260064
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.68_1_1e-05_1.5_100_100_1_94364474791
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.68_1_1e-05_1.5_100_100_1_94364474791
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.72_1_1e-05_1.5_100_100_1_98675346149
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.72_1_1e-05_1.5_100_100_1_98675346149
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.76_1_1e-05_1.5_100_100_1_88435084962
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.76_1_1e-05_1.5_100_100_1_88435084962
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.8_1_1e-05_1.5_100_100_1_68101849158
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.8_1_1e-05_1.5_100_100_1_68101849158
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.84_1_1e-05_1.5_100_100_1_22814012675
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.84_1_1e-05_1.5_100_100_1_22814012675
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.88_1_1e-05_1.5_100_100_1_12476462994
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.88_1_1e-05_1.5_100_100_1_12476462994
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.92_1_1e-05_1.5_100_100_1_17722139864
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.92_1_1e-05_1.5_100_100_1_17722139864
+Running test shift for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.96_1_1e-05_1.5_100_100_1_97756422062
+Running control for output/output_proportionbdm_10000_1_2_0.01_1e-07_1000_0.96_1_1e-05_1.5_100_100_1_97756422062

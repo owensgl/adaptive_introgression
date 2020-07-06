@@ -1,1 +1,1 @@
-bdm_n	bdm_s	burn_in_gen	delta	div_sel_n	div_sel_s	fitness_sd	m	mutation_rate	pop_size	qtl_sd	shift_gen	total_div	rep	seed
+burningen	delta	fitnesssd	m	mutationrate	popsize	proportionbdm	qtlsd	recombinationrate	rimax	shiftgen	totaldivbdmn	rep	seed

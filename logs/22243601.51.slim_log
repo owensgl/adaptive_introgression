@@ -1,0 +1,611 @@
+Running burn in for output/output_delta_10000_0.18_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_3040955269
+Running burn in for output/output_delta_10000_0.41_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36805269245
+Running burn in for output/output_delta_10000_0.15_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_39088106395
+Running burn in for output/output_delta_10000_0.14_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_26793884330
+Running burn in for output/output_delta_10000_0.2_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36850760628
+Running test shift for output/output_delta_10000_0.41_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36805269245
+Running test shift for output/output_delta_10000_0.15_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_39088106395
+Running control for output/output_delta_10000_0.41_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36805269245
+Running test shift for output/output_delta_10000_0.18_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_3040955269
+Running control for output/output_delta_10000_0.18_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_3040955269
+Running test shift for output/output_delta_10000_0.2_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36850760628
+Running control for output/output_delta_10000_0.2_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36850760628
+Running burn in for output/output_delta_10000_0.3_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_56795651798
+Running burn in for output/output_delta_10000_0.36_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_15886436503
+Running burn in for output/output_delta_10000_0.35_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_16689306667
+Running burn in for output/output_delta_10000_0.24_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_10620267440
+Running burn in for output/output_delta_10000_0.4_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_33895140008
+Running test shift for output/output_delta_10000_0.3_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_56795651798
+Running control for output/output_delta_10000_0.3_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_56795651798
+Running burn in for output/output_delta_10000_0.21_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_79235065991
+Running test shift for output/output_delta_10000_0.36_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_15886436503
+Running test shift for output/output_delta_10000_0.35_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_16689306667
+Running test shift for output/output_delta_10000_0.24_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_10620267440
+Running test shift for output/output_delta_10000_0.21_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_79235065991
+Running test shift for output/output_delta_10000_0.4_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_33895140008
+Running control for output/output_delta_10000_0.36_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_15886436503
+Running control for output/output_delta_10000_0.35_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_16689306667
+Running control for output/output_delta_10000_0.15_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_39088106395
+Running control for output/output_delta_10000_0.21_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_79235065991
+Running control for output/output_delta_10000_0.24_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_10620267440
+Running control for output/output_delta_10000_0.4_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_33895140008
+Running burn in for output/output_delta_10000_0.37_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36889932079
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 118.
+Running burn in for output/output_delta_10000_0.28_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_74004990219
+Running burn in for output/output_delta_10000_0.26_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_23553484615
+Running burn in for output/output_delta_10000_0.1_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_5606307655
+Running burn in for output/output_delta_10000_0.23_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_55258733134
+Running burn in for output/output_delta_10000_0.19_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_55380493782
+Running burn in for output/output_delta_10000_0.39_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_13560283843
+Running burn in for output/output_delta_10000_0.22_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91668473773
+Running burn in for output/output_delta_10000_0.11_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_39152313333
+Running burn in for output/output_delta_10000_0.17_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_86707588176
+Running burn in for output/output_delta_10000_0.38_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_17401995284
+Running burn in for output/output_delta_10000_0.13_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_35781919684
+Running test shift for output/output_delta_10000_0.14_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_26793884330
+Running control for output/output_delta_10000_0.14_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_26793884330
+Running burn in for output/output_delta_10000_0.25_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_42255858385
+Running test shift for output/output_delta_10000_0.37_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36889932079
+Running control for output/output_delta_10000_0.37_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_36889932079
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 144.
+Running test shift for output/output_delta_10000_0.28_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_74004990219
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 173.
+Running control for output/output_delta_10000_0.28_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_74004990219
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+print() on closed filehandle $fh3 at run_slim_sim_v5.pl line 208.
+Running burn in for output/output_delta_10000_0.32_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_55904380984
+Running test shift for output/output_delta_10000_0.26_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_23553484615
+Running control for output/output_delta_10000_0.26_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_23553484615
+Running test shift for output/output_delta_10000_0.1_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_5606307655
+Running control for output/output_delta_10000_0.1_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_5606307655
+Running burn in for output/output_delta_10000_0.33_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_73112771457
+Running test shift for output/output_delta_10000_0.23_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_55258733134
+Running control for output/output_delta_10000_0.23_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_55258733134
+Running test shift for output/output_delta_10000_0.19_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_55380493782
+Running control for output/output_delta_10000_0.19_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_55380493782
+Running test shift for output/output_delta_10000_0.11_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_39152313333
+Running test shift for output/output_delta_10000_0.39_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_13560283843
+Running test shift for output/output_delta_10000_0.22_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91668473773
+Running control for output/output_delta_10000_0.11_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_39152313333
+Running control for output/output_delta_10000_0.39_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_13560283843
+Running control for output/output_delta_10000_0.22_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_91668473773
+Running test shift for output/output_delta_10000_0.17_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_86707588176
+Running control for output/output_delta_10000_0.17_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_86707588176
+Running test shift for output/output_delta_10000_0.38_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_17401995284
+Running control for output/output_delta_10000_0.38_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_17401995284
+Running test shift for output/output_delta_10000_0.13_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_35781919684
+Running control for output/output_delta_10000_0.13_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_35781919684
+Running burn in for output/output_delta_10000_0.27_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_5232273701
+Running burn in for output/output_delta_10000_0.34_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_53027390789
+Running test shift for output/output_delta_10000_0.25_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_42255858385
+Running control for output/output_delta_10000_0.25_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_42255858385
+Running test shift for output/output_delta_10000_0.32_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_55904380984
+Running control for output/output_delta_10000_0.32_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_55904380984
+Running test shift for output/output_delta_10000_0.33_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_73112771457
+Running control for output/output_delta_10000_0.33_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_73112771457
+Running test shift for output/output_delta_10000_0.34_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_53027390789
+Running test shift for output/output_delta_10000_0.27_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_5232273701
+Running control for output/output_delta_10000_0.34_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_53027390789
+Running control for output/output_delta_10000_0.27_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_5232273701
+Running burn in for output/output_delta_10000_0.31_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_6260124647
+Running burn in for output/output_delta_10000_0.29_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_29456770916
+Running burn in for output/output_delta_10000_0.16_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_85127966788
+Running burn in for output/output_delta_10000_0.12_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_43747295283
+Running test shift for output/output_delta_10000_0.31_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_6260124647
+Running control for output/output_delta_10000_0.31_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_6260124647
+Running test shift for output/output_delta_10000_0.29_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_29456770916
+Running control for output/output_delta_10000_0.29_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_29456770916
+Running test shift for output/output_delta_10000_0.16_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_85127966788
+Running control for output/output_delta_10000_0.16_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_85127966788
+Running test shift for output/output_delta_10000_0.12_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_43747295283
+Running control for output/output_delta_10000_0.12_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_43747295283
+Running burn in for output/output_delta_10000_0.56_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_33187634668
+Running burn in for output/output_delta_10000_0.58_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_80745209597
+Running burn in for output/output_delta_10000_0.59_2_0.01_1e-07_1000_0_1_1e-05_2_100_100_1_68648773532
+slurmstepd: error: *** JOB 22246892 ON cdr1274 CANCELLED AT 2019-06-07T16:15:41 DUE TO TIME LIMIT ***

@@ -27,7 +27,7 @@ my $reps =1;  #Number of repetitions per set of parameters
 $p{"burningen"} = 10000; #Number of generations of burn in before shift
 $p{"shiftgen"} = 100; #Number of generations of shifting optimum.
 $p{"recombinationrate"} = 1e-5; #Number of generations of shifting optimum.
-my $max_runs = 105; #Maximum number of replicates before it starts skipping.
+my $max_runs = 100; #Maximum number of replicates before it starts skipping.
 my $output_dir = "output";
 
 my @parameters = sort keys %p;
@@ -53,7 +53,7 @@ $starting_p{"rimax"} = 0.7;
 $starting_p{"m"} = 0.0;
 $starting_p{"totaldivbdmn"} = 5;
 $starting_p{"recombinationrate"} = 1e-5;
-$starting_p{"proportionbdm"} = 0.05;
+$starting_p{"proportionbdm"} = 0.04;
 
 #Ending point of parameters
 $ending_p{"delta"}= 3;
@@ -61,7 +61,7 @@ $ending_p{"qtlsd"}= 5;
 $ending_p{"mutationrate"} = 5e-7;
 $ending_p{"rimax"} = 2;
 $ending_p{"m"} = 0.1;
-$ending_p{"totaldivbdmn"} = 100;
+$ending_p{"totaldivbdmn"} = 15;
 $ending_p{"recombinationrate"} = 5e-5;
 $ending_p{"proportionbdm"} = 1.0;
 
@@ -73,7 +73,7 @@ $increment_p{"rimax"} = 0.05;
 $increment_p{"m"} = 0.001;
 $increment_p{"totaldivbdmn"} = 5;
 $increment_p{"recombinationrate"} = 1e-6;
-$increment_p{"proportionbdm"} = 0.05;
+$increment_p{"proportionbdm"} = 0.04;
 
 
 my $parameter_file = "parameter_file.txt";
@@ -102,7 +102,7 @@ foreach my $varying_parameter (sort keys %varying_p){
 				$filename .= "_$tmp_p{$parameter}";
 				$prefix .= "_$tmp_p{$parameter}";
 			}
-			my $run_count = `ls $output_dir | grep $prefix | grep out3.txt.gz | wc -l`;
+			my $run_count = `ls $output_dir | grep ${prefix}_ | grep out3.txt.gz | wc -l`;
 			if ($run_count >= $max_runs){next;} #Skip runs where we already have enough replicates
 			$filename .= "_${rep}_${seed}";
 			my $filename_1 = $filename."_out1.txt";
